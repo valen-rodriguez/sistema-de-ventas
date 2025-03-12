@@ -9,7 +9,6 @@ public class ProductoServicio implements IProductoServicio{
 
     private ProductoRepositorio productoRepositorio;
 
-
     @Override
     public List<Producto> listarProductos() {
         List<Producto> productos = productoRepositorio.findAll();

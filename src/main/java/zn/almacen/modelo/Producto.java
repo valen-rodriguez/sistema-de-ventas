@@ -18,6 +18,7 @@ public class Producto {
     private Integer productoId;
     private String producto;
     private String descrpcion;
+    private String categoria;
     private Integer cantidad;
     private Double precio;
 }
