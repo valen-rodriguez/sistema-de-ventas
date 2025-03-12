@@ -12,7 +12,7 @@ import lombok.*;
 public class PedidoProducto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer pedidoProducotId;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "pedido_id")

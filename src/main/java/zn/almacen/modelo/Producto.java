@@ -15,7 +15,7 @@ import lombok.*;
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer productoId;
+    private Integer id;
     private String producto;
     private String descrpcion;
     private String categoria;
