@@ -1,10 +1,12 @@
 package zn.almacen.servicio;
 
+import org.springframework.stereotype.Service;
 import zn.almacen.modelo.PedidoProducto;
 import zn.almacen.repositorio.PedidoProductoRepositorio;
 
 import java.util.List;
 
+@Service
 public class PedidoProductoServicio implements IPedidoProductoServicio{
 
     PedidoProductoRepositorio pedidoProductoRepositorio;

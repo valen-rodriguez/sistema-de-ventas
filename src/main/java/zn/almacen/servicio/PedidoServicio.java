@@ -1,11 +1,13 @@
 package zn.almacen.servicio;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import zn.almacen.modelo.Pedido;
 import zn.almacen.repositorio.PedidoRepositorio;
 
 import java.util.List;
 
+@Service
 public class PedidoServicio implements IPedidoServicio{
 
     @Autowired

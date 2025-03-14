@@ -1,10 +1,12 @@
 package zn.almacen.servicio;
 
+import org.springframework.stereotype.Service;
 import zn.almacen.modelo.Producto;
 import zn.almacen.repositorio.ProductoRepositorio;
 
 import java.util.List;
 
+@Service
 public class ProductoServicio implements IProductoServicio{
 
     private ProductoRepositorio productoRepositorio;
