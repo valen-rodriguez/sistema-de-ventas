@@ -1,6 +1,6 @@
 # Almacen con JavaFX y Spring Boot
 
-Proyecto de una aplicación dee scritorio para un almacén, la aplicación consiste en tener el apartado del administrador y el apartado del cliente. El cliente podrá listar, agregar y eliminar productos en un carrito y buscar productos, mientras que el administrador podrá agregar, modificar y eliminar productos de la base datos
+Proyecto de una aplicación de escritorio para un almacén. Esta aplicación es un Sistema de Ventas, donde se podran cargar nuevas ventas, clientes, productos, proveedores y configurar los datos de la empresa 
 
 ## Authors
 
