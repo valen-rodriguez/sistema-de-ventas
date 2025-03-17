@@ -16,7 +16,7 @@ import lombok.*;
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer pedido_id;
+    private Integer id;
     private Integer cliente_id;
     private Double precioTotal;
 }

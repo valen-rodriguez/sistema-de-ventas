@@ -19,7 +19,7 @@ public class PedidoProductoServicio implements IPedidoProductoServicio{
 
     @Override
     public List<PedidoProducto> buscarPorPedido(Integer pedidoId) {
-        List<PedidoProducto> pedidoProductos = pedidoProductoRepositorio.findByPedidoId(pedidoId);
+        List<PedidoProducto> pedidoProductos = pedidoProductoRepositorio.findByPedidoId_Id(pedidoId);
         return pedidoProductos;
     }
 

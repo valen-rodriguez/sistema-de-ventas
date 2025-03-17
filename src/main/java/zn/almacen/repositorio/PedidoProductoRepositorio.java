@@ -6,5 +6,5 @@ import zn.almacen.modelo.PedidoProducto;
 import java.util.List;
 
 public interface PedidoProductoRepositorio extends JpaRepository<PedidoProducto,Integer> {
-    List<PedidoProducto> findByPedidoId(Integer pedidoId);
+    List<PedidoProducto> findByPedidoId_Id(Integer pedidoId);
 }
