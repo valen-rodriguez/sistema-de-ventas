@@ -15,8 +15,10 @@ import lombok.*;
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer cliente_id;
     private String nombre;
     private String apellido;
-    private int admin;
+    private int telefono;
+    private String direccion;
+    private String razon_social;
 }
