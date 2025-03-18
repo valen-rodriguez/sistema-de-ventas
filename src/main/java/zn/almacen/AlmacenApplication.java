@@ -1,15 +1,13 @@
 package zn.almacen;
 
 import javafx.application.Application;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
-import zn.almacen.presentacion.SistemaAlmacenFx;
+import zn.almacen.presentacion.SistemaDeVentasFx;
 
 @SpringBootApplication
 public class AlmacenApplication {
     public static void main(String[] args) {
-        //SpringApplication.run(AlmacenApplication.class, args);
-        Application.launch(SistemaAlmacenFx.class, args);
+
+        Application.launch(SistemaDeVentasFx.class, args);
     }
 }
