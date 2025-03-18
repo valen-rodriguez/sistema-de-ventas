@@ -1,7 +1,11 @@
 package zn.almacen.controlador;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
@@ -10,9 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import zn.almacen.modelo.Cuenta;
 import zn.almacen.servicio.CuentaServicio;
 import javafx.scene.control.*;
 
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -24,6 +31,12 @@ public class LoginControlador implements Initializable {
 
     @Setter
     private Stage stage;
+
+    private Cuenta cuenta;
+
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
+    }
 
     @Autowired
     private CuentaServicio cuentaServicio;
@@ -58,8 +71,33 @@ public class LoginControlador implements Initializable {
             var cuenta = cuentaServicio.buscarCuentaPorMail(mail);
             if (cuenta != null) {
                 if (password.equals(cuenta.getPassword())) {
-                    mostrarMensaje("Bienvenido", "Bienvenido " + cuenta.getNombre());
+                    // Cambiar de ventana a sistema.fxml
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/templates/sistema.fxml"));
+                        Parent root = loader.load();
 
+                        // Obtener el controlador de la ventana del sistema
+                        SistemaControlador controlador = loader.getController();
+
+                        // Pasar la cuenta al controlador de la ventana del sistema
+                        controlador.setCuenta(cuenta);
+
+                        // Crear una nueva escena y un nuevo Stage
+                        Scene scene = new Scene(root);
+                        Stage stage = new Stage();
+                        stage.setScene(scene);
+                        stage.setTitle("Sistema de Ventas");
+
+                        // mostrar la nueva ventana
+                        stage.show();
+
+                        // cerrar la ventana actual
+                        Stage currentStage = (Stage) emailTxt.getScene().getWindow();
+                        currentStage.close();
+                    } catch (IOException e) {
+                        e.printStackTrace(); // Manejo básico de excepciones
+                        mostrarMensaje("Error", "No se pudo cargar la ventana del sistema.");
+                    }
                 } else {
                     mostrarMensaje("Incorrecto", "Ha ingresado una contraseña incorrecta");
                     passTxt.requestFocus();
@@ -69,7 +107,6 @@ public class LoginControlador implements Initializable {
                 emailTxt.requestFocus();
             }
         }
-
     }
 
     private void mostrarMensaje(String titulo, String mensaje){
@@ -79,6 +116,4 @@ public class LoginControlador implements Initializable {
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
-
-
 }
