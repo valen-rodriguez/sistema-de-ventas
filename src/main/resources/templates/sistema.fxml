@@ -2,31 +2,130 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="727.0" prefWidth="802.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zn.almacen.controlador.SistemaControlador">
+<AnchorPane prefHeight="727.0" prefWidth="1322.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zn.almacen.controlador.SistemaControlador">
    <children>
-      <Label fx:id="mostrate" layoutX="208.0" layoutY="53.0" text="Sistema de Ventas">
+      <Label fx:id="mostrate" layoutX="229.0" layoutY="47.0" text="Sistema de Ventas: Nombre de tu empresa">
          <font>
-            <Font name="Segoe UI Bold" size="40.0" />
+            <Font name="Segoe UI Bold" size="50.0" />
          </font></Label>
-      <AnchorPane layoutX="161.0" layoutY="124.0" prefHeight="593.0" prefWidth="631.0">
+      <AnchorPane layoutX="161.0" layoutY="124.0" prefHeight="593.0" prefWidth="939.0">
          <children>
-            <TabPane prefHeight="519.0" prefWidth="599.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPanePrincipal" prefHeight="593.0" prefWidth="1159.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="tabNuevaVenta" text="Nueva Venta">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="572.0" prefWidth="645.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="564.0" prefWidth="734.0" style="-fx-border-color: black; -fx-background-color: #d9d9d9;">
+                           <children>
+                              <TableView fx:id="tablaCarrito" editable="true" layoutX="57.0" layoutY="155.0" prefHeight="282.0" prefWidth="778.0">
+                                <columns>
+                                  <TableColumn fx:id="CodigoProductoCarritoColumna" prefWidth="78.0" text="Código" />
+                                  <TableColumn fx:id="nombreProductoCarritoColumna" prefWidth="144.0" text="Producto" />
+                                    <TableColumn fx:id="descripcionProductoCarritoColumna" prefWidth="254.0" text="Descripcion" />
+                                    <TableColumn fx:id="cantidadProductoCarritoColumna" prefWidth="102.0" text="Cantidad" />
+                                    <TableColumn fx:id="precioProductoCarritoColumna" prefWidth="101.0" text="Precio (unidad)" />
+                                    <TableColumn fx:id="totalProductoCarritoColumna" prefWidth="98.0" text="Total" />
+                                </columns>
+                              </TableView>
+                              <AnchorPane layoutX="32.0" layoutY="23.0" prefHeight="104.0" prefWidth="1040.0">
+                                 <children>
+                                    <Label layoutX="30.0" layoutY="24.0" text="Código">
+                                       <font>
+                                          <Font name="System Bold" size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="176.0" layoutY="24.0" text="Producto">
+                                       <font>
+                                          <Font name="System Bold" size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="722.0" layoutY="24.0" text="Cantidad">
+                                       <font>
+                                          <Font name="System Bold" size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="420.0" layoutY="24.0" text="Precio (unidad)">
+                                       <font>
+                                          <Font name="System Bold" size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="606.0" layoutY="24.0" text="Stock">
+                                       <font>
+                                          <Font name="System Bold" size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="codigoTxt" layoutX="30.0" layoutY="54.0" prefHeight="25.0" prefWidth="116.0" style="-fx-background-color: #d9d9d9;" />
+                                    <Separator layoutX="30.0" layoutY="79.0" prefHeight="2.0" prefWidth="118.0" style="-fx-background-color: black;" />
+                                    <Separator layoutX="175.0" layoutY="79.0" prefHeight="1.0" prefWidth="217.0" style="-fx-background-color: black;" />
+                                    <TextField fx:id="productoTxt" editable="false" layoutX="176.0" layoutY="54.0" prefHeight="25.0" prefWidth="216.0" style="-fx-background-color: #d9d9d9;" />
+                                    <Separator layoutX="418.0" layoutY="79.0" prefHeight="0.0" prefWidth="143.0" style="-fx-background-color: black;" />
+                                    <TextField fx:id="precioTxt" editable="false" layoutX="418.0" layoutY="54.0" prefHeight="25.0" prefWidth="142.0" style="-fx-background-color: #d9d9d9;" />
+                                    <TextField fx:id="stockTxt" editable="false" layoutX="606.0" layoutY="54.0" prefHeight="25.0" prefWidth="74.0" style="-fx-background-color: #d9d9d9;" />
+                                    <Separator layoutX="606.0" layoutY="79.0" prefHeight="0.0" prefWidth="74.0" style="-fx-background-color: black;" />
+                                    <TextField fx:id="cantidadTxt" layoutX="722.0" layoutY="54.0" prefHeight="25.0" prefWidth="74.0" style="-fx-background-color: #d9d9d9;" />
+                                    <Separator layoutX="722.0" layoutY="79.0" prefHeight="0.0" prefWidth="74.0" style="-fx-background-color: black;" />
+                                    <Button fx:id="btnAgregarAlCarrito" layoutX="837.0" layoutY="49.0" mnemonicParsing="false" onAction="#nuevaVenta" prefHeight="36.0" prefWidth="135.0" text="Agregar Producto" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane layoutX="851.0" layoutY="155.0" prefHeight="121.0" prefWidth="186.0">
+                                 <children>
+                                    <Label layoutX="30.0" text="DNI:">
+                                       <font>
+                                          <Font name="System Bold" size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="30.0" layoutY="65.0" text="Cliente:">
+                                       <font>
+                                          <Font name="System Bold" size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="dniClienteTxt" layoutX="31.0" layoutY="28.0" prefHeight="25.0" prefWidth="116.0" style="-fx-background-color: #d9d9d9;" />
+                                    <Separator layoutX="31.0" layoutY="53.0" prefHeight="2.0" prefWidth="118.0" style="-fx-background-color: black;" />
+                                    <Separator layoutX="30.0" layoutY="118.0" prefHeight="1.0" prefWidth="217.0" style="-fx-background-color: black;" />
+                                    <TextField fx:id="nombreClienteTxt" editable="false" layoutX="31.0" layoutY="93.0" prefHeight="25.0" prefWidth="216.0" style="-fx-background-color: #d9d9d9;" />
+                                 </children>
+                              </AnchorPane>
+                              <Label layoutX="596.0" layoutY="449.0" text="Total a pagar:">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="totalTxt" editable="false" layoutX="729.0" layoutY="449.0" prefHeight="25.0" prefWidth="107.0" style="-fx-background-color: #d9d9d9;" />
+                              <Separator layoutX="729.0" layoutY="474.0" prefHeight="1.0" prefWidth="107.0" style="-fx-background-color: black;" />
+                              <Button fx:id="btnCrearVenta" layoutX="701.0" layoutY="506.0" mnemonicParsing="false" onAction="#nuevaVenta" prefHeight="36.0" prefWidth="135.0" text="Crear Venta" />
+                           </children></AnchorPane>
                   </content>
                 </Tab>
                 <Tab fx:id="tabProductos" text="Productos">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <AnchorPane layoutX="23.0" layoutY="125.0" prefHeight="294.0" prefWidth="681.0">
+                                 <children>
+                                    <TableView fx:id="tablaProductos" layoutX="6.0" layoutY="8.0" prefHeight="268.0" prefWidth="678.0">
+                                      <columns>
+                                        <TableColumn fx:id="idProductoColumna" prefWidth="36.0" text="Id" />
+                                          <TableColumn fx:id="codigoProductoColumna" prefWidth="66.0" text="Codigo" />
+                                        <TableColumn fx:id="proveedorProductoColumna" prefWidth="78.0" text="Proveedor" />
+                                          <TableColumn fx:id="nombreProductoColumna" prefWidth="128.0" text="Producto" />
+                                          <TableColumn fx:id="descripcionProductoColumna" prefWidth="223.0" text="Descricpion" />
+                                          <TableColumn fx:id="stockProductoColumna" prefWidth="72.0" text="Stock" />
+                                          <TableColumn fx:id="precioProductoColumna" prefWidth="74.0" text="Precio" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                           </children></AnchorPane>
                   </content>
                 </Tab>
                   <Tab fx:id="tabClientes" text="Clientes">
@@ -54,16 +153,16 @@
          </children>
       </AnchorPane>
       <Button fx:id="btnNuevaVenta" layoutX="29.0" layoutY="170.0" mnemonicParsing="false" onAction="#nuevaVenta" prefHeight="36.0" prefWidth="107.0" text="Nueva Venta" />
-      <AnchorPane layoutX="46.0" layoutY="25.0" prefHeight="102.0" prefWidth="72.0" style="-fx-border-radius: 100;">
+      <AnchorPane layoutX="51.0" layoutY="33.0" prefHeight="83.0" prefWidth="61.0" style="-fx-border-radius: 100;">
          <children>
-            <ImageView fitHeight="104.0" fitWidth="99.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="90.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@multimedia/tuLogo.png" />
                </image>
             </ImageView>
          </children>
       </AnchorPane>
-      <Button fx:id="btnProductos" layoutX="29.0" layoutY="245.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="107.0" text="Productos" />
+      <Button fx:id="btnProductos" layoutX="29.0" layoutY="245.0" mnemonicParsing="false" onAction="#verTabProductos" prefHeight="36.0" prefWidth="107.0" text="Productos" />
       <Button fx:id="btnClientes" layoutX="30.0" layoutY="323.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="107.0" text="Clientes" />
       <Button fx:id="btnProveedores" layoutX="29.0" layoutY="398.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="107.0" text="Proveedores" />
       <Button fx:id="btnPedidos" layoutX="30.0" layoutY="472.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="107.0" text="Pedidos" />

@@ -11,10 +11,10 @@ import zn.almacen.AlmacenApplication;
 
 public class SistemaDeVentasFx extends Application {
 
-    private ConfigurableApplicationContext applicationContext;
+    public static ConfigurableApplicationContext applicationContext;
 
     public void init(){
-        this.applicationContext = new SpringApplicationBuilder(AlmacenApplication.class).run();
+        applicationContext = new SpringApplicationBuilder(AlmacenApplication.class).run();
     }
 
     @Override

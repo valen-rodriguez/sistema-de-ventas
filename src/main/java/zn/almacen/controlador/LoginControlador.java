@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import zn.almacen.AlmacenApplication;
+import zn.almacen.presentacion.SistemaDeVentasFx;
 import zn.almacen.servicio.CuentaServicio;
 import javafx.scene.control.*;
 
@@ -61,7 +63,8 @@ public class LoginControlador implements Initializable {
                 if (password.equals(cuenta.getPassword())) {
                     // Cambiar de ventana a sistema.fxml
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/templates/sistema.fxml"));
+                        FXMLLoader loader = new FXMLLoader(AlmacenApplication.class.getResource("/templates/sistema.fxml"));
+                        loader.setControllerFactory(SistemaDeVentasFx.applicationContext::getBean);
                         Parent root = loader.load();
 
                         // Obtener el controlador de la ventana del sistema
@@ -70,13 +73,11 @@ public class LoginControlador implements Initializable {
                         // Pasar la cuenta al controlador de la ventana del sistema
                         controlador.setCuenta(cuenta);
 
-                        // Crear una nueva escena y un nuevo Stage
+                        // Crear una nueva escena y un nuevo Stage y mostrar la ventana
                         Scene scene = new Scene(root);
                         Stage stage = new Stage();
                         stage.setScene(scene);
                         stage.setTitle("Sistema de Ventas");
-
-                        // mostrar la nueva ventana
                         stage.show();
 
                         // cerrar la ventana actual
