@@ -18,5 +18,6 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer cliente_id;
+    private Integer cuenta_id;
     private Double precioTotal;
 }
