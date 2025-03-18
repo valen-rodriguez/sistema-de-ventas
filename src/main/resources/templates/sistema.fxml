@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="727.0" prefWidth="802.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zn.almacen.controlador.SistemaControlador">
+   <children>
+      <Label fx:id="mostrate" layoutX="208.0" layoutY="53.0" text="Sistema de Ventas">
+         <font>
+            <Font name="Segoe UI Bold" size="40.0" />
+         </font></Label>
+      <AnchorPane layoutX="161.0" layoutY="124.0" prefHeight="593.0" prefWidth="631.0">
+         <children>
+            <TabPane prefHeight="519.0" prefWidth="599.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab fx:id="tabNuevaVenta" text="Nueva Venta">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="572.0" prefWidth="645.0" />
+                  </content>
+                </Tab>
+                <Tab fx:id="tabProductos" text="Productos">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+                  <Tab fx:id="tabClientes" text="Clientes">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab fx:id="tabProveedores" text="Proveedores">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab fx:id="tabPedidos" text="Pedidos">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab fx:id="tabDatosEmpresa" text="Datos de la empresa">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </AnchorPane>
+      <Button fx:id="btnNuevaVenta" layoutX="29.0" layoutY="170.0" mnemonicParsing="false" onAction="#nuevaVenta" prefHeight="36.0" prefWidth="107.0" text="Nueva Venta" />
+      <AnchorPane layoutX="46.0" layoutY="25.0" prefHeight="102.0" prefWidth="72.0" style="-fx-border-radius: 100;">
+         <children>
+            <ImageView fitHeight="104.0" fitWidth="99.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@multimedia/tuLogo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <Button fx:id="btnProductos" layoutX="29.0" layoutY="245.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="107.0" text="Productos" />
+      <Button fx:id="btnClientes" layoutX="30.0" layoutY="323.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="107.0" text="Clientes" />
+      <Button fx:id="btnProveedores" layoutX="29.0" layoutY="398.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="107.0" text="Proveedores" />
+      <Button fx:id="btnPedidos" layoutX="30.0" layoutY="472.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="107.0" text="Pedidos" />
+      <Button fx:id="btnDatosEmpresa" layoutX="29.0" layoutY="545.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="107.0" text="Datos" />
+   </children>
+</AnchorPane>
