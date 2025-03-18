@@ -9,12 +9,15 @@ import java.util.List;
 @Service
 public class ProductoServicio implements IProductoServicio{
 
-    private ProductoRepositorio productoRepositorio;
+    private final ProductoRepositorio productoRepositorio;
+
+    public ProductoServicio(ProductoRepositorio productoRepositorio) {
+        this.productoRepositorio = productoRepositorio;
+    }
 
     @Override
     public List<Producto> listarProductos() {
-        List<Producto> productos = productoRepositorio.findAll();
-        return productos;
+        return productoRepositorio.findAll();
     }
 
     @Override
