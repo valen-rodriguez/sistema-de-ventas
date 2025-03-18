@@ -3,22 +3,18 @@ package zn.almacen.controlador;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import zn.almacen.modelo.Cuenta;
 import zn.almacen.servicio.CuentaServicio;
 import javafx.scene.control.*;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,14 +25,6 @@ public class LoginControlador implements Initializable {
     private static final Logger logger =
             LoggerFactory.getLogger(LoginControlador.class);
 
-    @Setter
-    private Stage stage;
-
-    private Cuenta cuenta;
-
-    public void setCuenta(Cuenta cuenta) {
-        this.cuenta = cuenta;
-    }
 
     @Autowired
     private CuentaServicio cuentaServicio;
@@ -62,7 +50,7 @@ public class LoginControlador implements Initializable {
             if (mail.isEmpty()) {
                 mostrarMensaje("Error", "Debe proporcionar un correo electrónico");
                 emailTxt.requestFocus();
-            } else if (password.isEmpty()) {
+            } else {
                 mostrarMensaje("Error", "Debe proporcionar una contraseña");
                 passTxt.requestFocus();
             }
