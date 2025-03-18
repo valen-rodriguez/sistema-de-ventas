@@ -23,6 +23,7 @@ public class SistemaDeVentasFx extends Application {
         loader.setControllerFactory(applicationContext::getBean);
         Scene login = new Scene(loader.load());
         stage.setScene(login);
+        stage.setTitle("Iniciar sesión");
         stage.show();
     }
 

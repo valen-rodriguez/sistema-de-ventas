@@ -1,9 +1,14 @@
 package zn.almacen.controlador;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
+import javafx.stage.Stage;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +16,8 @@ import org.springframework.stereotype.Component;
 import zn.almacen.servicio.CuentaServicio;
 import javafx.scene.control.*;
 
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -20,6 +27,8 @@ public class LoginControlador implements Initializable {
     private static final Logger logger =
             LoggerFactory.getLogger(LoginControlador.class);
 
+    @Setter
+    private Stage stage;
 
     @Autowired
     private CuentaServicio cuentaServicio;
@@ -55,6 +64,7 @@ public class LoginControlador implements Initializable {
             if (cuenta != null) {
                 if (password.equals(cuenta.getPassword())) {
                     mostrarMensaje("Bienvenido", "Bienvenido " + cuenta.getNombre());
+
                 } else {
                     mostrarMensaje("Incorrecto", "Ha ingresado una contraseña incorrecta");
                     passTxt.requestFocus();
@@ -74,4 +84,6 @@ public class LoginControlador implements Initializable {
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
+
+
 }
