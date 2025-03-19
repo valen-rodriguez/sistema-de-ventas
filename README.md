@@ -1,6 +1,6 @@
-# Almacen con JavaFX y Spring Boot
+# Sistema de ventas con JavaFX y Spring Boot
 
-Proyecto de una aplicación de escritorio para un almacén. Esta aplicación es un Sistema de Ventas, donde se podran cargar nuevas ventas, clientes, productos, proveedores y configurar los datos de la empresa 
+Proyecto de una aplicación de escritorio para una tienda. Esta aplicación es un Sistema de Ventas, donde se podran cargar nuevas ventas, clientes, productos, proveedores y configurar los datos de la empresa 
 
 ## Authors
 
