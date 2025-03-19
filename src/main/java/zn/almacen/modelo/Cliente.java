@@ -18,6 +18,7 @@ public class Cliente {
     private Integer cliente_id;
     private String nombre;
     private String apellido;
+    private int dni;
     private int telefono;
     private String direccion;
     private String razon_social;

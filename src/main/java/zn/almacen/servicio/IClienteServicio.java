@@ -1,17 +1,21 @@
 package zn.almacen.servicio;
 
 import zn.almacen.modelo.Cliente;
+import zn.almacen.modelo.Producto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IClienteServicio {
 
-    public List<Cliente> listarClientes();
+    List<Cliente> listarClientes();
 
-    public Cliente buscarClientePorId(Integer clienteId);
+    Cliente buscarClientePorDni(Integer dni);
 
-    public void guardarCliente(Cliente cliente);
+    Cliente buscarClientePorId(Integer clienteId);
 
-    public void eliminarCliente(Cliente cliente);
+    void guardarCliente(Cliente cliente);
+
+    void eliminarCliente(Cliente cliente);
 
 }
