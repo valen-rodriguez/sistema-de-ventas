@@ -21,6 +21,12 @@ public class ProductoServicio implements IProductoServicio{
     }
 
     @Override
+    public Producto buscarProductoPorCodigo(Integer codigo) {
+        Producto producto = productoRepositorio.findProductoByCodigo(codigo).orElse(null);
+        return producto;
+    }
+
+    @Override
     public Producto buscarProductoPorId(Integer productoId) {
         Producto producto = productoRepositorio.findById(productoId).orElse(null);
         return producto;

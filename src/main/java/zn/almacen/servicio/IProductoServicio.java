@@ -6,12 +6,14 @@ import java.util.List;
 
 public interface IProductoServicio {
 
-    public List<Producto> listarProductos();
+    List<Producto> listarProductos();
 
-    public Producto buscarProductoPorId(Integer productoId);
+    Producto buscarProductoPorCodigo(Integer codigo);
 
-    public void agregarProducto(Producto producto);
+    Producto buscarProductoPorId(Integer productoId);
 
-    public void eliminarProducto(Producto producto);
+    void agregarProducto(Producto producto);
+
+    void eliminarProducto(Producto producto);
 
 }
