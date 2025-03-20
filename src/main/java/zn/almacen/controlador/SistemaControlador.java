@@ -476,7 +476,7 @@ public class SistemaControlador implements Initializable {
     //metodo recibo en pdf
     private void pdf() {
         try {
-            //crea la carpeta si no existe
+
             File carpetaPdf = new File("src/main/java/zn/almacen/pdf");
 
             File file = new File(carpetaPdf, "venta" + this.pedido.getId() + ".pdf");
