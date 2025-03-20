@@ -1,6 +1,9 @@
 package zn.almacen.controlador;
 
-import javafx.beans.property.SimpleDoubleProperty;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,31 +13,28 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.control.TextField;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.grammars.hql.HqlParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import zn.almacen.modelo.*;
 
 import javafx.scene.control.*;
-import zn.almacen.servicio.ClienteServicio;
-import zn.almacen.servicio.PedidoProductoServicio;
-import zn.almacen.servicio.PedidoServicio;
-import zn.almacen.servicio.ProductoServicio;
+import zn.almacen.servicio.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 @Component
 public class SistemaControlador implements Initializable {
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(SistemaControlador.class);
-
     @Setter
     private Cuenta cuenta;
 
     //creacion de los objetos de las clases
+    public LocalDateTime fecha;
 
     private Cliente cliente;
 
@@ -43,6 +43,8 @@ public class SistemaControlador implements Initializable {
     private PedidoProducto pedidoProducto;
 
     private Pedido pedido;
+
+    private DatosEmpresa datosEmpresa;
 
     //listas
     private final ObservableList<Producto> productoList =
@@ -70,6 +72,9 @@ public class SistemaControlador implements Initializable {
 
     @Autowired
     private PedidoProductoServicio pedidoProductoServicio;
+
+    @Autowired
+    private DatosEmpresaServicio datosEmpresaServicio;
 
 
     //tabPane principal
@@ -176,6 +181,7 @@ public class SistemaControlador implements Initializable {
         this.cliente = new Cliente();
         this.pedidoProducto = new PedidoProducto();
         this.pedido = new Pedido();
+        this.datosEmpresa = new DatosEmpresa();
 
         tablaProductos.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         cargarTextoProducto();
@@ -373,7 +379,9 @@ public class SistemaControlador implements Initializable {
             pedidoNuevo.setCliente_id(this.cliente.getCliente_id());
             pedidoNuevo.setCuenta_id(this.cuenta.getCuenta_id());
             pedidoNuevo.setPrecioTotal(this.totalPagar);
+            pedidoNuevo.setFecha(LocalDateTime.now());
             pedidoServicio.agregarPedido(pedidoNuevo);
+            this.pedido = pedidoNuevo;
 
             //recorre lista de productos en el carrito
             for (Producto producto : productoCarritoList){
@@ -391,6 +399,7 @@ public class SistemaControlador implements Initializable {
 
             }
             mostrarMensaje("Informacion", "Se ha creado una nueva venta");
+            pdf();
 
             //limpiar la tabla del carrito
             productoCarritoList.clear();
@@ -400,6 +409,10 @@ public class SistemaControlador implements Initializable {
             //limpiar formulario del cliente
             dniClienteTxt.clear();
             nombreClienteTxt.clear();
+
+            //limpiar formulario total a pagar y resetear la variable a 0
+            totalTxt.clear();
+            this.totalPagar = 0;
 
             //limpiar formulario producto
             limpiarFormularioProducto();
@@ -415,6 +428,169 @@ public class SistemaControlador implements Initializable {
         precioTxt.clear();
         stockTxt.clear();
         cantidadTxt.clear();
+    }
+
+    //metodo recibo en pdf
+    private void pdf() {
+        try {
+            //crea la carpeta si no existe
+            File carpetaPdf = new File("src/main/java/zn/almacen/pdf");
+            if (!carpetaPdf.exists()) {
+                carpetaPdf.mkdirs(); // Crea la carpeta y cualquier directorio padre necesario
+            }
+
+            File file = new File(carpetaPdf, "venta" + this.pedido.getId() + ".pdf");
+            FileOutputStream archivo = new FileOutputStream(file);
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, archivo);
+
+            doc.open();
+
+            PdfPTable Encabezado =  new PdfPTable(4);
+            Encabezado.setWidthPercentage(100);
+            Encabezado.getDefaultCell().setBorder(0);
+            float[] ColumnaEncabezado = new float[]{20f, 30f, 70f, 40};
+            Encabezado.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+            // Logo
+            Image img = Image.getInstance("src/main/resources/templates/multimedia/tuLogo.png");
+            Encabezado.addCell(img);
+
+            //fuentes
+            Font fuenteTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLUE);
+            Font fuenteSubtitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLUE);
+            Font fuenteNormal = FontFactory.getFont(FontFactory.HELVETICA, 12);
+
+            //titulo
+            Paragraph titulo = new Paragraph("RECIBO", fuenteTitulo);
+
+            //datos del vendedor
+            Paragraph datosVendedor = new Paragraph("Vendedor:\n", fuenteNormal);
+            datosVendedor.setAlignment(Element.ALIGN_RIGHT);
+            String nombreVendedor = this.cuenta.getNombre() + " " + this.cuenta.getApellido();
+            datosVendedor.add(nombreVendedor);
+
+            Encabezado.addCell("");
+            Encabezado.addCell(titulo);
+            Encabezado.addCell(datosVendedor);
+            doc.add(Encabezado);
+
+            doc.add(new Paragraph(" "));
+            doc.add(new Paragraph(" "));
+
+            //datos del cliente
+            Paragraph datosCliente = new Paragraph("Datos del cliente", fuenteSubtitulo);
+            datosCliente.setAlignment(Element.ALIGN_LEFT);
+            doc.add(datosCliente);
+
+            String nombreCliente = this.cliente.getNombre() + this.cliente.getApellido();
+            String dni = String.valueOf(this.cliente.getDni());
+            String telefono = String.valueOf(this.cliente.getTelefono());
+            String direccion = this.cliente.getDireccion();
+            String razonSocial = this.cliente.getRazon_social();
+
+            Paragraph infoCliente = new Paragraph(
+                    "Nombre: " + nombreCliente + "\n" +
+                            "DNI: " + dni + "\n" +
+                            "Teléfono: " + telefono + "\n" +
+                            "Dirección: " + direccion + "\n" +
+                            "Razón social: " + razonSocial + "\n"
+            );
+            infoCliente.setAlignment(Element.ALIGN_LEFT);
+            doc.add(infoCliente);
+            doc.add(new Paragraph(" "));
+            doc.add(new Paragraph(" "));
+
+            //tabla de productos
+            PdfPTable tablaPdf = new PdfPTable(3);
+            tablaPdf.setWidthPercentage(100);
+
+            //encabezado de la tabla
+            agregarCelda(tablaPdf, "Producto", fuenteSubtitulo);
+            agregarCelda(tablaPdf, "Cantidad", fuenteSubtitulo);
+            agregarCelda(tablaPdf, "Total", fuenteSubtitulo);
+
+            //cargar productos en la tabla
+            for (Producto producto : productoCarritoList) {
+                String nombreProducto = producto.getProducto();
+                String cantidadIngresada = String.valueOf(producto.getCantidadIngresada());
+                String total = String.valueOf(producto.getTotal());
+
+                agregarFilaProducto(tablaPdf, nombreProducto, cantidadIngresada, total, fuenteNormal);
+
+            }
+            tablaPdf.setHorizontalAlignment(Element.ALIGN_CENTER);
+            doc.add(tablaPdf);
+
+            doc.add(new Paragraph(" "));
+
+            //total
+            Paragraph total = new Paragraph("TOTAL: $" + this.totalPagar, fuenteSubtitulo);
+            doc.add(total);
+
+            //factura y fecha;
+            String fechaCompleta = String.valueOf(this.pedido.getFecha());
+            String fechaFormateada = fechaCompleta.substring(0, 10);
+            Paragraph fecha = new Paragraph("Factura: " + this.pedido.getId() + "\nFecha: " + fechaFormateada, fuenteNormal);
+            fecha.setAlignment(Element.ALIGN_LEFT);
+            doc.add(fecha);
+
+            //datos de la empresa
+            Paragraph datosDeLaEmpresa = new Paragraph("Datos empresa", fuenteSubtitulo);
+            datosDeLaEmpresa.setAlignment(Element.ALIGN_RIGHT);
+            doc.add(datosDeLaEmpresa);
+
+            //cargar datos de la empresa
+            var datosEmpresaNuevo = datosEmpresaServicio.verDatos(1);
+            String ruc = String.valueOf(datosEmpresaNuevo.getRuc());
+            String nombre = datosEmpresaNuevo.getNombre();
+            String telefonoEmpresa = String.valueOf(datosEmpresaNuevo.getTelefono());
+            String direccionEmpresa = datosEmpresaNuevo.getDireccion();
+            String razonSocialEmpresa = datosEmpresaNuevo.getRazon_social();
+
+            Paragraph infoEmpresa = new Paragraph(
+                    "RUC: " + ruc + "\n" +
+                            "Empresa: " + nombre + "\n" +
+                            "Teléfono: " + telefonoEmpresa + "\n" +
+                            "Dirección: " + direccionEmpresa + "\n" +
+                            "Razón social: " + razonSocialEmpresa + "\n"
+            );
+            infoEmpresa.setAlignment(Element.ALIGN_RIGHT);
+            doc.add(infoEmpresa);
+
+            doc.close();
+            archivo.close();
+            mostrarMensaje("Información", "Recibo creado");
+        } catch (Exception e) {
+            mostrarMensaje("Error", "Error al crear el PDF: " + e.getMessage());
+        }
+    }
+
+    //metodo eliminar producto carrito
+    public void eliminarProductoCarrito(){
+        var producto = tablaCarrito.getSelectionModel().getSelectedItem();
+        if (producto != null){
+            productoCarritoList.remove(producto);
+            tablaCarrito.setItems(productoCarritoList);
+            tablaCarrito.refresh();
+            totalAPagar();
+        }else{
+            mostrarMensaje("Error", "Debe seleccionar un producto");
+        }
+    }
+
+    //metodo agregar celda en tabla pdf
+    private static void agregarCelda(PdfPTable tabla, String texto, Font fuente) {
+        PdfPCell celda = new PdfPCell(new Phrase(texto, fuente));
+        celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+        tabla.addCell(celda);
+    }
+
+    //metodo para agregar una fila de producto a la tabla pdf
+    private static void agregarFilaProducto(PdfPTable tabla, String producto, String cantidad, String total, Font fuente){
+        agregarCelda(tabla, producto, fuente);
+        agregarCelda(tabla, cantidad, fuente);
+        agregarCelda(tabla, total, fuente);
     }
 
     //metodo apartado Productos
