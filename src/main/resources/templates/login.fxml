@@ -7,15 +7,18 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="480.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zn.almacen.controlador.LoginControlador">
-   <children>
-      <Label layoutX="84.0" layoutY="73.0" text="Bienvenido">
-         <font>
-            <Font name="Segoe UI Bold" size="29.0" />
-         </font>
-      </Label>
-      <TextField fx:id="emailTxt" layoutX="69.0" layoutY="228.0" prefHeight="25.0" prefWidth="183.0" promptText="nombre@mail.com" style="-fx-background-color: #d9d9d9;" />
-      <PasswordField fx:id="passTxt" layoutX="69.0" layoutY="263.0" prefHeight="25.0" prefWidth="183.0" promptText="Contraseña" style="-fx-background-color: #d9d9d9;" />
-      <Button fx:id="btnIniciarSesion" layoutX="69.0" layoutY="307.0" mnemonicParsing="false" onAction="#btnIniciarSesion" prefHeight="25.0" prefWidth="183.0" style="-fx-background-radius: 33;" text="Iniciar sesión" />
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0"
+            prefWidth="320.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="zn.almacen.controlador.LoginControlador">
+   <Label layoutX="84.0" layoutY="73.0" text="Bienvenido">
+      <font>
+         <Font name="Segoe UI Bold" size="29.0"/>
+      </font>
+   </Label>
+   <TextField fx:id="emailTxt" layoutX="69.0" layoutY="228.0" prefHeight="25.0" prefWidth="183.0"
+              promptText="nombre@mail.com" style="-fx-background-color: #d9d9d9;"/>
+   <PasswordField fx:id="passTxt" layoutX="69.0" layoutY="263.0" prefHeight="25.0" prefWidth="183.0"
+                  promptText="Contraseña" style="-fx-background-color: #d9d9d9;"/>
+   <Button fx:id="btnIniciarSesion" layoutX="69.0" layoutY="307.0" mnemonicParsing="false" onAction="#btnIniciarSesion"
+           prefHeight="25.0" prefWidth="183.0" style="-fx-background-radius: 33;" text="Iniciar sesión"/>
 </AnchorPane>
