@@ -460,14 +460,24 @@ public class SistemaControlador implements Initializable {
         nombreClienteTxt.clear();
     }
 
+    //metodo eliminar producto carrito
+    public void eliminarProductoCarrito(){
+        var producto = tablaCarrito.getSelectionModel().getSelectedItem();
+        if (producto != null){
+            productoCarritoList.remove(producto);
+            tablaCarrito.setItems(productoCarritoList);
+            tablaCarrito.refresh();
+            totalAPagar();
+        }else{
+            mostrarMensaje("Error", "Debe seleccionar un producto");
+        }
+    }
+
     //metodo recibo en pdf
     private void pdf() {
         try {
             //crea la carpeta si no existe
             File carpetaPdf = new File("src/main/java/zn/almacen/pdf");
-            if (!carpetaPdf.exists()) {
-                carpetaPdf.mkdirs(); // Crea la carpeta y cualquier directorio padre necesario
-            }
 
             File file = new File(carpetaPdf, "venta" + this.pedido.getId() + ".pdf");
             FileOutputStream archivo = new FileOutputStream(file);
@@ -480,6 +490,7 @@ public class SistemaControlador implements Initializable {
             Encabezado.setWidthPercentage(100);
             Encabezado.getDefaultCell().setBorder(0);
             float[] ColumnaEncabezado = new float[]{20f, 30f, 70f, 40};
+            Encabezado.setWidths(ColumnaEncabezado);
             Encabezado.setHorizontalAlignment(Element.ALIGN_LEFT);
 
             // Logo
@@ -595,21 +606,6 @@ public class SistemaControlador implements Initializable {
             mostrarMensaje("Error", "Error al crear el PDF: " + e.getMessage());
         }
     }
-
-    //metodo eliminar producto carrito
-    public void eliminarProductoCarrito(){
-        var producto = tablaCarrito.getSelectionModel().getSelectedItem();
-        if (producto != null){
-            productoCarritoList.remove(producto);
-            tablaCarrito.setItems(productoCarritoList);
-            tablaCarrito.refresh();
-            totalAPagar();
-        }else{
-            mostrarMensaje("Error", "Debe seleccionar un producto");
-        }
-    }
-
-
 
     //metodo agregar celda en tabla pdf
     private static void agregarCelda(PdfPTable tabla, String texto, Font fuente) {
