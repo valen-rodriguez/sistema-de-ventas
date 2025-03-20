@@ -19,7 +19,7 @@ public class SistemaDeVentasFx extends Application {
 
     @Override
     public void start(Stage stage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(AlmacenApplication.class.getResource("/templates/login.fxml"));
+        FXMLLoader loader = new FXMLLoader(AlmacenApplication.class.getResource("/templates/sistema.fxml"));
         loader.setControllerFactory(applicationContext::getBean);
         Scene login = new Scene(loader.load());
         stage.setScene(login);
