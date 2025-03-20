@@ -91,7 +91,7 @@ public class LoginControlador implements Initializable {
                         stage.setScene(scene);
                         stage.setTitle("Sistema de Ventas");
                         stage.setWidth(1335);
-                        stage.setHeight(722);
+                        stage.setHeight(748);
                         stage.setResizable(false);
                         stage.setMaximized(false);
                         stage.show();
