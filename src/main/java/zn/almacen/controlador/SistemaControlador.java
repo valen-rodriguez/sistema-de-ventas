@@ -361,6 +361,7 @@ public class SistemaControlador implements Initializable {
         totalTxt.setText("$" + this.totalPagar);
     }
 
+    //metodo para crear una venta
     public void crearVenta(){
         if (totalTxt.getText().isEmpty()){
             mostrarMensaje("Error", "Ingrese al menos un producto");
