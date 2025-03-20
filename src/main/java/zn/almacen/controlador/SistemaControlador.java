@@ -290,7 +290,7 @@ public class SistemaControlador implements Initializable {
                 } else {
                     mostrarMensaje("Error", "El producto ya está en el carrito");
                 }
-                limpiarFormulario();
+                limpiarFormularioProducto();
                 codigoTxt.requestFocus();
             } else {
                 mostrarMensaje("Error", "No hay suficiente stock");
@@ -401,19 +401,32 @@ public class SistemaControlador implements Initializable {
             dniClienteTxt.clear();
             nombreClienteTxt.clear();
 
+            //limpiar formulario producto
+            limpiarFormularioProducto();
+
             codigoTxt.requestFocus();
         }
     }
 
+    //metodo para limpiar el formulario del producto
+    public void limpiarFormularioProducto(){
+        codigoTxt.clear();
+        productoTxt.clear();
+        precioTxt.clear();
+        stockTxt.clear();
+        cantidadTxt.clear();
+    }
+
     //metodo apartado Productos
     //metodo para abrir la ventana de productos
+
     public void verTabProductos(){
         tabPanePrincipal.getSelectionModel().select(tabProductos);
         configurarColumnasProductos();
         listarProductos();
     }
-
     //metodo configurar columnas de la tabla de productos
+
     private void configurarColumnasProductos(){
         idProductoColumna.setCellValueFactory(new PropertyValueFactory<>("producto_id"));
         codigoProductoColumna.setCellValueFactory(new PropertyValueFactory<>("codigo"));
@@ -422,40 +435,32 @@ public class SistemaControlador implements Initializable {
         stockProductoColumna.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
         precioProductoColumna.setCellValueFactory(new PropertyValueFactory<>("precio"));
     }
-
     //metodo para listar los productos
+
     private void listarProductos(){
         productoList.clear();
         productoList.addAll(productoServicio.listarProductos());
         tablaProductos.setItems(productoList);
     }
-
     //metodo para abrir la ventana de clientes
+
     public void verTabClientes(){
         tabPanePrincipal.getSelectionModel().select(tabClientes);
     }
-
     //metodo para abrir la ventana de proveedores
+
     public void verTabProovedores(){
         tabPanePrincipal.getSelectionModel().select(tabProveedores);
     }
-
     //metodo para abrir la ventana de pedidos
+
     public void verTabPedidos(){
         tabPanePrincipal.getSelectionModel().select(tabPedidos);
     }
-
     //metodo para abrir la ventana de datos de la empresa
+
     public void verTabDatos(){
         tabPanePrincipal.getSelectionModel().select(tabDatosEmpresa);
-    }
-
-    public void limpiarFormulario(){
-        codigoTxt.clear();
-        productoTxt.clear();
-        precioTxt.clear();
-        stockTxt.clear();
-        cantidadTxt.clear();
     }
 
     private void mostrarMensaje(String titulo, String mensaje){
