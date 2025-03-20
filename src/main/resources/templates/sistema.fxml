@@ -103,7 +103,7 @@
                               </Label>
                               <TextField fx:id="totalTxt" editable="false" layoutX="729.0" layoutY="449.0" prefHeight="25.0" prefWidth="107.0" style="-fx-background-color: #d9d9d9;" />
                               <Separator layoutX="729.0" layoutY="474.0" prefHeight="1.0" prefWidth="107.0" style="-fx-background-color: black;" />
-                              <Button fx:id="btnCrearVenta" layoutX="701.0" layoutY="506.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="135.0" text="Crear Venta" />
+                              <Button fx:id="btnCrearVenta" layoutX="701.0" layoutY="506.0" mnemonicParsing="false" onAction="#crearVenta" prefHeight="36.0" prefWidth="135.0" text="Crear Venta" />
                            </children></AnchorPane>
                   </content>
                 </Tab>

@@ -14,12 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import zn.almacen.modelo.Cliente;
+import zn.almacen.modelo.*;
 
 import javafx.scene.control.*;
-import zn.almacen.modelo.Cuenta;
-import zn.almacen.modelo.Pedido;
-import zn.almacen.modelo.Producto;
 import zn.almacen.servicio.ClienteServicio;
 import zn.almacen.servicio.PedidoProductoServicio;
 import zn.almacen.servicio.PedidoServicio;
@@ -37,7 +34,15 @@ public class SistemaControlador implements Initializable {
     @Setter
     private Cuenta cuenta;
 
+    //creacion de los objetos de las clases
+
+    private Cliente cliente;
+
     private Producto producto;
+
+    private PedidoProducto pedidoProducto;
+
+    private Pedido pedido;
 
     //listas
     private final ObservableList<Producto> productoList =
@@ -90,6 +95,10 @@ public class SistemaControlador implements Initializable {
     private Tab tabDatosEmpresa;
 
     //apartado Nueva Venta
+
+    //variable total a pagar
+    private double totalPagar;
+
     //campos de texto
     @FXML
     private TextField codigoTxt;
@@ -164,11 +173,16 @@ public class SistemaControlador implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.producto = new Producto();
+        this.cliente = new Cliente();
+        this.pedidoProducto = new PedidoProducto();
+        this.pedido = new Pedido();
+
         tablaProductos.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         cargarTextoProducto();
         tablaCarrito.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         configurarColumnasCarrito();
         cargarProductoTabla();
+        buscarCliente();
     }
 
 
@@ -190,7 +204,7 @@ public class SistemaControlador implements Initializable {
                         precioTxt.setText(String.valueOf(productoCodigo.getPrecio()));
                         stockTxt.setText(String.valueOf(productoCodigo.getCantidad()));
 
-                        // Asignar los valores al objeto producto
+                        //asignar los valores al objeto producto
                         this.producto.setProducto_id(productoCodigo.getProducto_id());
                         this.producto.setProveedor_id(productoCodigo.getProveedor_id());
                         this.producto.setCodigo(productoCodigo.getCodigo());
@@ -223,10 +237,12 @@ public class SistemaControlador implements Initializable {
     public void agregarProductoCarrito() {
         try {
 
-            //verifioco si el usuario ingreso el codigo dle producto antes de agregar el producto en el carrito
-            if (cantidadTxt.getText().isEmpty() || productoTxt.getText().isEmpty()){
-                mostrarMensaje("Error", "No hay producto que agregar");
+            //verifico si el usuario ingreso el codigo dle producto antes de agregar el producto en el carrito
+            if (cantidadTxt.getText().isEmpty()){
+                mostrarMensaje("Error", "Ingrese la cantidad");
                 return;
+            }else if (productoTxt.getText().isEmpty()){
+                mostrarMensaje("Error", "No ha ingresado ningun producto");
             }
 
             Double cantidadIngresadaTxt = Double.parseDouble(cantidadTxt.getText());
@@ -254,8 +270,9 @@ public class SistemaControlador implements Initializable {
                 productoCarrito.setCantidadIngresada(cantidadIngresadaTxt);
                 double total = cantidadIngresadaTxt * this.producto.getPrecio();
                 productoCarrito.setTotal(total);
-                Integer codigo = productoCarrito.getCodigo();
+                this.producto.setTotal(total);
 
+                Integer codigo = productoCarrito.getCodigo();
                 //valido producto (si esta en la lista o no)
                 boolean repetido = false;
                 for (Producto producto : productoCarritoList) {
@@ -269,13 +286,14 @@ public class SistemaControlador implements Initializable {
                     productoCarritoList.add(productoCarrito);
                     tablaCarrito.setItems(productoCarritoList);
                     tablaCarrito.refresh();
+                    totalAPagar();
                 } else {
                     mostrarMensaje("Error", "El producto ya está en el carrito");
                 }
                 limpiarFormulario();
                 codigoTxt.requestFocus();
             } else {
-                mostrarMensaje("Error", "Ingrese la cantidad");
+                mostrarMensaje("Error", "No hay suficiente stock");
             }
         } catch (Exception e) {
             mostrarMensaje("Error", "Ingrese un número válido para la cantidad.");
@@ -304,7 +322,87 @@ public class SistemaControlador implements Initializable {
         });
     }
 
+    //metodo buscar cliente por dni
+    private void buscarCliente(){
+        dniClienteTxt.setOnKeyPressed(event ->{
+        if (event.getCode() == KeyCode.ENTER) {
+            try {
+                Integer dni = Integer.parseInt(dniClienteTxt.getText());
+                Cliente clienteDni = clienteServicio.buscarClientePorDni(dni);
+                if (clienteDni != null) {
+                    nombreClienteTxt.setText(clienteDni.getNombre() + " " + clienteDni.getApellido());
 
+                    //asignar valores al objeto cliente
+                    this.cliente.setCliente_id(clienteDni.getCliente_id());
+                    this.cliente.setNombre(clienteDni.getNombre());
+                    this.cliente.setApellido(clienteDni.getApellido());
+                    this.cliente.setDni(clienteDni.getDni());
+                    this.cliente.setTelefono(clienteDni.getTelefono());
+                    this.cliente.setDireccion(clienteDni.getDireccion());
+                    this.cliente.setRazon_social(clienteDni.getRazon_social());
+                } else {
+                    mostrarMensaje("Error", "No se encontro un cliente con ese DNI.");
+                    dniClienteTxt.requestFocus();
+                }
+            } catch (NumberFormatException e) {
+                mostrarMensaje("Error", "Ingrese un DNI valido");
+                dniClienteTxt.requestFocus();
+            }
+        }
+    });
+    }
+
+    //metodo para calcular el total a pagar
+    private void totalAPagar() {
+        this.totalPagar = 0;
+        for (Producto producto : productoCarritoList) {
+            this.totalPagar = this.totalPagar + producto.getTotal();
+        }
+        totalTxt.setText("$" + this.totalPagar);
+    }
+
+    public void crearVenta(){
+        if (totalTxt.getText().isEmpty()){
+            mostrarMensaje("Error", "Ingrese al menos un producto");
+        } else if (nombreClienteTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese el cliente");
+        } else {
+            //crea el pedido
+            Pedido pedidoNuevo = new Pedido();
+            pedidoNuevo.setCliente_id(this.cliente.getCliente_id());
+            pedidoNuevo.setCuenta_id(this.cuenta.getCuenta_id());
+            pedidoNuevo.setPrecioTotal(this.totalPagar);
+            pedidoServicio.agregarPedido(pedidoNuevo);
+
+            //recorre lista de productos en el carrito
+            for (Producto producto : productoCarritoList){
+                //guarda el pedidoProducto en la base de datos
+                PedidoProducto pedidoProducto = new PedidoProducto();
+                pedidoProducto.setProductoId(producto);
+                pedidoProducto.setPedidoId(pedidoNuevo);
+                pedidoProducto.setCantidad(producto.getCantidadIngresada().intValue());
+                pedidoProductoServicio.agregarPedidoProducto(pedidoProducto);
+
+                //asigna el nuevo stock a los productos
+                double cantidadNueva = producto.getCantidad() - producto.getCantidadIngresada();
+                producto.setCantidad((int) cantidadNueva);
+                productoServicio.agregarProducto(producto);
+
+            }
+            mostrarMensaje("Informacion", "Se ha creado una nueva venta");
+
+            //limpiar la tabla del carrito
+            productoCarritoList.clear();
+            tablaCarrito.setItems(productoCarritoList);
+            tablaCarrito.refresh();
+
+            //limpiar formulario del cliente
+            dniClienteTxt.clear();
+            nombreClienteTxt.clear();
+
+            codigoTxt.requestFocus();
+        }
+    }
 
     //metodo apartado Productos
     //metodo para abrir la ventana de productos
@@ -366,6 +464,4 @@ public class SistemaControlador implements Initializable {
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
-
-
 }
