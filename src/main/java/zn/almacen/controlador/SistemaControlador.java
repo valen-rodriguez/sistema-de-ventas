@@ -314,6 +314,7 @@ public class SistemaControlador implements Initializable {
         }
     }
 
+    //metodo para cargar el producto en el formulario
     public void cargarProductoCarritoAFormulario() {
         var producto = tablaCarrito.getSelectionModel().getSelectedItem();
         if (producto != null) {
