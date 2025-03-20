@@ -191,7 +191,7 @@ public class SistemaControlador implements Initializable {
     }
 
 
-    //metodos de la ventana nueva venta
+    //-------------------------------- METODOS DEL APARTADO NUEVA VENTA --------------------------------//
     //metodo para abrir la ventana de nueva venta
     public void verTabNuevaVenta(){
         tabPanePrincipal.getSelectionModel().select(tabNuevaVenta);
@@ -592,7 +592,11 @@ public class SistemaControlador implements Initializable {
         agregarCelda(tabla, total, fuente);
     }
 
-    //metodo apartado Productos
+    //-------------------------------- FIN DEL APARTADO NUEVA VENTA --------------------------------//
+
+
+
+    //-------------------------------- METODOS DEL APARTADO PRODUCTOS --------------------------------//
 
     //metodo para abrir la ventana de productos
     public void verTabProductos(){
@@ -618,6 +622,17 @@ public class SistemaControlador implements Initializable {
         tablaProductos.setItems(productoList);
     }
     //metodo para abrir la ventana de clientes
+
+
+
+
+
+
+
+
+
+
+    //-------------------------------- FIN DEL APARTADO PRODUCTOS --------------------------------//
 
     public void verTabClientes(){
         tabPanePrincipal.getSelectionModel().select(tabClientes);
