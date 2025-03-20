@@ -7,9 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import zn.almacen.AlmacenApplication;
@@ -24,10 +23,6 @@ import java.util.ResourceBundle;
 @Component
 public class LoginControlador implements Initializable {
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(LoginControlador.class);
-
-
     @Autowired
     private CuentaServicio cuentaServicio;
 
@@ -39,10 +34,27 @@ public class LoginControlador implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        logger.info("Iniciando aplicacion");
+        password();
+        iniciarSesion();
+    }
+
+    public void password(){
+        emailTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                passTxt.requestFocus();
+            }
+        });
     }
 
     public void iniciarSesion(){
+        passTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                btnIniciarSesion();
+            }
+        });
+    }
+
+    public void btnIniciarSesion(){
 
         String mail = emailTxt.getText();
         String password = passTxt.getText();
