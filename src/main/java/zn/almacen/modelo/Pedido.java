@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -20,4 +22,5 @@ public class Pedido {
     private Integer cliente_id;
     private Integer cuenta_id;
     private Double precioTotal;
+    private LocalDateTime fecha;
 }
