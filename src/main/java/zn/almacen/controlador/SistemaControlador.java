@@ -190,8 +190,8 @@ public class SistemaControlador implements Initializable {
         buscarCliente();
     }
 
+    //-------------------------------- MÉTODOS DEL APARTADO NUEVA VENTA --------------------------------//
 
-    //-------------------------------- METODOS DEL APARTADO NUEVA VENTA --------------------------------//
     //metodo para abrir la ventana de nueva venta
     public void verTabNuevaVenta(){
         tabPanePrincipal.getSelectionModel().select(tabNuevaVenta);
@@ -238,7 +238,7 @@ public class SistemaControlador implements Initializable {
         });
     }
 
-    //metodo para cargar el producto en la tabla (boton)
+    //metodo para cargar el producto en la tabla (botón)
     public void agregarProductoCarrito() {
         try {
 
@@ -279,22 +279,31 @@ public class SistemaControlador implements Initializable {
 
                 Integer codigo = productoCarrito.getCodigo();
                 //valido producto (si esta en la lista o no)
-                boolean repetido = false;
+                var repetido = false;
+                Producto productoExistente = null;
                 for (Producto producto : productoCarritoList) {
                     if (producto.getCodigo().equals(codigo)) {
                         repetido = true;
+                        productoExistente = producto;
                         break;
                     }
                 }
 
                 if (!repetido) {
                     productoCarritoList.add(productoCarrito);
-                    tablaCarrito.setItems(productoCarritoList);
-                    tablaCarrito.refresh();
-                    totalAPagar();
                 } else {
-                    mostrarMensaje("Error", "El producto ya está en el carrito");
+                    //si el producto ya está en la lista, actualizo la cantidad y el total
+                    double nuevaCantidad = cantidadIngresadaTxt;
+                    productoExistente.setCantidadIngresada(nuevaCantidad);
+                    productoExistente.setTotal(nuevaCantidad * productoExistente.getPrecio());
                 }
+
+                //actualizo la tabla y el total a pagar
+                tablaCarrito.setItems(productoCarritoList);
+                tablaCarrito.refresh();
+                totalAPagar();
+
+                //limpio el formulario
                 limpiarFormularioProducto();
                 codigoTxt.requestFocus();
             } else {
@@ -302,6 +311,18 @@ public class SistemaControlador implements Initializable {
             }
         } catch (Exception e) {
             mostrarMensaje("Error", "Ingrese un número válido para la cantidad.");
+        }
+    }
+
+    public void cargarProductoCarritoAFormulario() {
+        var producto = tablaCarrito.getSelectionModel().getSelectedItem();
+        if (producto != null) {
+            codigoTxt.setText(String.valueOf(producto.getCodigo()));
+            codigoTxt.setEditable(false);
+            productoTxt.setText(producto.getProducto());
+            precioTxt.setText(String.valueOf(producto.getPrecio()));
+            stockTxt.setText(String.valueOf(producto.getCantidad()));
+            cantidadTxt.setText(String.valueOf(producto.getCantidadIngresada()));
         }
     }
 
@@ -427,6 +448,15 @@ public class SistemaControlador implements Initializable {
         precioTxt.clear();
         stockTxt.clear();
         cantidadTxt.clear();
+        codigoTxt.setEditable(true);
+    }
+
+    //metodo para limpiar todos los formularios
+    public void limpiarFormulariosTabVentas(){
+        limpiarFormularioProducto();
+        //limpiar formulario del cliente
+        dniClienteTxt.clear();
+        nombreClienteTxt.clear();
     }
 
     //metodo recibo en pdf
@@ -578,6 +608,8 @@ public class SistemaControlador implements Initializable {
         }
     }
 
+
+
     //metodo agregar celda en tabla pdf
     private static void agregarCelda(PdfPTable tabla, String texto, Font fuente) {
         PdfPCell celda = new PdfPCell(new Phrase(texto, fuente));
@@ -596,7 +628,7 @@ public class SistemaControlador implements Initializable {
 
 
 
-    //-------------------------------- METODOS DEL APARTADO PRODUCTOS --------------------------------//
+    //-------------------------------- MÉTODOS DEL APARTADO PRODUCTOS --------------------------------//
 
     //metodo para abrir la ventana de productos
     public void verTabProductos(){
