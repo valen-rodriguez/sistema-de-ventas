@@ -17,6 +17,7 @@ public class Cuenta {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer cuenta_id;
     private String nombre;
+    private String apellido;
     private String mail;
     private String password;
 }
