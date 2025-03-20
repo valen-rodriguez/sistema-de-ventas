@@ -13,7 +13,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.control.TextField;
 import lombok.Setter;
-import org.hibernate.grammars.hql.HqlParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import zn.almacen.modelo.*;
@@ -483,7 +482,7 @@ public class SistemaControlador implements Initializable {
             datosCliente.setAlignment(Element.ALIGN_LEFT);
             doc.add(datosCliente);
 
-            String nombreCliente = this.cliente.getNombre() + this.cliente.getApellido();
+            String nombreCliente = this.cliente.getNombre() + " " + this.cliente.getApellido();
             String dni = String.valueOf(this.cliente.getDni());
             String telefono = String.valueOf(this.cliente.getTelefono());
             String direccion = this.cliente.getDireccion();
@@ -594,15 +593,15 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo apartado Productos
-    //metodo para abrir la ventana de productos
 
+    //metodo para abrir la ventana de productos
     public void verTabProductos(){
         tabPanePrincipal.getSelectionModel().select(tabProductos);
         configurarColumnasProductos();
         listarProductos();
     }
-    //metodo configurar columnas de la tabla de productos
 
+    //metodo configurar columnas de la tabla de productos
     private void configurarColumnasProductos(){
         idProductoColumna.setCellValueFactory(new PropertyValueFactory<>("producto_id"));
         codigoProductoColumna.setCellValueFactory(new PropertyValueFactory<>("codigo"));
