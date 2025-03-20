@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="727.0" prefWidth="1322.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zn.almacen.controlador.SistemaControlador">
+<AnchorPane prefHeight="727.0" prefWidth="1322.0" scaleShape="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zn.almacen.controlador.SistemaControlador">
    <children>
       <Label fx:id="mostrate" layoutX="229.0" layoutY="47.0" text="Sistema de Ventas: Nombre de tu empresa">
          <font>
@@ -29,12 +29,12 @@
                            <children>
                               <TableView fx:id="tablaCarrito" editable="true" layoutX="57.0" layoutY="155.0" prefHeight="282.0" prefWidth="778.0">
                                 <columns>
-                                  <TableColumn fx:id="CodigoProductoCarritoColumna" prefWidth="78.0" text="Código" />
-                                  <TableColumn fx:id="nombreProductoCarritoColumna" prefWidth="144.0" text="Producto" />
-                                    <TableColumn fx:id="descripcionProductoCarritoColumna" prefWidth="254.0" text="Descripcion" />
-                                    <TableColumn fx:id="cantidadProductoCarritoColumna" prefWidth="102.0" text="Cantidad" />
-                                    <TableColumn fx:id="precioProductoCarritoColumna" prefWidth="101.0" text="Precio (unidad)" />
-                                    <TableColumn fx:id="totalProductoCarritoColumna" prefWidth="98.0" text="Total" />
+                                  <TableColumn fx:id="codigoProductoCarritoColumna" editable="false" prefWidth="78.0" text="Código" />
+                                  <TableColumn fx:id="nombreProductoCarritoColumna" editable="false" prefWidth="144.0" text="Producto" />
+                                    <TableColumn fx:id="descripcionProductoCarritoColumna" editable="false" prefWidth="254.0" text="Descripcion" />
+                                    <TableColumn fx:id="cantidadProductoCarritoColumna" editable="false" prefWidth="102.0" text="Cantidad" />
+                                    <TableColumn fx:id="precioProductoCarritoColumna" editable="false" prefWidth="101.0" text="Precio (unidad)" />
+                                    <TableColumn fx:id="totalProductoCarritoColumna" editable="false" prefWidth="98.0" text="Total" />
                                 </columns>
                               </TableView>
                               <AnchorPane layoutX="32.0" layoutY="23.0" prefHeight="104.0" prefWidth="1040.0">
@@ -74,7 +74,8 @@
                                     <Separator layoutX="606.0" layoutY="79.0" prefHeight="0.0" prefWidth="74.0" style="-fx-background-color: black;" />
                                     <TextField fx:id="cantidadTxt" layoutX="722.0" layoutY="54.0" prefHeight="25.0" prefWidth="74.0" style="-fx-background-color: #d9d9d9;" />
                                     <Separator layoutX="722.0" layoutY="79.0" prefHeight="0.0" prefWidth="74.0" style="-fx-background-color: black;" />
-                                    <Button fx:id="btnAgregarAlCarrito" layoutX="837.0" layoutY="49.0" mnemonicParsing="false" onAction="#nuevaVenta" prefHeight="36.0" prefWidth="135.0" text="Agregar Producto" />
+                                    <Button fx:id="btnAgregarAlCarrito" layoutX="837.0" layoutY="49.0" mnemonicParsing="false" onAction="#agregarProductoCarrito" prefHeight="36.0" prefWidth="135.0" text="Agregar Producto" />
+                                    <Button fx:id="btnLimpiarFormulario" layoutX="837.0" layoutY="6.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="135.0" text="Limpiar formulario" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane layoutX="851.0" layoutY="155.0" prefHeight="121.0" prefWidth="186.0">
@@ -95,14 +96,14 @@
                                     <TextField fx:id="nombreClienteTxt" editable="false" layoutX="31.0" layoutY="93.0" prefHeight="25.0" prefWidth="216.0" style="-fx-background-color: #d9d9d9;" />
                                  </children>
                               </AnchorPane>
-                              <Label layoutX="596.0" layoutY="449.0" text="Total a pagar:">
+                              <Label layoutX="595.0" layoutY="448.0" text="Total a pagar:">
                                  <font>
                                     <Font name="System Bold" size="19.0" />
                                  </font>
                               </Label>
                               <TextField fx:id="totalTxt" editable="false" layoutX="729.0" layoutY="449.0" prefHeight="25.0" prefWidth="107.0" style="-fx-background-color: #d9d9d9;" />
                               <Separator layoutX="729.0" layoutY="474.0" prefHeight="1.0" prefWidth="107.0" style="-fx-background-color: black;" />
-                              <Button fx:id="btnCrearVenta" layoutX="701.0" layoutY="506.0" mnemonicParsing="false" onAction="#nuevaVenta" prefHeight="36.0" prefWidth="135.0" text="Crear Venta" />
+                              <Button fx:id="btnCrearVenta" layoutX="701.0" layoutY="506.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="135.0" text="Crear Venta" />
                            </children></AnchorPane>
                   </content>
                 </Tab>
@@ -152,7 +153,7 @@
             </TabPane>
          </children>
       </AnchorPane>
-      <Button fx:id="btnNuevaVenta" layoutX="29.0" layoutY="170.0" mnemonicParsing="false" onAction="#nuevaVenta" prefHeight="36.0" prefWidth="107.0" text="Nueva Venta" />
+      <Button fx:id="btnNuevaVenta" layoutX="29.0" layoutY="170.0" mnemonicParsing="false" onAction="#verTabNuevaVenta" prefHeight="36.0" prefWidth="107.0" text="Nueva Venta" />
       <AnchorPane layoutX="51.0" layoutY="33.0" prefHeight="83.0" prefWidth="61.0" style="-fx-border-radius: 100;">
          <children>
             <ImageView fitHeight="90.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
