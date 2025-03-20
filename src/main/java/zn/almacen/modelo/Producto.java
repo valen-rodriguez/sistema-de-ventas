@@ -1,9 +1,6 @@
 package zn.almacen.modelo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -22,4 +19,9 @@ public class Producto {
     private String descripcion;
     private Integer cantidad;
     private Double precio;
+
+    @Transient
+    private Double total;
+    @Transient
+    private Double cantidadIngresada;
 }
