@@ -1,6 +1,8 @@
 package zn.almacen.controlador;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -71,7 +73,7 @@ public class SistemaControlador implements Initializable {
     @Autowired
     private DatosEmpresaServicio datosEmpresaServicio;
 
-    //-------------------------------- TABPANE PRINCIPAL --------------------------------//
+    //-------------------------------- TAB-PANE PRINCIPAL --------------------------------//
 
     @FXML
     private TabPane tabPanePrincipal;
@@ -244,10 +246,10 @@ public class SistemaControlador implements Initializable {
 
             //verifico si el usuario ingreso el codigo dle producto antes de agregar el producto en el carrito
             if (cantidadTxt.getText().isEmpty()){
-                mostrarMensaje("Error", "Ingrese la cantidad");
+                mostrarMensaje("Error", "Ingrese la cantidad.");
                 return;
             }else if (productoTxt.getText().isEmpty()){
-                mostrarMensaje("Error", "No ha ingresado ningun producto");
+                mostrarMensaje("Error", "No ha ingresado ningún producto.");
             }
 
             Double cantidadIngresadaTxt = Double.parseDouble(cantidadTxt.getText());
@@ -260,7 +262,7 @@ public class SistemaControlador implements Initializable {
             //guardo el stock en una variable aparte para compararla con la cantidad ingresada por el usuario
             Integer stock = this.producto.getCantidad();
 
-            //valido que haya mas stock que la cantidad ingresada
+            //valido que haya más stock que la cantidad ingresada
             if (cantidadIngresadaTxt <= stock) {
 
                 //guardo el producto en un nuevo objeto tipo producto para evitar errores
@@ -278,7 +280,7 @@ public class SistemaControlador implements Initializable {
                 this.producto.setTotal(total);
 
                 Integer codigo = productoCarrito.getCodigo();
-                //valido producto (si esta en la lista o no)
+                //valido producto (si está en la lista o no)
                 var repetido = false;
                 Producto productoExistente = null;
                 for (Producto producto : productoCarritoList) {
@@ -307,7 +309,7 @@ public class SistemaControlador implements Initializable {
                 limpiarFormularioProducto();
                 codigoTxt.requestFocus();
             } else {
-                mostrarMensaje("Error", "No hay suficiente stock");
+                mostrarMensaje("Error", "No hay suficiente stock.");
             }
         } catch (Exception e) {
             mostrarMensaje("Error", "Ingrese un número válido para la cantidad.");
@@ -368,11 +370,11 @@ public class SistemaControlador implements Initializable {
                     this.cliente.setDireccion(clienteDni.getDireccion());
                     this.cliente.setRazon_social(clienteDni.getRazon_social());
                 } else {
-                    mostrarMensaje("Error", "No se encontro un cliente con ese DNI.");
+                    mostrarMensaje("Error", "No se encontró un cliente con ese DNI.");
                     dniClienteTxt.requestFocus();
                 }
             } catch (NumberFormatException e) {
-                mostrarMensaje("Error", "Ingrese un DNI valido");
+                mostrarMensaje("Error", "Ingrese un DNI valido.");
                 dniClienteTxt.requestFocus();
             }
         }
@@ -389,11 +391,11 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para crear una venta
-    public void crearVenta(){
+    public void crearVenta() throws InterruptedException {
         if (totalTxt.getText().isEmpty()){
-            mostrarMensaje("Error", "Ingrese al menos un producto");
+            mostrarMensaje("Error", "Ingrese al menos un producto.");
         } else if (nombreClienteTxt.getText().isEmpty()) {
-            mostrarMensaje("Error", "Ingrese el cliente");
+            mostrarMensaje("Error", "Ingrese el cliente.");
         } else {
             //crea el pedido
             Pedido pedidoNuevo = new Pedido();
@@ -419,7 +421,7 @@ public class SistemaControlador implements Initializable {
                 productoServicio.agregarProducto(producto);
 
             }
-            mostrarMensaje("Informacion", "Se ha creado una nueva venta");
+            mostrarMensaje("Información", "Se ha creado una nueva venta.");
             pdf();
 
             //limpiar la tabla del carrito
@@ -469,7 +471,7 @@ public class SistemaControlador implements Initializable {
             tablaCarrito.refresh();
             totalAPagar();
         }else{
-            mostrarMensaje("Error", "Debe seleccionar un producto");
+            mostrarMensaje("Error", "Debe seleccionar un producto.");
         }
     }
 
@@ -477,8 +479,9 @@ public class SistemaControlador implements Initializable {
     private void pdf() {
         try {
             File carpetaPdf = new File("src/main/java/zn/almacen/pdf");
+            var nombreArchivo = "venta" + this.pedido.getId() + ".pdf";
 
-            File file = new File(carpetaPdf, "venta" + this.pedido.getId() + ".pdf");
+            File file = new File(carpetaPdf, nombreArchivo);
             FileOutputStream archivo = new FileOutputStream(file);
             Document doc = new Document();
             PdfWriter.getInstance(doc, archivo);
@@ -589,7 +592,7 @@ public class SistemaControlador implements Initializable {
             String razonSocialEmpresa = datosEmpresaNuevo.getRazon_social();
 
             Paragraph infoEmpresa = new Paragraph(
-                    "RUC: " + ruc + "\n" +
+                            "RUC: " + ruc + "\n" +
                             "Empresa: " + nombre + "\n" +
                             "Teléfono: " + telefonoEmpresa + "\n" +
                             "Dirección: " + direccionEmpresa + "\n" +
@@ -597,10 +600,9 @@ public class SistemaControlador implements Initializable {
             );
             infoEmpresa.setAlignment(Element.ALIGN_RIGHT);
             doc.add(infoEmpresa);
-
             doc.close();
             archivo.close();
-            mostrarMensaje("Información", "Recibo creado");
+            mostrarMensaje("Información", "Recibo creado.");
         } catch (Exception e) {
             mostrarMensaje("Error", "Error al crear el PDF: " + e.getMessage());
         }
@@ -667,7 +669,7 @@ public class SistemaControlador implements Initializable {
     }
     //metodo para abrir la ventana de proveedores
 
-    public void verTabProovedores(){
+    public void verTabProveedores(){
         tabPanePrincipal.getSelectionModel().select(tabProveedores);
     }
     //metodo para abrir la ventana de pedidos
