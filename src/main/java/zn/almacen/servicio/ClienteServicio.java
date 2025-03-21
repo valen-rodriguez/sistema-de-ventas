@@ -6,7 +6,6 @@ import zn.almacen.modelo.Cliente;
 import zn.almacen.repositorio.ClienteRepositorio;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClienteServicio implements IClienteServicio{
@@ -16,20 +15,17 @@ public class ClienteServicio implements IClienteServicio{
 
     @Override
     public List<Cliente> listarClientes() {
-        List<Cliente> clientes = clienteRepositorio.findAll();
-        return clientes;
+        return clienteRepositorio.findAll();
     }
 
     @Override
     public Cliente buscarClientePorDni(Integer dni) {
-        Cliente cliente = clienteRepositorio.findClienteByDni(dni).orElse(null);
-        return cliente;
+        return clienteRepositorio.findClienteByDni(dni).orElse(null);
     }
 
     @Override
     public Cliente buscarClientePorId(Integer idCliente) {
-        Cliente cliente = clienteRepositorio.findById(idCliente).orElse(null);
-        return cliente;
+        return clienteRepositorio.findById(idCliente).orElse(null);
     }
 
     @Override

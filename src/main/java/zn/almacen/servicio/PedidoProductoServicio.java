@@ -3,7 +3,6 @@ package zn.almacen.servicio;
 import org.springframework.stereotype.Service;
 import zn.almacen.modelo.PedidoProducto;
 import zn.almacen.repositorio.PedidoProductoRepositorio;
-import zn.almacen.repositorio.ProductoRepositorio;
 
 import java.util.List;
 
@@ -18,14 +17,12 @@ public class PedidoProductoServicio implements IPedidoProductoServicio{
 
     @Override
     public List<PedidoProducto> listarPedidoProductos() {
-        List<PedidoProducto> pedidoProductos = pedidoProductoRepositorio.findAll();
-        return pedidoProductos;
+        return pedidoProductoRepositorio.findAll();
     }
 
     @Override
     public List<PedidoProducto> buscarPorPedido(Integer pedidoId) {
-        List<PedidoProducto> pedidoProductos = pedidoProductoRepositorio.findByPedidoId_Id(pedidoId);
-        return pedidoProductos;
+        return pedidoProductoRepositorio.findByPedidoId_Id(pedidoId);
     }
 
     @Override

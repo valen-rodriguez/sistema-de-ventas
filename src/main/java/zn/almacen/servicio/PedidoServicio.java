@@ -15,14 +15,12 @@ public class PedidoServicio implements IPedidoServicio{
 
     @Override
     public List<Pedido> listarPedidos(){
-        List<Pedido> pedidos = pedidoRepositorio.findAll();
-        return pedidos;
+        return pedidoRepositorio.findAll();
     }
 
     @Override
     public Pedido buscarPedidoPorId(Integer pedidoId) {
-        Pedido pedido = pedidoRepositorio.findById(pedidoId).orElse(null);
-        return pedido;
+        return pedidoRepositorio.findById(pedidoId).orElse(null);
     }
 
     @Override

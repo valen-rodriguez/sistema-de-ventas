@@ -15,14 +15,12 @@ public class ProveedorServicio implements IProveedorServicio{
 
     @Override
     public List<Proveedor> listarProveedores() {
-        List<Proveedor> proveedores = proveedorRepositorio.findAll();
-        return proveedores;
+        return proveedorRepositorio.findAll();
     }
 
     @Override
     public Proveedor buscarProveedorPorId(Integer proveedor_id) {
-        Proveedor proveedor = proveedorRepositorio.findById(proveedor_id).orElse(null);
-        return proveedor;
+        return proveedorRepositorio.findById(proveedor_id).orElse(null);
     }
 
     @Override

@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface IPedidoProductoServicio {
 
-    public List<PedidoProducto> listarPedidoProductos();
+    List<PedidoProducto> listarPedidoProductos();
 
-    public List<PedidoProducto> buscarPorPedido(Integer pedidoId);
+    List<PedidoProducto> buscarPorPedido(Integer pedidoId);
 
-    public void agregarPedidoProducto(PedidoProducto pedidoProducto);
+    void agregarPedidoProducto(PedidoProducto pedidoProducto);
 
-    public void eliminarPedidoProducto(PedidoProducto pedidoProducto);
+    void eliminarPedidoProducto(PedidoProducto pedidoProducto);
 
 
 }

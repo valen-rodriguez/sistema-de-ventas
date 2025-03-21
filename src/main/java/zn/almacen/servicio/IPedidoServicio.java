@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface IPedidoServicio {
 
-    public List<Pedido> listarPedidos();
+    List<Pedido> listarPedidos();
 
-    public Pedido buscarPedidoPorId(Integer pedidoId);
+    Pedido buscarPedidoPorId(Integer pedidoId);
 
-    public void agregarPedido(Pedido pedido);
+    void agregarPedido(Pedido pedido);
 
-    public void eliminarPedido(Pedido pedido);
+    void eliminarPedido(Pedido pedido);
 
 }
