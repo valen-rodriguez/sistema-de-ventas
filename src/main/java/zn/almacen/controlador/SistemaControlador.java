@@ -392,32 +392,37 @@ public class SistemaControlador implements Initializable {
         });
     }
 
-    //metodo buscar cliente por dni
+    //metodo buscar cliente por dni (botón)
+    public void btnBuscarCliente(){
+        try {
+            Integer dni = Integer.parseInt(dniClienteTxt.getText());
+            Cliente clienteDni = clienteServicio.buscarClientePorDni(dni);
+            if (clienteDni != null) {
+                nombreClienteTxt.setText(clienteDni.getNombre() + " " + clienteDni.getApellido());
+
+                //asignar valores al objeto cliente
+                this.cliente.setCliente_id(clienteDni.getCliente_id());
+                this.cliente.setNombre(clienteDni.getNombre());
+                this.cliente.setApellido(clienteDni.getApellido());
+                this.cliente.setDni(clienteDni.getDni());
+                this.cliente.setTelefono(clienteDni.getTelefono());
+                this.cliente.setDireccion(clienteDni.getDireccion());
+                this.cliente.setRazon_social(clienteDni.getRazon_social());
+            } else {
+                mostrarMensaje("Error", "No se encontró un cliente con ese DNI.");
+                dniClienteTxt.requestFocus();
+            }
+        } catch (NumberFormatException e) {
+            mostrarMensaje("Error", "Ingrese un DNI valido.");
+            dniClienteTxt.requestFocus();
+        }
+    }
+
+    //metodo buscar cliente por dni (ENTER)
     private void buscarCliente() {
         dniClienteTxt.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                try {
-                    Integer dni = Integer.parseInt(dniClienteTxt.getText());
-                    Cliente clienteDni = clienteServicio.buscarClientePorDni(dni);
-                    if (clienteDni != null) {
-                        nombreClienteTxt.setText(clienteDni.getNombre() + " " + clienteDni.getApellido());
-
-                        //asignar valores al objeto cliente
-                        this.cliente.setCliente_id(clienteDni.getCliente_id());
-                        this.cliente.setNombre(clienteDni.getNombre());
-                        this.cliente.setApellido(clienteDni.getApellido());
-                        this.cliente.setDni(clienteDni.getDni());
-                        this.cliente.setTelefono(clienteDni.getTelefono());
-                        this.cliente.setDireccion(clienteDni.getDireccion());
-                        this.cliente.setRazon_social(clienteDni.getRazon_social());
-                    } else {
-                        mostrarMensaje("Error", "No se encontró un cliente con ese DNI.");
-                        dniClienteTxt.requestFocus();
-                    }
-                } catch (NumberFormatException e) {
-                    mostrarMensaje("Error", "Ingrese un DNI valido.");
-                    dniClienteTxt.requestFocus();
-                }
+                btnBuscarCliente();
             }
         });
     }
@@ -433,7 +438,7 @@ public class SistemaControlador implements Initializable {
 
     //metodo para crear una venta
     public void crearVenta() {
-        if (totalTxt.getText().isEmpty()) {
+        if (totalTxt.getText().isEmpty() || this.totalPagar == 0) {
             mostrarMensaje("Error", "Ingrese al menos un producto.");
         } else if (nombreClienteTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el cliente.");
@@ -917,10 +922,15 @@ public class SistemaControlador implements Initializable {
         }
     }
 
-
-
-
-
+    public void limpiarFormularioTabProducto(){
+        codigoProductoTxt.clear();
+        nombreProductoTxt.clear();
+        descripcionProductoTxt.clear();
+        precioProductoTxt.clear();
+        stockProductoTxt.clear();
+        comboBoxProveedor.setValue(null);
+        codigoProductoBuscarTxt.clear();
+    }
     //-------------------------------- FIN DEL APARTADO PRODUCTOS --------------------------------//
 
     //metodo para abrir la ventana de clientes
