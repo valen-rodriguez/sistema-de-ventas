@@ -32,20 +32,16 @@ public class SistemaControlador implements Initializable {
     @Setter
     private Cuenta cuenta;
 
-    //creacion de los objetos de las clases
-    public LocalDateTime fecha;
+    //-------------------------------- CLASES --------------------------------//
 
     private Cliente cliente;
 
     private Producto producto;
 
-    private PedidoProducto pedidoProducto;
-
     private Pedido pedido;
 
-    private DatosEmpresa datosEmpresa;
+    //-------------------------------- LISTAS --------------------------------//
 
-    //listas
     private final ObservableList<Producto> productoList =
             FXCollections.observableArrayList();
 
@@ -58,8 +54,8 @@ public class SistemaControlador implements Initializable {
     private final ObservableList<Pedido> pedidoList =
             FXCollections.observableArrayList();
 
+    //-------------------------------- SERVICIOS --------------------------------//
 
-    //servicios
     @Autowired
     private ProductoServicio productoServicio;
 
@@ -75,8 +71,8 @@ public class SistemaControlador implements Initializable {
     @Autowired
     private DatosEmpresaServicio datosEmpresaServicio;
 
+    //-------------------------------- TABPANE PRINCIPAL --------------------------------//
 
-    //tabPane principal
     @FXML
     private TabPane tabPanePrincipal;
 
@@ -98,12 +94,13 @@ public class SistemaControlador implements Initializable {
     @FXML
     private Tab tabDatosEmpresa;
 
-    //apartado Nueva Venta
+    //-------------------------------- APARTADO NUEVA VENTA --------------------------------//
 
-    //variable total a pagar
+    //-------- VARIABLES --------//
+
     private double totalPagar;
 
-    //campos de texto
+    //-------- CAMPOS DE TEXTO --------//
     @FXML
     private TextField codigoTxt;
 
@@ -128,7 +125,7 @@ public class SistemaControlador implements Initializable {
     @FXML
     private TextField totalTxt;
 
-    //tabla carrito
+    //-------- TABLA CARRITO --------//
     @FXML
     private TableView<Producto> tablaCarrito;
 
@@ -150,8 +147,10 @@ public class SistemaControlador implements Initializable {
     @FXML
     private TableColumn<Producto, String> totalProductoCarritoColumna;
 
-    //apartado Productos
-    //tabla
+    //-------------------------------- APARTADO PRODUCTOS --------------------------------//
+
+    //-------- TABLA PRODUCTOS --------//
+
     @FXML
     private TableView<Producto> tablaProductos;
 
@@ -174,13 +173,14 @@ public class SistemaControlador implements Initializable {
     private TableColumn<Producto, String> precioProductoColumna;
 
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.producto = new Producto();
         this.cliente = new Cliente();
-        this.pedidoProducto = new PedidoProducto();
         this.pedido = new Pedido();
-        this.datosEmpresa = new DatosEmpresa();
+        PedidoProducto pedidoProducto = new PedidoProducto();
+        DatosEmpresa datosEmpresa = new DatosEmpresa();
 
         tablaProductos.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         cargarTextoProducto();
@@ -476,7 +476,6 @@ public class SistemaControlador implements Initializable {
     //metodo recibo en pdf
     private void pdf() {
         try {
-
             File carpetaPdf = new File("src/main/java/zn/almacen/pdf");
 
             File file = new File(carpetaPdf, "venta" + this.pedido.getId() + ".pdf");
