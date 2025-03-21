@@ -199,6 +199,8 @@ public class SistemaControlador implements Initializable {
     @FXML
     private TextField stockProductoTxt;
 
+    @FXML
+    private TextField descripcionProductoTxt;
     //-------- COMBO BOX PROVEEDOR --------//
 
     @FXML
@@ -213,7 +215,7 @@ public class SistemaControlador implements Initializable {
         PedidoProducto pedidoProducto = new PedidoProducto();
         DatosEmpresa datosEmpresa = new DatosEmpresa();
 
-        //inicializacion de la tabla carrito en el apartado de nueva venta
+        //inicialización de la tabla carrito en el apartado de nueva venta
         tablaCarrito.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         cargarTextoProducto();
         configurarColumnasCarrito();
@@ -221,11 +223,10 @@ public class SistemaControlador implements Initializable {
 
         buscarCliente();
 
-        //inicializacion de la tabla productos en el apartado de productos
+        //inicialización de la tabla productos en el apartado de productos
         tablaProductos.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         configurarColumnasProductos();
-
-
+        apretarEnterPasarFormulario();
     }
 
     //-------------------------------- MÉTODOS DEL APARTADO NUEVA VENTA --------------------------------//
@@ -427,7 +428,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para crear una venta
-    public void crearVenta() throws InterruptedException {
+    public void crearVenta(){
         if (totalTxt.getText().isEmpty()){
             mostrarMensaje("Error", "Ingrese al menos un producto.");
         } else if (nombreClienteTxt.getText().isEmpty()) {
@@ -691,8 +692,10 @@ public class SistemaControlador implements Initializable {
     //metodo para listar los productos
     private void listarProductos(){
         productoList.clear();
+        tablaProductos.refresh();
         productoList.addAll(productoServicio.listarProductos());
         tablaProductos.setItems(productoList);
+        tablaProductos.refresh();
     }
 
     //metodo para ver los proveedores en el comboBox
@@ -707,13 +710,116 @@ public class SistemaControlador implements Initializable {
         comboBoxProveedor.setItems(proveedorList);
     }
 
+    //metodo para agregar un producto a la base de datos
+    public void agregarProducto(){
+        var producto = new Producto();
 
+        Integer codigo = Integer.parseInt(codigoProductoTxt.getText().trim());
+        var nombre = nombreProductoTxt.getText().trim();
+        var descripcion = descripcionProductoTxt.getText().trim();
+        double precio = Double.parseDouble(precioProductoTxt.getText());
+        int cantidad = Integer.parseInt(stockProductoTxt.getText());
 
+        if (!nombre.isEmpty()) {
+            nombre = nombre.substring(0, 1).toUpperCase() + nombre.substring(1).toLowerCase();
+        }
 
+        if (!descripcion.isEmpty()) {
+            descripcion = descripcion.substring(0, 1).toUpperCase() + descripcion.substring(1).toLowerCase();
+        }
 
+        var proveedor = new Proveedor();
 
+        try {
+            String nombreProveedor = String.valueOf(comboBoxProveedor.getValue());
+            proveedor = proveedorServicio.buscarProveedorPorNombre(nombreProveedor);
+            var proveedorId = proveedor.getProveedor_id();
+            producto.setProveedor_id(proveedorId);
+        }catch (Exception e){
+            mostrarMensaje("Error", "Seleccione un proveedor.");
+            comboBoxProveedor.requestFocus();
+        }
 
+        producto.setCodigo(codigo);
+        producto.setProducto(nombre);
+        producto.setDescripcion(descripcion);
+        producto.setPrecio(precio);
+        producto.setCantidad(cantidad);
+        producto.setProveedor_id(proveedor.getProveedor_id());
 
+        if (producto.getCodigo() == null) {
+            mostrarMensaje("Error", "Ingrese el código.");
+            codigoProductoTxt.requestFocus();
+
+        } else if (producto.getProducto() == null || producto.getProducto().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese el nombre.");
+            nombreProductoTxt.requestFocus();
+
+        } else if (producto.getDescripcion() == null || producto.getDescripcion().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese la descripción.");
+            descripcionProductoTxt.requestFocus();
+
+        } else if (producto.getPrecio() == null) {
+            mostrarMensaje("Error", "Ingrese el precio.");
+            precioProductoTxt.requestFocus();
+
+        } else if (producto.getPrecio() <= 0) {
+            mostrarMensaje("Error", "El precio debe ser mayor que 0.");
+            precioProductoTxt.requestFocus();
+
+        } else if (producto.getCantidad() == null) {
+            mostrarMensaje("Error", "Ingrese el stock.");
+            stockProductoTxt.requestFocus();
+
+        } else if (producto.getCantidad() < 0) {
+            mostrarMensaje("Error", "La cantidad no puede ser negativa.");
+            stockProductoTxt.requestFocus();
+
+        } else {
+            // Si todos los campos están completos y son válidos, agregar el producto
+            productoServicio.agregarProducto(producto);
+            mostrarMensaje("Información", "Se agregó un nuevo producto a la base de datos.");
+            listarProductos();
+        }
+
+    }
+
+    //metodo para que cuando se apriete el enter en los formularios pase automáticamente al siguiente
+    private void apretarEnterPasarFormulario(){
+        codigoProductoTxt.setOnKeyPressed(event ->{
+            if (event.getCode() == KeyCode.ENTER){
+                nombreProductoTxt.requestFocus();
+            }
+        });
+        nombreProductoTxt.setOnKeyPressed(event ->{
+            if (event.getCode() == KeyCode.ENTER){
+                descripcionProductoTxt.requestFocus();
+            }
+        });
+        descripcionProductoTxt.setOnKeyPressed(event ->{
+            if (event.getCode() == KeyCode.ENTER){
+                precioProductoTxt.requestFocus();
+            }
+        });
+        precioProductoTxt.setOnKeyPressed(event ->{
+            if (event.getCode() == KeyCode.ENTER){
+                stockProductoTxt.requestFocus();
+            }
+        });
+        stockProductoTxt.setOnKeyPressed(event ->{
+            if (event.getCode() == KeyCode.ENTER){
+                comboBoxProveedor.requestFocus();
+            }
+        });
+
+        //si se aprieta enter en el combo box se agrega el producto
+        comboBoxProveedor.setOnKeyPressed(event ->{
+            if (event.getCode() == KeyCode.ENTER){
+                agregarProducto();
+            }
+        });
+
+    }
 
     //-------------------------------- FIN DEL APARTADO PRODUCTOS --------------------------------//
 

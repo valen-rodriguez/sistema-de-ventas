@@ -150,7 +150,7 @@
                      <Font name="System Bold" size="19.0" />
                   </font>
                </Label>
-               <Label layoutX="208.0" layoutY="33.0" text="Producto">
+               <Label layoutX="140.0" layoutY="32.0" text="Producto">
                   <font>
                      <Font name="System Bold" size="19.0" />
                   </font>
@@ -165,39 +165,51 @@
                      <Font name="System Bold" size="19.0" />
                   </font>
                </Label>
-               <Label layoutX="595.0" layoutY="33.0" text="Stock">
+               <Label layoutX="591.0" layoutY="33.0" text="Stock">
                   <font>
                      <Font name="System Bold" size="19.0" />
                   </font>
                </Label>
-               <TextField fx:id="codigoProductoTxt" layoutX="48.0" layoutY="62.0" prefHeight="25.0" prefWidth="123.0" style="-fx-background-color: #d9d9d9;">
+               <TextField fx:id="codigoProductoTxt" layoutX="34.0" layoutY="59.0" prefHeight="29.0" prefWidth="87.0" style="-fx-background-color: #d9d9d9;">
                   <font>
                      <Font name="Segoe UI" size="16.0" />
                   </font>
                </TextField>
-               <TextField fx:id="nombreProductoTxt" editable="false" layoutX="208.0" layoutY="63.0" prefHeight="29.0" prefWidth="226.0" style="-fx-background-color: #d9d9d9;">
+               <TextField fx:id="nombreProductoTxt" layoutX="135.0" layoutY="59.0" prefHeight="29.0" prefWidth="117.0" style="-fx-background-color: #d9d9d9;">
                   <font>
                      <Font name="Segoe UI" size="16.0" />
                   </font>
                </TextField>
-               <TextField fx:id="precioProductoTxt" editable="false" layoutX="477.0" layoutY="63.0" prefHeight="29.0" prefWidth="75.0" style="-fx-background-color: #d9d9d9;">
+               <TextField fx:id="precioProductoTxt" layoutX="476.0" layoutY="59.0" prefHeight="29.0" prefWidth="82.0" style="-fx-background-color: #d9d9d9;">
                   <font>
                      <Font name="Segoe UI" size="16.0" />
                   </font>
                </TextField>
-               <TextField fx:id="stockProductoTxt" editable="false" layoutX="591.0" layoutY="63.0" prefHeight="29.0" prefWidth="78.0" style="-fx-background-color: #d9d9d9;">
+               <TextField fx:id="stockProductoTxt" layoutX="587.0" layoutY="59.0" prefHeight="29.0" prefWidth="83.0" style="-fx-background-color: #d9d9d9;">
                   <font>
                      <Font name="Segoe UI" size="16.0" />
                   </font>
                </TextField>
-               <ComboBox fx:id="comboBoxProveedor" layoutX="708.0" layoutY="65.0" onMouseClicked="#setProveedores" prefHeight="25.0" prefWidth="99.0" promptText="Proveedor" style="-fx-background-color: #d9d9d9;" />
-               <Separator layoutX="45.0" layoutY="87.0" prefHeight="2.0" prefWidth="118.0" style="-fx-background-color: black;" />
-               <Separator layoutX="207.0" layoutY="88.0" prefHeight="1.0" prefWidth="217.0" style="-fx-background-color: black;" />
-               <Separator layoutX="479.0" layoutY="88.0" prefHeight="0.0" prefWidth="72.0" style="-fx-background-color: black;" />
-               <Separator layoutX="595.0" layoutY="88.0" prefHeight="0.0" prefWidth="74.0" style="-fx-background-color: black;" />
-               <Separator layoutX="711.0" layoutY="89.0" prefHeight="3.0" prefWidth="96.0" style="-fx-background-color: black;" />
-               <Button layoutX="843.0" layoutY="29.0" mnemonicParsing="false" onAction="#agregarProductoCarrito" prefHeight="36.0" prefWidth="135.0" text="Agregar Producto" />
-               <Button layoutX="843.0" layoutY="72.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="135.0" text="Limpiar formulario" />
+               <ComboBox fx:id="comboBoxProveedor" layoutX="705.0" layoutY="61.0" onMouseClicked="#setProveedores" prefHeight="25.0" prefWidth="99.0" promptText="Proveedor" style="-fx-background-color: #d9d9d9;" />
+               <Separator layoutX="45.0" layoutY="87.0" prefHeight="3.0" prefWidth="80.0" style="-fx-background-color: black;" />
+               <Separator layoutX="140.0" layoutY="87.0" prefHeight="2.0" prefWidth="107.0" style="-fx-background-color: black;" />
+               <Separator layoutX="481.0" layoutY="87.0" prefHeight="0.0" prefWidth="72.0" style="-fx-background-color: black;" />
+               <Separator layoutX="591.0" layoutY="87.0" prefHeight="0.0" prefWidth="74.0" style="-fx-background-color: black;" />
+               <Separator layoutX="710.0" layoutY="87.0" prefHeight="3.0" prefWidth="96.0" style="-fx-background-color: black;" />
+               <Button layoutX="843.0" layoutY="29.0" mnemonicParsing="false" onAction="#agregarProducto" prefHeight="36.0" prefWidth="135.0" text="Agregar Producto" />
+               <Button layoutX="843.0" layoutY="119.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="135.0" text="Limpiar formulario" />
+               <Button layoutX="843.0" layoutY="73.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="135.0" text="Modificar Producto" />
+               <Label layoutX="266.0" layoutY="33.0" text="Descripción">
+                  <font>
+                     <Font name="System Bold" size="19.0" />
+                  </font>
+               </Label>
+               <TextField fx:id="descripcionProductoTxt" layoutX="256.0" layoutY="59.0" prefHeight="29.0" prefWidth="197.0" style="-fx-background-color: #d9d9d9;">
+                  <font>
+                     <Font name="Segoe UI" size="16.0" />
+                  </font>
+               </TextField>
+               <Separator layoutX="264.0" layoutY="87.0" prefHeight="0.0" prefWidth="189.0" style="-fx-background-color: black;" />
                 </AnchorPane>
             </Tab>
             <Tab fx:id="tabClientes" text="Clientes">
