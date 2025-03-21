@@ -199,7 +199,7 @@
                <Separator layoutX="721.0" layoutY="87.0" prefHeight="3.0" prefWidth="96.0" style="-fx-background-color: black;" />
                <Button layoutX="681.0" layoutY="103.0" mnemonicParsing="false" onAction="#agregarProducto" prefHeight="36.0" prefWidth="135.0" text="Agregar Producto" />
                <Button layoutX="683.0" layoutY="442.0" mnemonicParsing="false" onAction="#listarProductos" prefHeight="36.0" prefWidth="135.0" text="Listar productos" />
-               <Button layoutX="608.0" layoutY="470.0" mnemonicParsing="false" onAction="#buscarProducto" prefHeight="0.0" prefWidth="64.0" text="Buscar" />
+               <Button layoutX="565.0" layoutY="469.0" mnemonicParsing="false" onAction="#buscarProducto" prefHeight="0.0" prefWidth="64.0" text="Buscar" />
                <Label layoutX="286.0" layoutY="34.0" text="Descripción">
                   <font>
                      <Font name="System Bold" size="19.0" />
@@ -211,19 +211,19 @@
                   </font>
                </TextField>
                <Separator layoutX="284.0" layoutY="88.0" prefHeight="0.0" prefWidth="189.0" style="-fx-background-color: black;" />
-               <Label layoutX="275.0" layoutY="439.0" text="Buscar producto por código:">
+               <Label layoutX="232.0" layoutY="438.0" text="Buscar producto por código:">
                   <font>
                      <Font name="System Bold" size="16.0" />
                   </font>
                </Label>
-               <TextField fx:id="codigoProductoBuscarTxt" layoutX="490.0" layoutY="437.0" prefHeight="29.0" prefWidth="182.0" style="-fx-background-color: #d9d9d9;">
+               <TextField fx:id="codigoProductoBuscarTxt" layoutX="447.0" layoutY="436.0" prefHeight="29.0" prefWidth="182.0" style="-fx-background-color: #d9d9d9;">
                   <font>
                      <Font name="Segoe UI" size="16.0" />
                   </font>
                </TextField>
-               <Separator layoutX="498.0" layoutY="464.0" prefHeight="2.0" prefWidth="174.0" style="-fx-background-color: black;" />
+               <Separator layoutX="455.0" layoutY="463.0" prefHeight="2.0" prefWidth="174.0" style="-fx-background-color: black;" />
                <Button layoutX="534.0" layoutY="103.0" mnemonicParsing="false" onAction="#agregarProducto" prefHeight="36.0" prefWidth="135.0" text="Agregar Producto" />
-               <Button layoutX="40.0" layoutY="441.0" mnemonicParsing="false" onAction="#eliminarProducto" prefHeight="22.0" prefWidth="122.0" style="-fx-background-color: red;" text="Eliminar producto" />
+               <Button layoutX="40.0" layoutY="441.0" mnemonicParsing="false" onAction="#eliminarProducto" prefHeight="22.0" prefWidth="122.0" style="-fx-background-color: red;" text="Eliminar producto" textFill="WHITE" />
                 </AnchorPane>
             </Tab>
             <Tab fx:id="tabClientes" text="Clientes">

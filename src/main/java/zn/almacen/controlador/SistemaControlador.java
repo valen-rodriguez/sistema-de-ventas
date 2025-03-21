@@ -894,6 +894,29 @@ public class SistemaControlador implements Initializable {
         }
     }
 
+    public void eliminarProducto(){
+        var producto = tablaProductos.getSelectionModel().getSelectedItem();
+        if (producto != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmación");
+            alert.setHeaderText("Modificar Producto");
+            alert.setContentText("¿Querés confirmar la eliminación del producto: " + producto.getProducto() + "?");
+
+            ButtonType botonSi = new ButtonType("Sí");
+            ButtonType botonNo = new ButtonType("No");
+            alert.getButtonTypes().setAll(botonSi, botonNo);
+
+            // Mostrar la ventana modal y esperar la respuesta del usuario
+            Optional<ButtonType> resultado = alert.showAndWait();
+
+            if (resultado.isPresent() && resultado.get() == botonSi) {
+                productoServicio.eliminarProducto(producto);
+                listarProductos();
+                mostrarMensaje("Información", "Producto eliminado correctamente.");
+            }
+        }
+    }
+
 
 
 
