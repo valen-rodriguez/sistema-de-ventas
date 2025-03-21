@@ -12,6 +12,8 @@ public interface IProveedorServicio {
 
      Proveedor buscarProveedorPorId(Integer proveedor_id);
 
+     Proveedor buscarProveedorPorNombre(String nombre);
+
      void agregarProveedor(Proveedor proveedor);
 
      void eliminarProveedor(Proveedor proveedor);

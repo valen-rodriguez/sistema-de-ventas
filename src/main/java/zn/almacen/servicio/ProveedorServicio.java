@@ -24,6 +24,11 @@ public class ProveedorServicio implements IProveedorServicio{
     }
 
     @Override
+    public Proveedor buscarProveedorPorNombre(String nombre) {
+        return proveedorRepositorio.findProductoByNombre(nombre).orElse(null);
+    }
+
+    @Override
     public void agregarProveedor(Proveedor proveedor) {
         proveedorRepositorio.save(proveedor);
     }
