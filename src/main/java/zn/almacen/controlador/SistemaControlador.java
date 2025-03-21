@@ -55,8 +55,8 @@ public class SistemaControlador implements Initializable {
     private final ObservableList<String> proveedorList =
             FXCollections.observableArrayList();
 
-//    private final ObservableList<Cliente> clienteList =
-//            FXCollections.observableArrayList();
+    private final ObservableList<Cliente> clienteList =
+           FXCollections.observableArrayList();
 //
 //    private final ObservableList<Pedido> pedidoList =
 //            FXCollections.observableArrayList();
@@ -211,6 +211,34 @@ public class SistemaControlador implements Initializable {
     @FXML
     private ComboBox comboBoxProveedor;
 
+    //-------------------------------- APARTADO CLIENTES --------------------------------//
+
+    //-------- TABLA CLIENTES --------//
+
+    @FXML
+    private TableView<Cliente> tablaClientes;
+
+    @FXML
+    private TableColumn<Cliente, Integer> idClienteColumna;
+
+    @FXML
+    private TableColumn<Cliente, String> nombreClienteColumna;
+
+    @FXML
+    private TableColumn<Cliente, String> apellidoClienteColumna;
+
+    @FXML
+    private TableColumn<Cliente, Integer> dniClienteColumna;
+
+    @FXML
+    private TableColumn<Cliente, Integer> telefonoClienteColumna;
+
+    @FXML
+    private TableColumn<Cliente, String> direccionClienteColumna;
+
+    @FXML
+    private TableColumn<Cliente, String> razonSocialClienteColumna;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -231,6 +259,9 @@ public class SistemaControlador implements Initializable {
         configurarColumnasProductos();
         apretarEnterPasarFormulario();
 
+        //inicialización de la tabla cliente en el apartado de clientes
+        tablaClientes.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        configurarColumnasClientes();
     }
 
     //-------------------------------- MÉTODOS DEL APARTADO NUEVA VENTA --------------------------------//
@@ -933,10 +964,39 @@ public class SistemaControlador implements Initializable {
     }
     //-------------------------------- FIN DEL APARTADO PRODUCTOS --------------------------------//
 
+    //-------------------------------- MÉTODOS DEL APARTADO CLIENTES --------------------------------//
     //metodo para abrir la ventana de clientes
     public void verTabClientes(){
         tabPanePrincipal.getSelectionModel().select(tabClientes);
+        configurarColumnasClientes();
+        listarClientes();
     }
+
+    private void configurarColumnasClientes() {
+        idClienteColumna.setCellValueFactory(new PropertyValueFactory<>("cliente_id"));
+        nombreClienteColumna.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        apellidoClienteColumna.setCellValueFactory(new PropertyValueFactory<>("apellido"));
+        dniClienteColumna.setCellValueFactory(new PropertyValueFactory<>("dni"));
+        telefonoClienteColumna.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+        direccionClienteColumna.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        razonSocialClienteColumna.setCellValueFactory(new PropertyValueFactory<>("razon_social"));
+    }
+
+    private void listarClientes() {
+        clienteList.clear();
+        tablaClientes.refresh();
+        clienteList.addAll(clienteServicio.listarClientes());
+        tablaClientes.setItems(clienteList);
+        tablaClientes.refresh();
+    }
+
+
+
+
+
+
+
+    //-------------------------------- FIN DEL APARTADO CLIENTES --------------------------------//
 
     //metodo para abrir la ventana de proveedores
     public void verTabProveedores(){
