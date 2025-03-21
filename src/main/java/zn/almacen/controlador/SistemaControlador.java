@@ -50,6 +50,9 @@ public class SistemaControlador implements Initializable {
     private final ObservableList<Producto> productoCarritoList =
             FXCollections.observableArrayList();
 
+    private final ObservableList<String> proveedorList =
+            FXCollections.observableArrayList();
+
     private final ObservableList<Cliente> clienteList =
             FXCollections.observableArrayList();
 
@@ -72,6 +75,9 @@ public class SistemaControlador implements Initializable {
 
     @Autowired
     private DatosEmpresaServicio datosEmpresaServicio;
+
+    @Autowired
+    private ProveedorServicio proveedorServicio;
 
     //-------------------------------- TAB-PANE PRINCIPAL --------------------------------//
 
@@ -103,6 +109,7 @@ public class SistemaControlador implements Initializable {
     private double totalPagar;
 
     //-------- CAMPOS DE TEXTO --------//
+
     @FXML
     private TextField codigoTxt;
 
@@ -128,6 +135,7 @@ public class SistemaControlador implements Initializable {
     private TextField totalTxt;
 
     //-------- TABLA CARRITO --------//
+
     @FXML
     private TableView<Producto> tablaCarrito;
 
@@ -166,6 +174,9 @@ public class SistemaControlador implements Initializable {
     private TableColumn<Producto, String> nombreProductoColumna;
 
     @FXML
+    private TableColumn<Producto, String> proveedorProductoColumna;
+
+    @FXML
     private TableColumn<Producto, String> descripcionProductoColumna;
 
     @FXML
@@ -174,6 +185,24 @@ public class SistemaControlador implements Initializable {
     @FXML
     private TableColumn<Producto, String> precioProductoColumna;
 
+    //-------- CAMPOS DE TEXTO --------//
+
+    @FXML
+    private TextField codigoProductoTxt;
+
+    @FXML
+    private TextField nombreProductoTxt;
+
+    @FXML
+    private TextField precioProductoTxt;
+
+    @FXML
+    private TextField stockProductoTxt;
+
+    //-------- COMBO BOX PROVEEDOR --------//
+
+    @FXML
+    private ComboBox comboBoxProveedor;
 
 
     @Override
@@ -184,12 +213,19 @@ public class SistemaControlador implements Initializable {
         PedidoProducto pedidoProducto = new PedidoProducto();
         DatosEmpresa datosEmpresa = new DatosEmpresa();
 
-        tablaProductos.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        cargarTextoProducto();
+        //inicializacion de la tabla carrito en el apartado de nueva venta
         tablaCarrito.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        cargarTextoProducto();
         configurarColumnasCarrito();
         cargarProductoTabla();
+
         buscarCliente();
+
+        //inicializacion de la tabla productos en el apartado de productos
+        tablaProductos.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        configurarColumnasProductos();
+
+
     }
 
     //-------------------------------- MÉTODOS DEL APARTADO NUEVA VENTA --------------------------------//
@@ -639,20 +675,37 @@ public class SistemaControlador implements Initializable {
     private void configurarColumnasProductos(){
         idProductoColumna.setCellValueFactory(new PropertyValueFactory<>("producto_id"));
         codigoProductoColumna.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        //columna proveedor
+        proveedorProductoColumna.setCellValueFactory(cellData -> {
+            Producto producto = cellData.getValue();
+            var proveedorId = producto.getProveedor_id();
+            var proveedor = proveedorServicio.buscarProveedorPorId(proveedorId);
+            return new SimpleStringProperty(proveedor != null ? proveedor.getNombre() : "N/A");
+        });
         nombreProductoColumna.setCellValueFactory(new PropertyValueFactory<>("producto"));
         descripcionProductoColumna.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         stockProductoColumna.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
         precioProductoColumna.setCellValueFactory(new PropertyValueFactory<>("precio"));
     }
-    //metodo para listar los productos
 
+    //metodo para listar los productos
     private void listarProductos(){
         productoList.clear();
         productoList.addAll(productoServicio.listarProductos());
         tablaProductos.setItems(productoList);
     }
-    //metodo para abrir la ventana de clientes
 
+    //metodo para ver los proveedores en el comboBox
+    public void setProveedores(){
+        //borro la lista ya que en caso de apretar varias veces se repiten los nombren
+        proveedorList.clear();
+        comboBoxProveedor.setItems(proveedorList);
+        for (Proveedor proveedor: proveedorServicio.listarProveedores()){
+            var nombreProveedor = proveedor.getNombre();
+            proveedorList.add(nombreProveedor);
+        }
+        comboBoxProveedor.setItems(proveedorList);
+    }
 
 
 
@@ -664,21 +717,22 @@ public class SistemaControlador implements Initializable {
 
     //-------------------------------- FIN DEL APARTADO PRODUCTOS --------------------------------//
 
+    //metodo para abrir la ventana de clientes
     public void verTabClientes(){
         tabPanePrincipal.getSelectionModel().select(tabClientes);
     }
-    //metodo para abrir la ventana de proveedores
 
+    //metodo para abrir la ventana de proveedores
     public void verTabProveedores(){
         tabPanePrincipal.getSelectionModel().select(tabProveedores);
     }
-    //metodo para abrir la ventana de pedidos
 
+    //metodo para abrir la ventana de pedidos
     public void verTabPedidos(){
         tabPanePrincipal.getSelectionModel().select(tabPedidos);
     }
-    //metodo para abrir la ventana de datos de la empresa
 
+    //metodo para abrir la ventana de datos de la empresa
     public void verTabDatos(){
         tabPanePrincipal.getSelectionModel().select(tabDatosEmpresa);
     }
