@@ -24,8 +24,6 @@ public class SistemaDeVentasFx extends Application {
         Scene login = new Scene(loader.load());
         stage.setScene(login);
         stage.setTitle("Iniciar sesión");
-        stage.setWidth(320);
-        stage.setHeight(480);
         stage.setResizable(false);
         stage.setMaximized(false);
         stage.show();
