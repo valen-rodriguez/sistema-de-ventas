@@ -27,6 +27,8 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+import java.util.Optional;
+
 
 @Component
 public class SistemaControlador implements Initializable {
@@ -53,11 +55,11 @@ public class SistemaControlador implements Initializable {
     private final ObservableList<String> proveedorList =
             FXCollections.observableArrayList();
 
-    private final ObservableList<Cliente> clienteList =
-            FXCollections.observableArrayList();
-
-    private final ObservableList<Pedido> pedidoList =
-            FXCollections.observableArrayList();
+//    private final ObservableList<Cliente> clienteList =
+//            FXCollections.observableArrayList();
+//
+//    private final ObservableList<Pedido> pedidoList =
+//            FXCollections.observableArrayList();
 
     //-------------------------------- SERVICIOS --------------------------------//
 
@@ -201,6 +203,9 @@ public class SistemaControlador implements Initializable {
 
     @FXML
     private TextField descripcionProductoTxt;
+
+    @FXML
+    private TextField codigoProductoBuscarTxt;
     //-------- COMBO BOX PROVEEDOR --------//
 
     @FXML
@@ -212,8 +217,6 @@ public class SistemaControlador implements Initializable {
         this.producto = new Producto();
         this.cliente = new Cliente();
         this.pedido = new Pedido();
-        PedidoProducto pedidoProducto = new PedidoProducto();
-        DatosEmpresa datosEmpresa = new DatosEmpresa();
 
         //inicialización de la tabla carrito en el apartado de nueva venta
         tablaCarrito.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -227,12 +230,13 @@ public class SistemaControlador implements Initializable {
         tablaProductos.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         configurarColumnasProductos();
         apretarEnterPasarFormulario();
+
     }
 
     //-------------------------------- MÉTODOS DEL APARTADO NUEVA VENTA --------------------------------//
 
     //metodo para abrir la ventana de nueva venta
-    public void verTabNuevaVenta(){
+    public void verTabNuevaVenta() {
         tabPanePrincipal.getSelectionModel().select(tabNuevaVenta);
     }
 
@@ -269,9 +273,9 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para cargar el producto en la tabla (ENTER)
-    private void cargarProductoTabla(){
-        cantidadTxt.setOnKeyPressed(event ->{
-            if (event.getCode() == KeyCode.ENTER){
+    private void cargarProductoTabla() {
+        cantidadTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
                 agregarProductoCarrito();
             }
         });
@@ -282,10 +286,10 @@ public class SistemaControlador implements Initializable {
         try {
 
             //verifico si el usuario ingreso el codigo dle producto antes de agregar el producto en el carrito
-            if (cantidadTxt.getText().isEmpty()){
+            if (cantidadTxt.getText().isEmpty()) {
                 mostrarMensaje("Error", "Ingrese la cantidad.");
                 return;
-            }else if (productoTxt.getText().isEmpty()){
+            } else if (productoTxt.getText().isEmpty()) {
                 mostrarMensaje("Error", "No ha ingresado ningún producto.");
             }
 
@@ -367,7 +371,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo configurar columnas de la tabla del carrito
-    private void configurarColumnasCarrito(){
+    private void configurarColumnasCarrito() {
         codigoProductoCarritoColumna.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         nombreProductoCarritoColumna.setCellValueFactory(new PropertyValueFactory<>("producto"));
         descripcionProductoCarritoColumna.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
@@ -380,42 +384,42 @@ public class SistemaControlador implements Initializable {
         });
         precioProductoCarritoColumna.setCellValueFactory(new PropertyValueFactory<>("precio"));
         totalProductoCarritoColumna.setCellValueFactory(cellData -> {
-                    Producto producto = cellData.getValue();
-                    double total = producto.getCantidadIngresada() * producto.getPrecio();
-                    String totalFormateado = String.format("%.2f", total);
-                    return new SimpleStringProperty(totalFormateado);
+            Producto producto = cellData.getValue();
+            double total = producto.getCantidadIngresada() * producto.getPrecio();
+            String totalFormateado = String.format("%.2f", total);
+            return new SimpleStringProperty(totalFormateado);
 
         });
     }
 
     //metodo buscar cliente por dni
-    private void buscarCliente(){
-        dniClienteTxt.setOnKeyPressed(event ->{
-        if (event.getCode() == KeyCode.ENTER) {
-            try {
-                Integer dni = Integer.parseInt(dniClienteTxt.getText());
-                Cliente clienteDni = clienteServicio.buscarClientePorDni(dni);
-                if (clienteDni != null) {
-                    nombreClienteTxt.setText(clienteDni.getNombre() + " " + clienteDni.getApellido());
+    private void buscarCliente() {
+        dniClienteTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                try {
+                    Integer dni = Integer.parseInt(dniClienteTxt.getText());
+                    Cliente clienteDni = clienteServicio.buscarClientePorDni(dni);
+                    if (clienteDni != null) {
+                        nombreClienteTxt.setText(clienteDni.getNombre() + " " + clienteDni.getApellido());
 
-                    //asignar valores al objeto cliente
-                    this.cliente.setCliente_id(clienteDni.getCliente_id());
-                    this.cliente.setNombre(clienteDni.getNombre());
-                    this.cliente.setApellido(clienteDni.getApellido());
-                    this.cliente.setDni(clienteDni.getDni());
-                    this.cliente.setTelefono(clienteDni.getTelefono());
-                    this.cliente.setDireccion(clienteDni.getDireccion());
-                    this.cliente.setRazon_social(clienteDni.getRazon_social());
-                } else {
-                    mostrarMensaje("Error", "No se encontró un cliente con ese DNI.");
+                        //asignar valores al objeto cliente
+                        this.cliente.setCliente_id(clienteDni.getCliente_id());
+                        this.cliente.setNombre(clienteDni.getNombre());
+                        this.cliente.setApellido(clienteDni.getApellido());
+                        this.cliente.setDni(clienteDni.getDni());
+                        this.cliente.setTelefono(clienteDni.getTelefono());
+                        this.cliente.setDireccion(clienteDni.getDireccion());
+                        this.cliente.setRazon_social(clienteDni.getRazon_social());
+                    } else {
+                        mostrarMensaje("Error", "No se encontró un cliente con ese DNI.");
+                        dniClienteTxt.requestFocus();
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarMensaje("Error", "Ingrese un DNI valido.");
                     dniClienteTxt.requestFocus();
                 }
-            } catch (NumberFormatException e) {
-                mostrarMensaje("Error", "Ingrese un DNI valido.");
-                dniClienteTxt.requestFocus();
             }
-        }
-    });
+        });
     }
 
     //metodo para calcular el total a pagar
@@ -428,8 +432,8 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para crear una venta
-    public void crearVenta(){
-        if (totalTxt.getText().isEmpty()){
+    public void crearVenta() {
+        if (totalTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese al menos un producto.");
         } else if (nombreClienteTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el cliente.");
@@ -444,7 +448,7 @@ public class SistemaControlador implements Initializable {
             this.pedido = pedidoNuevo;
 
             //recorre lista de productos en el carrito
-            for (Producto producto : productoCarritoList){
+            for (Producto producto : productoCarritoList) {
                 //guarda el pedidoProducto en la base de datos
                 PedidoProducto pedidoProducto = new PedidoProducto();
                 pedidoProducto.setProductoId(producto);
@@ -482,7 +486,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para limpiar el formulario del producto
-    public void limpiarFormularioProducto(){
+    public void limpiarFormularioProducto() {
         codigoTxt.clear();
         productoTxt.clear();
         precioTxt.clear();
@@ -492,7 +496,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para limpiar todos los formularios
-    public void limpiarFormulariosTabVentas(){
+    public void limpiarFormulariosTabVentas() {
         limpiarFormularioProducto();
         //limpiar formulario del cliente
         dniClienteTxt.clear();
@@ -500,14 +504,14 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo eliminar producto carrito
-    public void eliminarProductoCarrito(){
+    public void eliminarProductoCarrito() {
         var producto = tablaCarrito.getSelectionModel().getSelectedItem();
-        if (producto != null){
+        if (producto != null) {
             productoCarritoList.remove(producto);
             tablaCarrito.setItems(productoCarritoList);
             tablaCarrito.refresh();
             totalAPagar();
-        }else{
+        } else {
             mostrarMensaje("Error", "Debe seleccionar un producto.");
         }
     }
@@ -525,7 +529,7 @@ public class SistemaControlador implements Initializable {
 
             doc.open();
 
-            PdfPTable Encabezado =  new PdfPTable(4);
+            PdfPTable Encabezado = new PdfPTable(4);
             Encabezado.setWidthPercentage(100);
             Encabezado.getDefaultCell().setBorder(0);
             float[] ColumnaEncabezado = new float[]{20f, 30f, 70f, 40};
@@ -629,7 +633,7 @@ public class SistemaControlador implements Initializable {
             String razonSocialEmpresa = datosEmpresaNuevo.getRazon_social();
 
             Paragraph infoEmpresa = new Paragraph(
-                            "RUC: " + ruc + "\n" +
+                    "RUC: " + ruc + "\n" +
                             "Empresa: " + nombre + "\n" +
                             "Teléfono: " + telefonoEmpresa + "\n" +
                             "Dirección: " + direccionEmpresa + "\n" +
@@ -653,7 +657,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para agregar una fila de producto a la tabla pdf
-    private static void agregarFilaProducto(PdfPTable tabla, String producto, String cantidad, String total, Font fuente){
+    private static void agregarFilaProducto(PdfPTable tabla, String producto, String cantidad, String total, Font fuente) {
         agregarCelda(tabla, producto, fuente);
         agregarCelda(tabla, cantidad, fuente);
         agregarCelda(tabla, total, fuente);
@@ -662,18 +666,17 @@ public class SistemaControlador implements Initializable {
     //-------------------------------- FIN DEL APARTADO NUEVA VENTA --------------------------------//
 
 
-
     //-------------------------------- MÉTODOS DEL APARTADO PRODUCTOS --------------------------------//
 
     //metodo para abrir la ventana de productos
-    public void verTabProductos(){
+    public void verTabProductos() {
         tabPanePrincipal.getSelectionModel().select(tabProductos);
         configurarColumnasProductos();
         listarProductos();
     }
 
     //metodo configurar columnas de la tabla de productos
-    private void configurarColumnasProductos(){
+    private void configurarColumnasProductos() {
         idProductoColumna.setCellValueFactory(new PropertyValueFactory<>("producto_id"));
         codigoProductoColumna.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         //columna proveedor
@@ -690,7 +693,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para listar los productos
-    private void listarProductos(){
+    public void listarProductos() {
         productoList.clear();
         tablaProductos.refresh();
         productoList.addAll(productoServicio.listarProductos());
@@ -699,11 +702,11 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para ver los proveedores en el comboBox
-    public void setProveedores(){
+    public void setProveedores() {
         //borro la lista ya que en caso de apretar varias veces se repiten los nombren
         proveedorList.clear();
         comboBoxProveedor.setItems(proveedorList);
-        for (Proveedor proveedor: proveedorServicio.listarProveedores()){
+        for (Proveedor proveedor : proveedorServicio.listarProveedores()) {
             var nombreProveedor = proveedor.getNombre();
             proveedorList.add(nombreProveedor);
         }
@@ -711,115 +714,189 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para agregar un producto a la base de datos
-    public void agregarProducto(){
+    public void agregarProducto() {
         var producto = new Producto();
 
-        Integer codigo = Integer.parseInt(codigoProductoTxt.getText().trim());
-        var nombre = nombreProductoTxt.getText().trim();
-        var descripcion = descripcionProductoTxt.getText().trim();
-        double precio = Double.parseDouble(precioProductoTxt.getText());
-        int cantidad = Integer.parseInt(stockProductoTxt.getText());
+        //valido que todos los campos estén llenos
+        String nombreProveedor = String.valueOf(comboBoxProveedor.getValue());
+        mostrarMensaje("info", nombreProveedor);
 
-        if (!nombre.isEmpty()) {
-            nombre = nombre.substring(0, 1).toUpperCase() + nombre.substring(1).toLowerCase();
-        }
-
-        if (!descripcion.isEmpty()) {
-            descripcion = descripcion.substring(0, 1).toUpperCase() + descripcion.substring(1).toLowerCase();
-        }
-
-        var proveedor = new Proveedor();
-
-        try {
-            String nombreProveedor = String.valueOf(comboBoxProveedor.getValue());
-            proveedor = proveedorServicio.buscarProveedorPorNombre(nombreProveedor);
-            var proveedorId = proveedor.getProveedor_id();
-            producto.setProveedor_id(proveedorId);
-        }catch (Exception e){
-            mostrarMensaje("Error", "Seleccione un proveedor.");
-            comboBoxProveedor.requestFocus();
-        }
-
-        producto.setCodigo(codigo);
-        producto.setProducto(nombre);
-        producto.setDescripcion(descripcion);
-        producto.setPrecio(precio);
-        producto.setCantidad(cantidad);
-        producto.setProveedor_id(proveedor.getProveedor_id());
-
-        if (producto.getCodigo() == null) {
+        if (codigoProductoTxt.getText().isEmpty()){
             mostrarMensaje("Error", "Ingrese el código.");
             codigoProductoTxt.requestFocus();
-
-        } else if (producto.getProducto() == null || producto.getProducto().isEmpty()) {
+        }else if (nombreProductoTxt.getText().isEmpty()){
             mostrarMensaje("Error", "Ingrese el nombre.");
             nombreProductoTxt.requestFocus();
-
-        } else if (producto.getDescripcion() == null || producto.getDescripcion().isEmpty()) {
+        }else if (descripcionProductoTxt.getText().isEmpty()){
             mostrarMensaje("Error", "Ingrese la descripción.");
             descripcionProductoTxt.requestFocus();
-
-        } else if (producto.getPrecio() == null) {
+        } else if (precioProductoTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el precio.");
             precioProductoTxt.requestFocus();
-
-        } else if (producto.getPrecio() <= 0) {
-            mostrarMensaje("Error", "El precio debe ser mayor que 0.");
-            precioProductoTxt.requestFocus();
-
-        } else if (producto.getCantidad() == null) {
+        } else if (stockProductoTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el stock.");
             stockProductoTxt.requestFocus();
+        } else if (nombreProveedor == null) {
+            mostrarMensaje("Error", "Seleccione un proveedor.");
+            comboBoxProveedor.requestFocus();
+        }else {
+            try{
+                //le doy formato a las variables para asignarlas al producto
+                Integer codigo = Integer.parseInt(codigoProductoTxt.getText().trim());
+                String nombre = nombreProductoTxt.getText().trim();
+                String descripcion = descripcionProductoTxt.getText().trim();
+                String precioStr = precioProductoTxt.getText();
+                if (precioStr.contains(",")){
+                    precioStr = precioStr.replace(",", ".");
+                }
+                nombre = nombre.substring(0, 1).toUpperCase() + nombre.substring(1).toLowerCase();
+                descripcion = descripcion.substring(0, 1).toUpperCase() + descripcion.substring(1).toLowerCase();
+                double precio = Double.parseDouble(precioStr);
+                Integer stock = Integer.parseInt(stockProductoTxt.getText());
+                var proveedor = new Proveedor();
+                Integer proveedorId;
 
-        } else if (producto.getCantidad() < 0) {
-            mostrarMensaje("Error", "La cantidad no puede ser negativa.");
-            stockProductoTxt.requestFocus();
+                try {
+                    proveedor = proveedorServicio.buscarProveedorPorNombre(nombreProveedor);
+                    proveedorId = proveedor.getProveedor_id();
+                } catch (Exception e) {
+                    mostrarMensaje("Error", "Seleccione un proveedor.");
+                    comboBoxProveedor.requestFocus();
+                    return;
+                }
 
-        } else {
-            // Si todos los campos están completos y son válidos, agregar el producto
-            productoServicio.agregarProducto(producto);
-            mostrarMensaje("Información", "Se agregó un nuevo producto a la base de datos.");
-            listarProductos();
+                //valido producto (si existe o no)
+                var repetido = false;
+                Producto productoExistente = null;
+                for (Producto productoLista : productoList) {
+                    if (productoLista.getCodigo().equals(codigo)) {
+                        repetido = true;
+                        productoExistente = productoLista;
+                        break;
+                    }
+                }
+
+                try{
+                    producto.setCodigo(codigo);
+                    producto.setProveedor_id(proveedorId);
+                    producto.setProducto(nombre);
+                    producto.setDescripcion(descripcion);
+                    producto.setCantidad(stock);
+                    producto.setPrecio(precio);
+                }catch (Exception e){
+                    mostrarMensaje("Error", e.getMessage());
+                    return;
+                }
+
+                if (!repetido) {
+                    productoServicio.agregarProducto(producto);
+                    mostrarMensaje("Información", "Se agregó un nuevo producto a la base de datos.");
+                    listarProductos();
+                } else {
+                    //si el producto ya está en la lista, actualizo lo modificado
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmación");
+                    alert.setHeaderText("Modificar Producto");
+                    alert.setContentText("¿Querés confirmar la modificación del producto: " + productoExistente.getProducto() + "?");
+
+                    ButtonType botonSi = new ButtonType("Sí");
+                    ButtonType botonNo = new ButtonType("No");
+                    alert.getButtonTypes().setAll(botonSi, botonNo);
+
+                    // Mostrar la ventana modal y esperar la respuesta del usuario
+                    Optional<ButtonType> resultado = alert.showAndWait();
+
+                    if (resultado.isPresent() && resultado.get() == botonSi) {
+                        productoExistente.setProducto(producto.getProducto());
+                        productoExistente.setDescripcion(producto.getDescripcion());
+                        productoExistente.setPrecio(producto.getPrecio());
+                        productoExistente.setCantidad(producto.getCantidad());
+
+                        // Llamo al metodo de actualización en el servicio
+                        productoServicio.agregarProducto(productoExistente);
+                        listarProductos();
+                        mostrarMensaje("Información", "Producto modificado correctamente.");
+                    }
+                }
+
+            }catch (Exception e){
+                mostrarMensaje("Error", e.getMessage());
+            }
         }
-
     }
 
     //metodo para que cuando se apriete el enter en los formularios pase automáticamente al siguiente
-    private void apretarEnterPasarFormulario(){
-        codigoProductoTxt.setOnKeyPressed(event ->{
-            if (event.getCode() == KeyCode.ENTER){
+    private void apretarEnterPasarFormulario() {
+        codigoProductoTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
                 nombreProductoTxt.requestFocus();
             }
         });
-        nombreProductoTxt.setOnKeyPressed(event ->{
-            if (event.getCode() == KeyCode.ENTER){
+        nombreProductoTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
                 descripcionProductoTxt.requestFocus();
             }
         });
-        descripcionProductoTxt.setOnKeyPressed(event ->{
-            if (event.getCode() == KeyCode.ENTER){
+        descripcionProductoTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
                 precioProductoTxt.requestFocus();
             }
         });
-        precioProductoTxt.setOnKeyPressed(event ->{
-            if (event.getCode() == KeyCode.ENTER){
+        precioProductoTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
                 stockProductoTxt.requestFocus();
             }
         });
-        stockProductoTxt.setOnKeyPressed(event ->{
-            if (event.getCode() == KeyCode.ENTER){
+        stockProductoTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
                 comboBoxProveedor.requestFocus();
             }
         });
 
         //si se aprieta enter en el combo box se agrega el producto
-        comboBoxProveedor.setOnKeyPressed(event ->{
-            if (event.getCode() == KeyCode.ENTER){
+        comboBoxProveedor.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
                 agregarProducto();
             }
         });
 
     }
+
+    //metodo para cargar un producto en el formulario para poder modificarlo
+    public void cargarProductoFormulario() {
+        var producto = tablaProductos.getSelectionModel().getSelectedItem();
+        if (producto != null) {
+            codigoProductoTxt.setText(String.valueOf(producto.getCodigo()));
+            nombreProductoTxt.setText(producto.getProducto());
+            descripcionProductoTxt.setText(producto.getDescripcion());
+            precioProductoTxt.setText(String.valueOf(producto.getPrecio()));
+            stockProductoTxt.setText(String.valueOf(producto.getCantidad()));
+            var proveedor = proveedorServicio.buscarProveedorPorId(producto.getProveedor_id());
+            comboBoxProveedor.setValue(proveedor.getNombre());
+        }
+    }
+
+    //metodo para buscar un producto por codigo
+    public void buscarProducto(){
+        if (!codigoProductoBuscarTxt.getText().isEmpty()){
+            Integer codigo = Integer.parseInt(codigoProductoBuscarTxt.getText());
+            var producto = productoServicio.buscarProductoPorCodigo(codigo);
+            if (producto != null){
+                productoList.clear();
+                productoList.add(producto);
+                tablaProductos.setItems(productoList);
+                tablaProductos.refresh();
+            }else{
+                mostrarMensaje("Error", "No se encontró ningún producto con el código: " + codigo + ".");
+            }
+        }else {
+            mostrarMensaje("Error", "Debe ingresar un código.");
+        }
+    }
+
+
+
+
 
     //-------------------------------- FIN DEL APARTADO PRODUCTOS --------------------------------//
 
