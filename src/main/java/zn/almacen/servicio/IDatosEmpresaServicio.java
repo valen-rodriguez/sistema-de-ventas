@@ -6,4 +6,6 @@ import zn.almacen.modelo.DatosEmpresa;
 @Service
 public interface IDatosEmpresaServicio{
     DatosEmpresa verDatos(Integer id);
+
+    void agregarDatos(DatosEmpresa datos);
 }

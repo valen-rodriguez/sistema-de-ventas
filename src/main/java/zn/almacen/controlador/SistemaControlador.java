@@ -24,6 +24,7 @@ import zn.almacen.servicio.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
@@ -371,6 +372,24 @@ public class SistemaControlador implements Initializable {
     @FXML
     private TextField idPedidoBuscar;
 
+    //-------------------------------- APARTADO DATOS --------------------------------//
+
+    //-------- CAMPOS DE TEXTO --------//
+
+    @FXML
+    private TextField rucEmpresaTxt;
+
+    @FXML
+    private TextField nombreEmpresaTxt;
+
+    @FXML
+    private TextField direccionEmpresaTxt;
+
+    @FXML
+    private TextField telefonoEmpresaTxt;
+
+    @FXML
+    private TextField razonSocialEmpresaTxt;
 
 
     @Override
@@ -410,6 +429,9 @@ public class SistemaControlador implements Initializable {
         configurarColumnasPedidos();
         buscarPedidoFecha();
         buscarPedidoId();
+
+        //apartado datos de la empresa
+        apretarEnterPasarFormularioDatos();
     }
 
     //-------------------------------- MÉTODOS DEL APARTADO NUEVA VENTA --------------------------------//
@@ -767,10 +789,9 @@ public class SistemaControlador implements Initializable {
     //metodo recibo en pdf
     private void pdf() {
         try {
-            File carpetaPdf = new File("src/main/java/zn/almacen/pdf");
-            var nombreArchivo = "venta" + this.pedido.getPedido_id() + ".pdf";
+            int id = this.pedido.getPedido_id();
 
-            File file = new File(carpetaPdf, nombreArchivo);
+            File file = new File("src/main/resources/zn/pdf/venta"+id+".pdf");
             FileOutputStream archivo = new FileOutputStream(file);
             Document doc = new Document();
             PdfWriter.getInstance(doc, archivo);
@@ -1781,12 +1802,122 @@ public class SistemaControlador implements Initializable {
         });
     }
 
+    //metodo para ver el recibo de un pedido
+    public void verRecibo() {
+        var pedido = tablaPedidos.getSelectionModel().getSelectedItem();
+        if (pedido == null) {
+            mostrarMensaje("Error", "Seleccione un pedido primero.");
+            return;
+        }
+       try {
+           int id = pedido.getPedido_id();
+           String comando = "cmd /c start " + "src/main/resources/zn/pdf/venta"+id+".pdf";
+           Runtime.getRuntime().exec(comando);
+       }catch (IOException e) {
+           mostrarMensaje("Error", "No se pudo abrir el archivo PDF: " + e.getMessage());
+       }
+    }
+
     //-------------------------------- FIN DEL APARTADO PEDIDOS --------------------------------//
+
+
+    //-------------------------------- MÉTODOS DEL APARTADO DATOS EMPRESA --------------------------------//
 
     //metodo para abrir la ventana de datos de la empresa
     public void verTabDatos(){
         tabPanePrincipal.getSelectionModel().select(tabDatosEmpresa);
+        cargarDatosEmpresa();
     }
+
+    //metodo para cargar los datos de la empresa en los text field
+    private void cargarDatosEmpresa(){
+        DatosEmpresa datos = datosEmpresaServicio.verDatos(1);
+        rucEmpresaTxt.setText(String.valueOf(datos.getRuc()));
+        nombreEmpresaTxt.setText(datos.getNombre());
+        telefonoEmpresaTxt.setText(String.valueOf(datos.getTelefono()));
+        direccionEmpresaTxt.setText(datos.getDireccion());
+        razonSocialEmpresaTxt.setText(datos.getRazon_social());
+    }
+
+    //metodo para guardar datos de la empresa (botón)
+    public void btnGuardarDatosEmpresa() {
+        //valido que estén todos los campos llenos
+        if (rucEmpresaTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese el RUC de la empresa.");
+            rucEmpresaTxt.requestFocus();
+        } else if (nombreEmpresaTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese el nombre de la empresa.");
+            nombreEmpresaTxt.requestFocus();
+        } else if (telefonoEmpresaTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese el teléfono de la empresa.");
+            telefonoEmpresaTxt.requestFocus();
+        } else if (direccionEmpresaTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese la dirección de la empresa.");
+            direccionEmpresaTxt.requestFocus();
+        } else if (razonSocialEmpresaTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese la razón social de la empresa.");
+            razonSocialEmpresaTxt.requestFocus();
+        } else {
+            try {
+                String nombre = nombreEmpresaTxt.getText();
+                String direccion = direccionEmpresaTxt.getText();
+                String razonSocial = razonSocialEmpresaTxt.getText();
+
+                //pone la primera letra del nombre y apellido en mayúscula y las demás en minúscula
+                nombre = nombre.substring(0, 1).toUpperCase() + nombre.substring(1);
+                direccion = direccion.substring(0, 1).toUpperCase() + direccion.substring(1);
+                razonSocial = razonSocial.substring(0, 1).toUpperCase() + razonSocial.substring(1);
+                int telefono = Integer.parseInt(telefonoEmpresaTxt.getText());
+                int ruc = Integer.parseInt(rucEmpresaTxt.getText());
+
+                DatosEmpresa datos = datosEmpresaServicio.verDatos(1);
+                datos.setRuc(ruc);
+                datos.setNombre(nombre);
+                datos.setTelefono(telefono);
+                datos.setDireccion(direccion);
+                datos.setRazon_social(razonSocial);
+
+                datosEmpresaServicio.agregarDatos(datos);
+                mostrarMensaje("Información", "Se han guardado los nuevos datos de la empresa");
+
+                cargarDatosEmpresa();
+            } catch (Exception e) {
+                mostrarMensaje("Error", e.getMessage());
+            }
+        }
+    }
+
+    //metodo para avanzar en el formulario al apretar enter
+    private void apretarEnterPasarFormularioDatos() {
+        rucEmpresaTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                nombreEmpresaTxt.requestFocus();
+            }
+        });
+        nombreEmpresaTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                telefonoEmpresaTxt.requestFocus();
+            }
+        });
+        telefonoEmpresaTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                direccionEmpresaTxt.requestFocus();
+            }
+        });
+        direccionEmpresaTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                razonSocialEmpresaTxt.requestFocus();
+            }
+        });
+        //si se aprieta enter en el text field razon social se agrega el proveedor
+        razonSocialEmpresaTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                btnGuardarDatosEmpresa();
+            }
+        });
+    }
+
+    //-------------------------------- FIN DEL APARTADO DATOS EMPRESA --------------------------------//
 
     private void mostrarMensaje(String titulo, String mensaje){
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);

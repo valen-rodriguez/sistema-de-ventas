@@ -22,4 +22,9 @@ public class DatosEmpresaServicio implements IDatosEmpresaServicio{
         Optional<DatosEmpresa> datosEmpresa = datosEmpresaRepositorio.findById(id);
         return datosEmpresa.orElse(null);
     }
+
+    @Override
+    public void agregarDatos(DatosEmpresa datos) {
+        datosEmpresaRepositorio.save(datos);
+    }
 }
