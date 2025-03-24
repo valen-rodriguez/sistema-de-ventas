@@ -6,4 +6,6 @@ public interface ICuentaServicio {
      Cuenta buscarCuentaPorMail(String mail);
 
      void guardarCuenta(Cuenta cuenta);
+
+     Cuenta buscarCuentaPorId(Integer id);
 }

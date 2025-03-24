@@ -1,10 +1,7 @@
 package zn.almacen.modelo;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,9 +15,13 @@ import java.time.LocalDateTime;
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer pedido_id;
     private Integer cliente_id;
     private Integer cuenta_id;
-    private Double precioTotal;
+    private Double precio_total;
+
+    //para ver como se pagó
+    private String forma_de_pago;
+
     private LocalDateTime fecha;
 }

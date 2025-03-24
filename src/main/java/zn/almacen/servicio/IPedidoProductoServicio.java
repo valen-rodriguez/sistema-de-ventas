@@ -8,7 +8,7 @@ public interface IPedidoProductoServicio {
 
     List<PedidoProducto> listarPedidoProductos();
 
-    List<PedidoProducto> buscarPorPedido(Integer pedidoId);
+    //List<PedidoProducto> buscarPorPedido(Integer pedidoId);
 
     void agregarPedidoProducto(PedidoProducto pedidoProducto);
 

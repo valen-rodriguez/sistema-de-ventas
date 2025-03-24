@@ -20,10 +20,10 @@ public class PedidoProductoServicio implements IPedidoProductoServicio{
         return pedidoProductoRepositorio.findAll();
     }
 
-    @Override
-    public List<PedidoProducto> buscarPorPedido(Integer pedidoId) {
-        return pedidoProductoRepositorio.findByPedidoId_Id(pedidoId);
-    }
+//    @Override
+//    public List<PedidoProducto> buscarPorPedido(Integer pedidoId) {
+//        return pedidoProductoRepositorio.findByPedidoId_Id(pedidoId);
+//    }
 
     @Override
     public void agregarPedidoProducto(PedidoProducto pedidoProducto) {

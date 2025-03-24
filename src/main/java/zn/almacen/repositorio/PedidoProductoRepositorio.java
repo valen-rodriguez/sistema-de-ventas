@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface PedidoProductoRepositorio extends JpaRepository<PedidoProducto,Integer> {
-    List<PedidoProducto> findByPedidoId_Id(Integer pedidoId);
 }

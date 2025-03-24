@@ -59,10 +59,10 @@ public class SistemaControlador implements Initializable {
             FXCollections.observableArrayList();
 
     private final ObservableList<Cliente> clienteList =
-           FXCollections.observableArrayList();
-//
-//    private final ObservableList<Pedido> pedidoList =
-//            FXCollections.observableArrayList();
+            FXCollections.observableArrayList();
+
+    private final ObservableList<Pedido> pedidoList =
+            FXCollections.observableArrayList();
 
     //-------------------------------- SERVICIOS --------------------------------//
 
@@ -83,6 +83,9 @@ public class SistemaControlador implements Initializable {
 
     @Autowired
     private ProveedorServicio proveedorServicio;
+
+    @Autowired
+    private CuentaServicio cuentaServicio;
 
     //-------------------------------- TAB-PANE PRINCIPAL --------------------------------//
 
@@ -320,6 +323,31 @@ public class SistemaControlador implements Initializable {
     @FXML
     private TextField rucBuscarTxt;
 
+    //-------------------------------- APARTADO PRODUCTOS --------------------------------//
+
+    //-------- TABLA PRODUCTOS --------//
+
+    @FXML
+    private TableView<Pedido> tablaPedidos;
+
+    @FXML
+    private TableColumn<Pedido, Integer> idPedidoColumna;
+
+    @FXML
+    private TableColumn<Pedido, String> clientePedidoColumna;
+
+    @FXML
+    private TableColumn<Pedido, String> vendedorPedidoColumna;
+
+    @FXML
+    private TableColumn<Pedido, String> fechaPedidoColumna;
+
+    @FXML
+    private TableColumn<Pedido, String> formaDePagoPedidoColumna;
+
+    @FXML
+    private TableColumn<Pedido, String> precioPedidoColumna;
+
 
 
     @Override
@@ -353,6 +381,10 @@ public class SistemaControlador implements Initializable {
         configurarColumnasProveedores();
         apretarEnterPasarFormularioProveedor();
         buscarProveedor();
+
+        //inicialización de la tabla pedidos en el apartado de pedidos
+        tablaPedidos.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        configurarColumnasPedidos();
     }
 
     //-------------------------------- MÉTODOS DEL APARTADO NUEVA VENTA --------------------------------//
@@ -515,7 +547,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo buscar cliente por dni (botón)
-    public void btnBuscarClienteVenta(){
+    public void btnBuscarClienteVenta() {
         try {
             Integer dni = Integer.parseInt(dniClienteTxt.getText());
             Cliente clienteDni = clienteServicio.buscarClientePorDni(dni);
@@ -555,7 +587,8 @@ public class SistemaControlador implements Initializable {
         for (Producto producto : productoCarritoList) {
             this.totalPagar = this.totalPagar + producto.getTotal();
         }
-        totalTxt.setText("$" + this.totalPagar);
+        String totalFormateado = String.format("%.2f", this.totalPagar);
+        totalTxt.setText(totalFormateado);
     }
 
     //metodo para crear una venta
@@ -565,12 +598,36 @@ public class SistemaControlador implements Initializable {
         } else {
             //crea el pedido
             Pedido pedidoNuevo = new Pedido();
-            if (!nombreClienteTxt.getText().isEmpty()){
+            if (!nombreClienteTxt.getText().isEmpty()) {
                 pedidoNuevo.setCliente_id(this.cliente.getCliente_id());
             }
             pedidoNuevo.setCuenta_id(this.cuenta.getCuenta_id());
-            pedidoNuevo.setPrecioTotal(this.totalPagar);
+            pedidoNuevo.setPrecio_total(this.totalPagar);
             pedidoNuevo.setFecha(LocalDateTime.now());
+
+            //verifico que metodo de pago utiliza
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmación");
+            alert.setHeaderText("Método de pago");
+            alert.setContentText("¿Cuál es el método de pago?");
+
+            ButtonType btnEfectivo = new ButtonType("Efectivo");
+            ButtonType btnMercadoPago = new ButtonType("Mercado Pago");
+            ButtonType btnTarjeta = new ButtonType("Tarjeta");
+            alert.getButtonTypes().setAll(btnEfectivo, btnMercadoPago, btnTarjeta);
+
+            Optional<ButtonType> resultado = alert.showAndWait();
+
+            String formaDePago = "Efectivo";
+            if (resultado.isPresent() && resultado.get() == btnEfectivo) {
+                formaDePago = "Efectivo";
+            }if (resultado.isPresent() && resultado.get() == btnMercadoPago){
+                formaDePago = "Mercado Pago";
+            }if (resultado.isPresent() && resultado.get() == btnTarjeta){
+                formaDePago = "Tarjeta";
+            }
+
+            pedidoNuevo.setForma_de_pago(formaDePago);
             pedidoServicio.agregarPedido(pedidoNuevo);
             this.pedido = pedidoNuevo;
 
@@ -578,8 +635,8 @@ public class SistemaControlador implements Initializable {
             for (Producto producto : productoCarritoList) {
                 //guarda el pedidoProducto en la base de datos
                 PedidoProducto pedidoProducto = new PedidoProducto();
-                pedidoProducto.setProductoId(producto);
-                pedidoProducto.setPedidoId(pedidoNuevo);
+                pedidoProducto.setProductoId(producto.getProducto_id());
+                pedidoProducto.setPedido_Id(pedidoNuevo.getPedido_id());
                 pedidoProducto.setCantidad(producto.getCantidadIngresada().intValue());
                 pedidoProductoServicio.agregarPedidoProducto(pedidoProducto);
 
@@ -587,8 +644,9 @@ public class SistemaControlador implements Initializable {
                 double cantidadNueva = producto.getCantidad() - producto.getCantidadIngresada();
                 producto.setCantidad((int) cantidadNueva);
                 productoServicio.agregarProducto(producto);
-
             }
+
+
             mostrarMensaje("Información", "Se ha creado una nueva venta.");
             pdf();
 
@@ -605,8 +663,7 @@ public class SistemaControlador implements Initializable {
             totalTxt.clear();
             this.totalPagar = 0;
 
-            //limpiar formulario producto
-            limpiarFormularioProducto();
+            limpiarFormulariosTabVentas();
 
             //elimino el cliente en caso de que haya uno
             this.cliente = null;
@@ -616,30 +673,30 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para calcular el vuelto en efectivo de una venta
-    private void calcularVuelto(){
+    private void calcularVuelto() {
         montoAbonadoTxt.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                if (montoAbonadoTxt.getText().isEmpty()){
+                if (montoAbonadoTxt.getText().isEmpty()) {
                     mostrarMensaje("Error", "Ingrese el monto abonado.");
-                }else{
+                } else {
                     try {
                         //veo si puso , en vez de . para los decimales y lo cambio en caso de ser necesario
                         String montoAbonadoStr = montoAbonadoTxt.getText();
-                        if (montoAbonadoStr.contains(",")){
+                        if (montoAbonadoStr.contains(",")) {
                             montoAbonadoStr = montoAbonadoStr.replace(",", ".");
                         }
                         this.montoAbonado = Double.parseDouble(montoAbonadoStr);
                         montoAbonadoTxt.setText("$" + montoAbonadoStr);
 
-                        if (this.montoAbonado < this.totalPagar){
+                        if (this.montoAbonado < this.totalPagar) {
                             mostrarMensaje("Error", "El monto abonado es menor al total del pedido.");
-                        }else{
+                        } else {
                             this.vuelto = this.montoAbonado - this.totalPagar;
                             //formateo el vuelto a solo 2 decimales
                             String vueltoFormateado = String.format("%.2f", this.vuelto);
                             vueltoTxt.setText("$" + vueltoFormateado);
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         mostrarMensaje("Error", "Ingrese un monto válido.");
                     }
                 }
@@ -686,7 +743,7 @@ public class SistemaControlador implements Initializable {
     private void pdf() {
         try {
             File carpetaPdf = new File("src/main/java/zn/almacen/pdf");
-            var nombreArchivo = "venta" + this.pedido.getId() + ".pdf";
+            var nombreArchivo = "venta" + this.pedido.getPedido_id() + ".pdf";
 
             File file = new File(carpetaPdf, nombreArchivo);
             FileOutputStream archivo = new FileOutputStream(file);
@@ -729,7 +786,7 @@ public class SistemaControlador implements Initializable {
             doc.add(new Paragraph(" "));
 
             //datos del cliente (si hay)
-            if (this.cliente.getCliente_id() != 0){
+            if (this.cliente.getCliente_id() != 0) {
                 Paragraph datosCliente = new Paragraph("Datos del cliente", fuenteSubtitulo);
                 datosCliente.setAlignment(Element.ALIGN_LEFT);
                 doc.add(datosCliente);
@@ -784,7 +841,7 @@ public class SistemaControlador implements Initializable {
             //factura y fecha;
             String fechaCompleta = String.valueOf(this.pedido.getFecha());
             String fechaFormateada = fechaCompleta.substring(0, 10);
-            Paragraph fecha = new Paragraph("Factura: " + this.pedido.getId() + "\nFecha: " + fechaFormateada, fuenteNormal);
+            Paragraph fecha = new Paragraph("Factura: " + this.pedido.getPedido_id() + "\nFecha: " + fechaFormateada, fuenteNormal);
             fecha.setAlignment(Element.ALIGN_LEFT);
             doc.add(fecha);
 
@@ -890,13 +947,13 @@ public class SistemaControlador implements Initializable {
         String nombreProveedor = String.valueOf(comboBoxProveedor.getValue());
         mostrarMensaje("info", nombreProveedor);
 
-        if (codigoProductoTxt.getText().isEmpty()){
+        if (codigoProductoTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el código.");
             codigoProductoTxt.requestFocus();
-        }else if (nombreProductoTxt.getText().isEmpty()){
+        } else if (nombreProductoTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el nombre.");
             nombreProductoTxt.requestFocus();
-        }else if (descripcionProductoTxt.getText().isEmpty()){
+        } else if (descripcionProductoTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese la descripción.");
             descripcionProductoTxt.requestFocus();
         } else if (precioProductoTxt.getText().isEmpty()) {
@@ -908,14 +965,14 @@ public class SistemaControlador implements Initializable {
         } else if (nombreProveedor == null) {
             mostrarMensaje("Error", "Seleccione un proveedor.");
             comboBoxProveedor.requestFocus();
-        }else {
-            try{
+        } else {
+            try {
                 //le doy formato a las variables para asignarlas al producto
                 Integer codigo = Integer.parseInt(codigoProductoTxt.getText().trim());
                 String nombre = nombreProductoTxt.getText().trim();
                 String descripcion = descripcionProductoTxt.getText().trim();
                 String precioStr = precioProductoTxt.getText();
-                if (precioStr.contains(",")){
+                if (precioStr.contains(",")) {
                     precioStr = precioStr.replace(",", ".");
                 }
 
@@ -947,14 +1004,14 @@ public class SistemaControlador implements Initializable {
                     }
                 }
 
-                try{
+                try {
                     producto.setCodigo(codigo);
                     producto.setProveedor_id(proveedorId);
                     producto.setProducto(nombre);
                     producto.setDescripcion(descripcion);
                     producto.setCantidad(stock);
                     producto.setPrecio(precio);
-                }catch (Exception e){
+                } catch (Exception e) {
                     mostrarMensaje("Error", e.getMessage());
                     return;
                 }
@@ -990,7 +1047,7 @@ public class SistemaControlador implements Initializable {
                     }
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 mostrarMensaje("Error", e.getMessage());
             }
         }
@@ -1048,29 +1105,29 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para buscar un producto por codigo
-    public void buscarProducto(){
-        if (!codigoProductoBuscarTxt.getText().isEmpty()){
-            try{
+    public void buscarProducto() {
+        if (!codigoProductoBuscarTxt.getText().isEmpty()) {
+            try {
                 Integer codigo = Integer.parseInt(codigoProductoBuscarTxt.getText());
                 var producto = productoServicio.buscarProductoPorCodigo(codigo);
-                if (producto != null){
+                if (producto != null) {
                     productoList.clear();
                     productoList.add(producto);
                     tablaProductos.setItems(productoList);
                     tablaProductos.refresh();
-                }else{
+                } else {
                     mostrarMensaje("Error", "No se encontró ningún producto con el código: " + codigo + ".");
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 mostrarMensaje("Error", "Ingrese un código válido.");
             }
-        }else {
+        } else {
             mostrarMensaje("Error", "Debe ingresar un código.");
         }
     }
 
     //metodo para eliminar un producto de la base de datos
-    public void eliminarProducto(){
+    public void eliminarProducto() {
         var producto = tablaProductos.getSelectionModel().getSelectedItem();
         if (producto != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -1094,7 +1151,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para limpiar todos los formularios del tab
-    public void limpiarFormularioTabProducto(){
+    public void limpiarFormularioTabProducto() {
         codigoProductoTxt.clear();
         nombreProductoTxt.clear();
         descripcionProductoTxt.clear();
@@ -1107,11 +1164,10 @@ public class SistemaControlador implements Initializable {
     //-------------------------------- FIN DEL APARTADO PRODUCTOS --------------------------------//
 
 
-
     //-------------------------------- MÉTODOS DEL APARTADO CLIENTES --------------------------------//
 
     //metodo para abrir la ventana de clientes
-    public void verTabClientes(){
+    public void verTabClientes() {
         tabPanePrincipal.getSelectionModel().select(tabClientes);
         configurarColumnasClientes();
         listarClientes();
@@ -1138,32 +1194,32 @@ public class SistemaControlador implements Initializable {
     }
 
     // metodo para agregar un cliente a la base de datos o modificar uno existente
-    public void agregarCliente(){
+    public void agregarCliente() {
 
         //valido que estén todos los campos llenos
-        if (nombreTabClienteTxt.getText().isEmpty()){
+        if (nombreTabClienteTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el nombre del cliente.");
             nombreTabClienteTxt.requestFocus();
         } else if (apellidoClienteTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el apellido del cliente.");
             apellidoClienteTxt.requestFocus();
         } else if (dniTabClienteTxt.getText().isEmpty()) {
-        mostrarMensaje("Error", "Ingrese el DNI del cliente.");
-        dniTabClienteTxt.requestFocus();
-        }else if (telefonoClienteTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese el DNI del cliente.");
+            dniTabClienteTxt.requestFocus();
+        } else if (telefonoClienteTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el teléfono del cliente.");
             telefonoClienteTxt.requestFocus();
-        }else if (direccionClienteTxt.getText().isEmpty()) {
+        } else if (direccionClienteTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese la dirección del cliente.");
             direccionClienteTxt.requestFocus();
-        }else if (razonSocialClienteTxt.getText().isEmpty()) {
+        } else if (razonSocialClienteTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese la razón social del cliente.");
             razonSocialClienteTxt.requestFocus();
-        }else {
+        } else {
 
             var cliente = new Cliente();
 
-            try{
+            try {
                 String nombre = nombreTabClienteTxt.getText();
                 String apellido = apellidoClienteTxt.getText();
                 String direccion = direccionClienteTxt.getText();
@@ -1187,19 +1243,19 @@ public class SistemaControlador implements Initializable {
                 //veo si se repite o no
                 Cliente clienteExistente = null;
                 var repetido = false;
-                for (Cliente clienteLista: clienteList){
-                    if (dni == clienteLista.getDni()){
+                for (Cliente clienteLista : clienteList) {
+                    if (dni == clienteLista.getDni()) {
                         repetido = true;
                         clienteExistente = clienteLista;
                         break;
                     }
                 }
 
-                if (!repetido){
+                if (!repetido) {
                     //si no se repite se guarda
                     clienteServicio.guardarCliente(cliente);
                     mostrarMensaje("Información", "Se ha guardado un nuevo cliente en la base de datos");
-                }else {
+                } else {
                     //si se repite se actualiza exceptuando el dni
                     clienteExistente.setNombre(cliente.getNombre());
                     clienteExistente.setApellido(cliente.getApellido());
@@ -1212,7 +1268,7 @@ public class SistemaControlador implements Initializable {
                 }
                 limpiarFormularioCliente();
                 listarClientes();
-            }catch (Exception e){
+            } catch (Exception e) {
                 mostrarMensaje("Error", e.getMessage());
             }
         }
@@ -1254,7 +1310,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para cargar un cliente de la tabla en el formulario
-    public void cargarClienteFormulario(){
+    public void cargarClienteFormulario() {
         var cliente = tablaClientes.getSelectionModel().getSelectedItem();
         if (cliente != null) {
             nombreTabClienteTxt.setText(cliente.getNombre());
@@ -1268,7 +1324,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para limpiar el formulario de cliente
-    public void limpiarFormularioCliente(){
+    public void limpiarFormularioCliente() {
         nombreTabClienteTxt.clear();
         apellidoClienteTxt.clear();
         dniTabClienteTxt.clear();
@@ -1280,7 +1336,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para eliminar un cliente de la base de datos
-    public void eliminarCliente(){
+    public void eliminarCliente() {
         var cliente = tablaClientes.getSelectionModel().getSelectedItem();
         if (cliente != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -1303,29 +1359,29 @@ public class SistemaControlador implements Initializable {
         }
     }
 
-    public void btnBuscarCliente(){
-        if (dniClienteBuscarTxt.getText().isEmpty()){
+    public void btnBuscarCliente() {
+        if (dniClienteBuscarTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese un DNI para buscar al cliente.");
             dniClienteBuscarTxt.requestFocus();
-        }else{
+        } else {
             try {
                 int dni = Integer.parseInt(dniClienteBuscarTxt.getText());
                 var cliente = clienteServicio.buscarClientePorDni(dni);
-                if (cliente != null){
+                if (cliente != null) {
                     clienteList.clear();
                     clienteList.add(cliente);
                     tablaClientes.setItems(clienteList);
                     tablaClientes.refresh();
-                }else{
+                } else {
                     mostrarMensaje("Error", "No se encontró ningún cliente con el DNI: " + dni + ".");
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 mostrarMensaje("Error", "Ingrese un dni valido");
             }
         }
     }
 
-    private void buscarCliente(){
+    private void buscarCliente() {
         dniClienteBuscarTxt.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 btnBuscarCliente();
@@ -1337,12 +1393,11 @@ public class SistemaControlador implements Initializable {
     //-------------------------------- FIN DEL APARTADO CLIENTES --------------------------------//
 
 
-
     //-------------------------------- MÉTODOS DEL APARTADO PROVEEDORES --------------------------------//
 
 
     //metodo para abrir la ventana de proveedores
-    public void verTabProveedores(){
+    public void verTabProveedores() {
         tabPanePrincipal.getSelectionModel().select(tabProveedores);
         configurarColumnasProveedores();
         listarProveedores();
@@ -1368,10 +1423,10 @@ public class SistemaControlador implements Initializable {
     }
 
     // metodo para agregar un cliente a la base de datos o modificar uno existente
-    public void agregarProveedor(){
+    public void agregarProveedor() {
 
         //valido que estén todos los campos llenos
-        if (rucTxt.getText().isEmpty()){
+        if (rucTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el RUC del proveedor.");
             rucTxt.requestFocus();
         } else if (nombreProveedorTxt.getText().isEmpty()) {
@@ -1380,17 +1435,17 @@ public class SistemaControlador implements Initializable {
         } else if (telefonoProveedorTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el teléfono del proveedor.");
             telefonoProveedorTxt.requestFocus();
-        }else if (direccionProveedorTxt.getText().isEmpty()) {
+        } else if (direccionProveedorTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese la dirección del proveedor.");
             direccionProveedorTxt.requestFocus();
-        }else if (razonSocialProveedorTxt.getText().isEmpty()) {
+        } else if (razonSocialProveedorTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese la razón social del proveedor.");
             razonSocialProveedorTxt.requestFocus();
         } else {
 
             var proveedor = new Proveedor();
 
-            try{
+            try {
                 String nombre = nombreProveedorTxt.getText();
                 String direccion = direccionProveedorTxt.getText();
                 String razonSocial = razonSocialProveedorTxt.getText();
@@ -1411,19 +1466,19 @@ public class SistemaControlador implements Initializable {
                 //veo si se repite o no
                 Proveedor proveedorExistente = null;
                 var repetido = false;
-                for (Proveedor proveedorLista: proveedorList){
-                    if (ruc == proveedorLista.getRuc()){
+                for (Proveedor proveedorLista : proveedorList) {
+                    if (ruc == proveedorLista.getRuc()) {
                         repetido = true;
                         proveedorExistente = proveedorLista;
                         break;
                     }
                 }
 
-                if (!repetido){
+                if (!repetido) {
                     //si no se repite se guarda
                     proveedorServicio.agregarProveedor(proveedor);
                     mostrarMensaje("Información", "Se ha guardado un nuevo proveedor en la base de datos");
-                }else {
+                } else {
                     //si se repite se actualiza exceptuando el RUC
                     proveedorExistente.setNombre(proveedor.getNombre());
                     proveedorExistente.setTelefono(proveedor.getTelefono());
@@ -1435,14 +1490,14 @@ public class SistemaControlador implements Initializable {
                 }
                 limpiarFormularioProveedor();
                 listarProveedores();
-            }catch (Exception e){
+            } catch (Exception e) {
                 mostrarMensaje("Error", e.getMessage());
             }
         }
     }
 
     //metodo para limpiar el formulario de proveedor
-    public void limpiarFormularioProveedor(){
+    public void limpiarFormularioProveedor() {
         rucTxt.clear();
         nombreProveedorTxt.clear();
         telefonoProveedorTxt.clear();
@@ -1453,7 +1508,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para avanzar en el formulario al apretar enter
-    private void apretarEnterPasarFormularioProveedor(){
+    private void apretarEnterPasarFormularioProveedor() {
         rucTxt.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 nombreProveedorTxt.requestFocus();
@@ -1483,39 +1538,39 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para buscar un proveedor por RUC (botón)
-    public void btnBuscarProveedor(){
-        if (rucBuscarTxt.getText().isEmpty()){
+    public void btnBuscarProveedor() {
+        if (rucBuscarTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese un RUC para buscar al proveedor.");
             rucBuscarTxt.requestFocus();
-        }else{
+        } else {
             try {
                 int ruc = Integer.parseInt(rucBuscarTxt.getText());
                 var proveedor = proveedorServicio.buscarProveedorPorRuc(ruc);
-                if (proveedor != null){
+                if (proveedor != null) {
                     proveedorList.clear();
                     proveedorList.add(proveedor);
                     tablaProveedores.setItems(proveedorList);
                     tablaProveedores.refresh();
-                }else{
+                } else {
                     mostrarMensaje("Error", "No se encontró ningún cliente con el RUC: " + ruc + ".");
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 mostrarMensaje("Error", "Ingrese un RUC valido");
             }
         }
     }
 
     //metodo para buscar un proveedor por RUC (enter)
-    public void buscarProveedor(){
+    public void buscarProveedor() {
         rucBuscarTxt.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-               btnBuscarProveedor();
+                btnBuscarProveedor();
             }
         });
     }
 
     //metodo para cargar un cliente de la tabla en el formulario
-    public void cargarProveedorFormulario(){
+    public void cargarProveedorFormulario() {
         var proveedor = tablaProveedores.getSelectionModel().getSelectedItem();
         if (proveedor != null) {
             rucTxt.setText(String.valueOf(proveedor.getRuc()));
@@ -1528,7 +1583,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para eliminar un cliente de la base de datos
-    public void eliminarProveedor(){
+    public void eliminarProveedor() {
         var proveedor = tablaProveedores.getSelectionModel().getSelectedItem();
         if (proveedor != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -1555,10 +1610,61 @@ public class SistemaControlador implements Initializable {
 
     //-------------------------------- FIN DEL APARTADO PROVEEDORES --------------------------------//
 
+
+
+    //-------------------------------- MÉTODOS DEL APARTADO PEDIDOS --------------------------------//
+
     //metodo para abrir la ventana de pedidos
     public void verTabPedidos(){
         tabPanePrincipal.getSelectionModel().select(tabPedidos);
+        configurarColumnasPedidos();
+        listarPedidos();
     }
+
+    //metodo para configurar las columnas de la tabla pedidos
+    private void configurarColumnasPedidos() {
+        idPedidoColumna.setCellValueFactory(new PropertyValueFactory<>("pedido_id"));
+        clientePedidoColumna.setCellValueFactory(cellData -> {
+            Pedido pedido = cellData.getValue();
+            var cliente = new Cliente();
+            if (pedido.getCliente_id() != null){
+                var clienteId = pedido.getCliente_id();
+                cliente = clienteServicio.buscarClientePorId(clienteId);
+            }else{
+                cliente = null;
+            }
+            return new SimpleStringProperty(cliente != null ? cliente.getNombre() : "N/A");
+        });
+        vendedorPedidoColumna.setCellValueFactory(cellData -> {
+            Pedido pedido = cellData.getValue();
+            var cuentaId = pedido.getCuenta_id();
+            var cuenta = cuentaServicio.buscarCuentaPorId(cuentaId);
+            return new SimpleStringProperty(cuenta != null ? cuenta.getNombre() + " " + cuenta.getApellido() : "N/A");
+        });
+        fechaPedidoColumna.setCellValueFactory(cellData -> {
+            Pedido pedido = cellData.getValue();
+            var fecha = pedido.getFecha();
+            String fechaStr = String.valueOf(fecha);
+            fechaStr = fechaStr.substring(0, 10);
+            return new SimpleStringProperty(fechaStr);
+        });
+        formaDePagoPedidoColumna.setCellValueFactory(cellData -> {
+            Pedido pedido = cellData.getValue();
+            return new SimpleStringProperty(pedido.getForma_de_pago() != null ? pedido.getForma_de_pago() : "N/A");
+        });
+        precioPedidoColumna.setCellValueFactory(new PropertyValueFactory<>("precio_total"));
+    }
+
+    //metodo para listar los pedidos
+    public void listarPedidos() {
+        pedidoList.clear();
+        tablaPedidos.refresh();
+        pedidoList.addAll(pedidoServicio.listarPedidos());
+        tablaPedidos.setItems(pedidoList);
+        tablaPedidos.refresh();
+    }
+
+    //-------------------------------- FIN DEL APARTADO PEDIDOS --------------------------------//
 
     //metodo para abrir la ventana de datos de la empresa
     public void verTabDatos(){

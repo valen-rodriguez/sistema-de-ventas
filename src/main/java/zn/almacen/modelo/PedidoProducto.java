@@ -13,13 +13,7 @@ public class PedidoProducto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pedido_producto_id;
-
-    @ManyToOne
-    @JoinColumn(name = "pedido_id")
-    private Pedido pedidoId;
-
-    @ManyToOne
-    @JoinColumn(name = "producto_id")
-    private Producto productoId;
+    private Integer pedido_Id;
+    private Integer productoId;
     private int cantidad;
 }

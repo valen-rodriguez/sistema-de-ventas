@@ -23,4 +23,9 @@ public class CuentaServicio implements ICuentaServicio{
     public void guardarCuenta(Cuenta cuenta) {
         cuentaRepositorio.save(cuenta);
     }
+
+    @Override
+    public Cuenta buscarCuentaPorId(Integer id) {
+        return cuentaRepositorio.findById(id).orElse(null);
+    }
 }
