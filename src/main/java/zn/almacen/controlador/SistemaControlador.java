@@ -52,7 +52,10 @@ public class SistemaControlador implements Initializable {
     private final ObservableList<Producto> productoCarritoList =
             FXCollections.observableArrayList();
 
-    private final ObservableList<String> proveedorList =
+    private final ObservableList<String> nombreProveedorList =
+            FXCollections.observableArrayList();
+
+    private final ObservableList<Proveedor> proveedorList =
             FXCollections.observableArrayList();
 
     private final ObservableList<Cliente> clienteList =
@@ -272,6 +275,52 @@ public class SistemaControlador implements Initializable {
     @FXML
     private TextField dniClienteBuscarTxt;
 
+    //-------------------------------- APARTADO PROVEEDORES --------------------------------//
+
+    //-------- TABLA PROVEEDORES --------//
+
+    @FXML
+    private TableView<Proveedor> tablaProveedores;
+
+    @FXML
+    private TableColumn<Proveedor, Integer> idProveedorColumna;
+
+    @FXML
+    private TableColumn<Proveedor, Integer> rucProveedorColumna;
+
+    @FXML
+    private TableColumn<Proveedor, String> nombreProveedorColumna;
+
+    @FXML
+    private TableColumn<Proveedor, Integer> telefonoProveedorColumna;
+
+    @FXML
+    private TableColumn<Proveedor, String> direccionProveedorColumna;
+
+    @FXML
+    private TableColumn<Proveedor, String> razonSocialProveedorColumna;
+
+    //-------- CAMPOS DE TEXTO --------//
+
+    @FXML
+    private TextField rucTxt;
+
+    @FXML
+    private TextField nombreProveedorTxt;
+
+    @FXML
+    private TextField telefonoProveedorTxt;
+
+    @FXML
+    private TextField direccionProveedorTxt;
+
+    @FXML
+    private TextField razonSocialProveedorTxt;
+
+    @FXML
+    private TextField rucBuscarTxt;
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -298,6 +347,12 @@ public class SistemaControlador implements Initializable {
         configurarColumnasClientes();
         apretarEnterPasarFormularioCliente();
         buscarCliente();
+
+        //inicialización de la tabla proveedores en el apartado de proveedores
+        tablaProveedores.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        configurarColumnasProveedores();
+        apretarEnterPasarFormularioProveedor();
+        buscarProveedor();
     }
 
     //-------------------------------- MÉTODOS DEL APARTADO NUEVA VENTA --------------------------------//
@@ -818,13 +873,13 @@ public class SistemaControlador implements Initializable {
     //metodo para ver los proveedores en el comboBox
     public void setProveedores() {
         //borro la lista ya que en caso de apretar varias veces se repiten los nombren
-        proveedorList.clear();
-        comboBoxProveedor.setItems(proveedorList);
+        nombreProveedorList.clear();
+        comboBoxProveedor.setItems(nombreProveedorList);
         for (Proveedor proveedor : proveedorServicio.listarProveedores()) {
             var nombreProveedor = proveedor.getNombre();
-            proveedorList.add(nombreProveedor);
+            nombreProveedorList.add(nombreProveedor);
         }
-        comboBoxProveedor.setItems(proveedorList);
+        comboBoxProveedor.setItems(nombreProveedorList);
     }
 
     //metodo para agregar un producto a la base de datos
@@ -1201,7 +1256,7 @@ public class SistemaControlador implements Initializable {
     //metodo para cargar un cliente de la tabla en el formulario
     public void cargarClienteFormulario(){
         var cliente = tablaClientes.getSelectionModel().getSelectedItem();
-        if (producto != null) {
+        if (cliente != null) {
             nombreTabClienteTxt.setText(cliente.getNombre());
             apellidoClienteTxt.setText(cliente.getApellido());
             dniTabClienteTxt.setText(String.valueOf(cliente.getDni()));
@@ -1281,10 +1336,224 @@ public class SistemaControlador implements Initializable {
 
     //-------------------------------- FIN DEL APARTADO CLIENTES --------------------------------//
 
+
+
+    //-------------------------------- MÉTODOS DEL APARTADO PROVEEDORES --------------------------------//
+
+
     //metodo para abrir la ventana de proveedores
     public void verTabProveedores(){
         tabPanePrincipal.getSelectionModel().select(tabProveedores);
+        configurarColumnasProveedores();
+        listarProveedores();
     }
+
+    //metodo configurar columnas de la tabla de proveedores
+    private void configurarColumnasProveedores() {
+        idProveedorColumna.setCellValueFactory(new PropertyValueFactory<>("proveedor_id"));
+        rucProveedorColumna.setCellValueFactory(new PropertyValueFactory<>("ruc"));
+        nombreProveedorColumna.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        telefonoProveedorColumna.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+        direccionProveedorColumna.setCellValueFactory(new PropertyValueFactory<>("direccion"));
+        razonSocialProveedorColumna.setCellValueFactory(new PropertyValueFactory<>("razon_social"));
+    }
+
+    //metodo para listar los proveedores
+    public void listarProveedores() {
+        proveedorList.clear();
+        tablaProveedores.refresh();
+        proveedorList.addAll(proveedorServicio.listarProveedores());
+        tablaProveedores.setItems(proveedorList);
+        tablaProveedores.refresh();
+    }
+
+    // metodo para agregar un cliente a la base de datos o modificar uno existente
+    public void agregarProveedor(){
+
+        //valido que estén todos los campos llenos
+        if (rucTxt.getText().isEmpty()){
+            mostrarMensaje("Error", "Ingrese el RUC del proveedor.");
+            rucTxt.requestFocus();
+        } else if (nombreProveedorTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese el nombre del proveedor.");
+            nombreProveedorTxt.requestFocus();
+        } else if (telefonoProveedorTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese el teléfono del proveedor.");
+            telefonoProveedorTxt.requestFocus();
+        }else if (direccionProveedorTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese la dirección del proveedor.");
+            direccionProveedorTxt.requestFocus();
+        }else if (razonSocialProveedorTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese la razón social del proveedor.");
+            razonSocialProveedorTxt.requestFocus();
+        } else {
+
+            var proveedor = new Proveedor();
+
+            try{
+                String nombre = nombreProveedorTxt.getText();
+                String direccion = direccionProveedorTxt.getText();
+                String razonSocial = razonSocialProveedorTxt.getText();
+
+                //pone la primera letra del nombre y apellido en mayúscula y las demás en minúscula
+                nombre = nombre.substring(0, 1).toUpperCase() + nombre.substring(1).toLowerCase();
+                direccion = direccion.substring(0, 1).toUpperCase() + direccion.substring(1);
+                razonSocial = razonSocial.substring(0, 1).toUpperCase() + razonSocial.substring(1).toLowerCase();
+                int telefono = Integer.parseInt(telefonoProveedorTxt.getText());
+                int ruc = Integer.parseInt(rucTxt.getText());
+
+                proveedor.setRuc(ruc);
+                proveedor.setNombre(nombre);
+                proveedor.setTelefono(telefono);
+                proveedor.setDireccion(direccion);
+                proveedor.setRazon_social(razonSocial);
+
+                //veo si se repite o no
+                Proveedor proveedorExistente = null;
+                var repetido = false;
+                for (Proveedor proveedorLista: proveedorList){
+                    if (ruc == proveedorLista.getRuc()){
+                        repetido = true;
+                        proveedorExistente = proveedorLista;
+                        break;
+                    }
+                }
+
+                if (!repetido){
+                    //si no se repite se guarda
+                    proveedorServicio.agregarProveedor(proveedor);
+                    mostrarMensaje("Información", "Se ha guardado un nuevo proveedor en la base de datos");
+                }else {
+                    //si se repite se actualiza exceptuando el RUC
+                    proveedorExistente.setNombre(proveedor.getNombre());
+                    proveedorExistente.setTelefono(proveedor.getTelefono());
+                    proveedorExistente.setDireccion(proveedor.getDireccion());
+                    proveedorExistente.setRazon_social(proveedor.getRazon_social());
+                    proveedorServicio.agregarProveedor(proveedorExistente);
+                    listarClientes();
+                    mostrarMensaje("Información", "Se ha actualizado el proveedor con RUC: " + ruc);
+                }
+                limpiarFormularioProveedor();
+                listarProveedores();
+            }catch (Exception e){
+                mostrarMensaje("Error", e.getMessage());
+            }
+        }
+    }
+
+    //metodo para limpiar el formulario de proveedor
+    public void limpiarFormularioProveedor(){
+        rucTxt.clear();
+        nombreProveedorTxt.clear();
+        telefonoProveedorTxt.clear();
+        direccionProveedorTxt.clear();
+        razonSocialProveedorTxt.clear();
+        rucBuscarTxt.clear();
+        rucTxt.setEditable(true);
+    }
+
+    //metodo para avanzar en el formulario al apretar enter
+    private void apretarEnterPasarFormularioProveedor(){
+        rucTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                nombreProveedorTxt.requestFocus();
+            }
+        });
+        nombreProveedorTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                telefonoProveedorTxt.requestFocus();
+            }
+        });
+        telefonoProveedorTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                direccionProveedorTxt.requestFocus();
+            }
+        });
+        direccionProveedorTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                razonSocialProveedorTxt.requestFocus();
+            }
+        });
+        //si se aprieta enter en el text field razon social se agrega el proveedor
+        razonSocialProveedorTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                agregarProveedor();
+            }
+        });
+    }
+
+    //metodo para buscar un proveedor por RUC (botón)
+    public void btnBuscarProveedor(){
+        if (rucBuscarTxt.getText().isEmpty()){
+            mostrarMensaje("Error", "Ingrese un RUC para buscar al proveedor.");
+            rucBuscarTxt.requestFocus();
+        }else{
+            try {
+                int ruc = Integer.parseInt(rucBuscarTxt.getText());
+                var proveedor = proveedorServicio.buscarProveedorPorRuc(ruc);
+                if (proveedor != null){
+                    proveedorList.clear();
+                    proveedorList.add(proveedor);
+                    tablaProveedores.setItems(proveedorList);
+                    tablaProveedores.refresh();
+                }else{
+                    mostrarMensaje("Error", "No se encontró ningún cliente con el RUC: " + ruc + ".");
+                }
+            }catch (Exception e){
+                mostrarMensaje("Error", "Ingrese un RUC valido");
+            }
+        }
+    }
+
+    //metodo para buscar un proveedor por RUC (enter)
+    public void buscarProveedor(){
+        rucBuscarTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+               btnBuscarProveedor();
+            }
+        });
+    }
+
+    //metodo para cargar un cliente de la tabla en el formulario
+    public void cargarProveedorFormulario(){
+        var proveedor = tablaProveedores.getSelectionModel().getSelectedItem();
+        if (proveedor != null) {
+            rucTxt.setText(String.valueOf(proveedor.getRuc()));
+            nombreProveedorTxt.setText(proveedor.getNombre());
+            telefonoProveedorTxt.setText(String.valueOf(proveedor.getTelefono()));
+            direccionProveedorTxt.setText(proveedor.getDireccion());
+            razonSocialProveedorTxt.setText(proveedor.getRazon_social());
+            rucTxt.setEditable(false);
+        }
+    }
+
+    //metodo para eliminar un cliente de la base de datos
+    public void eliminarProveedor(){
+        var proveedor = tablaProveedores.getSelectionModel().getSelectedItem();
+        if (proveedor != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmación");
+            alert.setHeaderText("Eliminar Proveedor");
+            alert.setContentText("¿Querés confirmar la eliminación del proveedor con RUC: " + proveedor.getRuc() + "?");
+
+            ButtonType botonSi = new ButtonType("Sí");
+            ButtonType botonNo = new ButtonType("No");
+            alert.getButtonTypes().setAll(botonSi, botonNo);
+
+            Optional<ButtonType> resultado = alert.showAndWait();
+
+            if (resultado.isPresent() && resultado.get() == botonSi) {
+                proveedorServicio.eliminarProveedor(proveedor);
+                listarProductos();
+                mostrarMensaje("Información", "Proveedor eliminado correctamente.");
+                listarClientes();
+            }
+        }
+        listarProveedores();
+    }
+
+
+    //-------------------------------- FIN DEL APARTADO PROVEEDORES --------------------------------//
 
     //metodo para abrir la ventana de pedidos
     public void verTabPedidos(){

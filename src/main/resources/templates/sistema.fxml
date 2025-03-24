@@ -359,7 +359,102 @@
             </content>
          </Tab>
             <Tab fx:id="tabProveedores" text="Proveedores">
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="573.0" prefWidth="862.0" style="-fx-background-color: #d9d9d9;">
+                     <children>
+                        <TableView fx:id="tablaProveedores" editable="true" layoutX="40.0" layoutY="155.0" onMouseClicked="#cargarProveedorFormulario" prefHeight="282.0" prefWidth="778.0">
+                           <columns>
+                              <TableColumn fx:id="idProveedorColumna" editable="false" prefWidth="50.0" text="Id" />
+                              <TableColumn fx:id="rucProveedorColumna" editable="false" prefWidth="123.0" text="RUC" />
+                              <TableColumn fx:id="nombreProveedorColumna" editable="false" prefWidth="114.0" text="Nombre" />
+                              <TableColumn fx:id="telefonoProveedorColumna" editable="false" prefWidth="167.0" text="Teléfono" />
+                              <TableColumn fx:id="direccionProveedorColumna" editable="false" prefWidth="140.0" text="Dirección" />
+                              <TableColumn fx:id="razonSocialProveedorColumna" editable="false" prefWidth="183.0" text="Razón Social" />
+                           </columns>
+                        </TableView>
+                        <AnchorPane layoutX="23.0" prefHeight="104.0" prefWidth="784.0">
+                           <children>
+                              <Label layoutX="25.0" layoutY="24.0" text="RUC">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="194.0" layoutY="25.0" text="Nombre">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="518.0" layoutY="25.0" text="Dirección">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="360.0" layoutY="23.0" text="Teléfono">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="rucTxt" layoutX="23.0" layoutY="50.0" prefHeight="29.0" prefWidth="134.0" style="-fx-background-color: #d9d9d9;">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                              </TextField>
+                              <TextField fx:id="nombreProveedorTxt" layoutX="192.0" layoutY="51.0" prefHeight="29.0" prefWidth="109.0" style="-fx-background-color: #d9d9d9;">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                              </TextField>
+                              <TextField fx:id="telefonoProveedorTxt" layoutX="356.0" layoutY="50.0" prefHeight="28.0" prefWidth="107.0" style="-fx-background-color: #d9d9d9;">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                              </TextField>
+                              <TextField fx:id="direccionProveedorTxt" layoutX="515.0" layoutY="51.0" prefHeight="29.0" prefWidth="112.0" style="-fx-background-color: #d9d9d9;">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                              </TextField>
+                              <Separator layoutX="22.0" layoutY="78.0" prefHeight="3.0" prefWidth="123.0" style="-fx-background-color: black;" />
+                              <Separator layoutX="194.0" layoutY="78.0" prefHeight="3.0" prefWidth="113.0" style="-fx-background-color: black;" />
+                              <Separator layoutX="360.0" layoutY="78.0" prefHeight="2.0" prefWidth="107.0" style="-fx-background-color: black;" />
+                              <Separator layoutX="512.0" layoutY="78.0" prefHeight="3.0" prefWidth="107.0" style="-fx-background-color: black;" />
+                              <Label layoutX="677.0" layoutY="25.0" text="Razón social">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="razonSocialProveedorTxt" layoutX="674.0" layoutY="51.0" prefHeight="29.0" prefWidth="126.0" style="-fx-background-color: #d9d9d9;">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                              </TextField>
+                              <Separator layoutX="671.0" layoutY="78.0" prefHeight="3.0" prefWidth="123.0" style="-fx-background-color: black;" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="255.0" layoutY="448.0" prefHeight="39.0" prefWidth="186.0">
+                           <children>
+                              <Label layoutX="37.0" text="ID:">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="rucBuscarTxt" layoutX="71.0" prefHeight="25.0" prefWidth="124.0" style="-fx-background-color: #d9d9d9;">
+                                 <font>
+                                    <Font name="Segoe UI" size="16.0" />
+                                 </font>
+                              </TextField>
+                              <Separator layoutX="77.0" layoutY="27.0" prefHeight="2.0" prefWidth="118.0" style="-fx-background-color: black;" />
+                           </children>
+                        </AnchorPane>
+                        <Button layoutX="40.0" layoutY="448.0" mnemonicParsing="false" onAction="#eliminarProveedor" prefHeight="29.0" prefWidth="145.0" style="-fx-background-color: red;" text="Eliminar proveedor" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP" wrapText="true" />
+                        <Button layoutX="681.0" layoutY="104.0" mnemonicParsing="false" onAction="#agregarProveedor" prefHeight="36.0" prefWidth="135.0" text="Agregar proveedor" />
+                        <Button layoutX="40.0" layoutY="104.0" mnemonicParsing="false" onAction="#limpiarFormularioProveedor" prefHeight="36.0" prefWidth="135.0" text="Limpiar formulario" />
+                        <Button layoutX="460.0" layoutY="448.0" minHeight="21.0" mnemonicParsing="false" onAction="#btnBuscarProveedor" prefHeight="29.0" prefWidth="129.0" text="Buscar proveedor" />
+                        <Button layoutX="692.0" layoutY="448.0" minHeight="21.0" mnemonicParsing="false" onAction="#listarProveedores" prefHeight="29.0" prefWidth="126.0" text="Listar proveedores" />
+                     </children>
+                  </AnchorPane>
+               </children></AnchorPane>
             </Tab>
             <Tab fx:id="tabPedidos" text="Pedidos">
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
