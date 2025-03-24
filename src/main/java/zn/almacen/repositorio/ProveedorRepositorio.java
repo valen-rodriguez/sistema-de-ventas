@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface ProveedorRepositorio extends JpaRepository<Proveedor, Integer> {
     Optional<Proveedor> findProductoByNombre(String nombre);
+    Optional<Proveedor> findProductoByRuc(int ruc);
 }

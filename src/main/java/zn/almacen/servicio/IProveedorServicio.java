@@ -14,8 +14,11 @@ public interface IProveedorServicio {
 
      Proveedor buscarProveedorPorNombre(String nombre);
 
+     Proveedor buscarProveedorPorRuc(int ruc);
+
      void agregarProveedor(Proveedor proveedor);
 
      void eliminarProveedor(Proveedor proveedor);
+
 
 }
