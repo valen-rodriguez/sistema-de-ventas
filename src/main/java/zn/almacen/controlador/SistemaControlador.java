@@ -239,11 +239,35 @@ public class SistemaControlador implements Initializable {
     @FXML
     private TableColumn<Cliente, String> razonSocialClienteColumna;
 
+    //-------- CAMPOS DE TEXTO --------//
+
+    @FXML
+    private TextField nombreTabClienteTxt;
+
+    @FXML
+    private TextField apellidoClienteTxt;
+
+    @FXML
+    private TextField dniTabClienteTxt;
+
+    @FXML
+    private TextField telefonoClienteTxt;
+
+    @FXML
+    private TextField direccionClienteTxt;
+
+    @FXML
+    private TextField razonSocialClienteTxt;
+
+    @FXML
+    private TextField dniClienteBuscarTxt;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.producto = new Producto();
         this.cliente = new Cliente();
+        this.cliente.setCliente_id(0);
         this.pedido = new Pedido();
 
         //inicialización de la tabla carrito en el apartado de nueva venta
@@ -257,11 +281,12 @@ public class SistemaControlador implements Initializable {
         //inicialización de la tabla productos en el apartado de productos
         tablaProductos.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         configurarColumnasProductos();
-        apretarEnterPasarFormulario();
+        apretarEnterPasarFormularioProducto();
 
         //inicialización de la tabla cliente en el apartado de clientes
         tablaClientes.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         configurarColumnasClientes();
+        apretarEnterPasarFormularioCliente();
     }
 
     //-------------------------------- MÉTODOS DEL APARTADO NUEVA VENTA --------------------------------//
@@ -471,12 +496,12 @@ public class SistemaControlador implements Initializable {
     public void crearVenta() {
         if (totalTxt.getText().isEmpty() || this.totalPagar == 0) {
             mostrarMensaje("Error", "Ingrese al menos un producto.");
-        } else if (nombreClienteTxt.getText().isEmpty()) {
-            mostrarMensaje("Error", "Ingrese el cliente.");
         } else {
             //crea el pedido
             Pedido pedidoNuevo = new Pedido();
-            pedidoNuevo.setCliente_id(this.cliente.getCliente_id());
+            if (!nombreClienteTxt.getText().isEmpty()){
+                pedidoNuevo.setCliente_id(this.cliente.getCliente_id());
+            }
             pedidoNuevo.setCuenta_id(this.cuenta.getCuenta_id());
             pedidoNuevo.setPrecioTotal(this.totalPagar);
             pedidoNuevo.setFecha(LocalDateTime.now());
@@ -516,6 +541,9 @@ public class SistemaControlador implements Initializable {
 
             //limpiar formulario producto
             limpiarFormularioProducto();
+
+            //elimino el cliente en caso de que haya uno
+            this.cliente = null;
 
             codigoTxt.requestFocus();
         }
@@ -598,28 +626,31 @@ public class SistemaControlador implements Initializable {
             doc.add(new Paragraph(" "));
             doc.add(new Paragraph(" "));
 
-            //datos del cliente
-            Paragraph datosCliente = new Paragraph("Datos del cliente", fuenteSubtitulo);
-            datosCliente.setAlignment(Element.ALIGN_LEFT);
-            doc.add(datosCliente);
+            //datos del cliente (si hay)
+            if (this.cliente.getCliente_id() != 0){
+                Paragraph datosCliente = new Paragraph("Datos del cliente", fuenteSubtitulo);
+                datosCliente.setAlignment(Element.ALIGN_LEFT);
+                doc.add(datosCliente);
 
-            String nombreCliente = this.cliente.getNombre() + " " + this.cliente.getApellido();
-            String dni = String.valueOf(this.cliente.getDni());
-            String telefono = String.valueOf(this.cliente.getTelefono());
-            String direccion = this.cliente.getDireccion();
-            String razonSocial = this.cliente.getRazon_social();
+                String nombreCliente = this.cliente.getNombre() + " " + this.cliente.getApellido();
+                String dni = String.valueOf(this.cliente.getDni());
+                String telefono = String.valueOf(this.cliente.getTelefono());
+                String direccion = this.cliente.getDireccion();
+                String razonSocial = this.cliente.getRazon_social();
 
-            Paragraph infoCliente = new Paragraph(
-                    "Nombre: " + nombreCliente + "\n" +
-                            "DNI: " + dni + "\n" +
-                            "Teléfono: " + telefono + "\n" +
-                            "Dirección: " + direccion + "\n" +
-                            "Razón social: " + razonSocial + "\n"
-            );
-            infoCliente.setAlignment(Element.ALIGN_LEFT);
-            doc.add(infoCliente);
-            doc.add(new Paragraph(" "));
-            doc.add(new Paragraph(" "));
+                Paragraph infoCliente = new Paragraph(
+                        "Nombre: " + nombreCliente + "\n" +
+                                "DNI: " + dni + "\n" +
+                                "Teléfono: " + telefono + "\n" +
+                                "Dirección: " + direccion + "\n" +
+                                "Razón social: " + razonSocial + "\n"
+                );
+                infoCliente.setAlignment(Element.ALIGN_LEFT);
+                doc.add(infoCliente);
+                doc.add(new Paragraph(" "));
+                doc.add(new Paragraph(" "));
+            }
+
 
             //tabla de productos
             PdfPTable tablaPdf = new PdfPTable(3);
@@ -785,6 +816,8 @@ public class SistemaControlador implements Initializable {
                 if (precioStr.contains(",")){
                     precioStr = precioStr.replace(",", ".");
                 }
+
+                //pone la primera letra del nombre y la descripción en mayúsculas y todas las demás en minúsculas
                 nombre = nombre.substring(0, 1).toUpperCase() + nombre.substring(1).toLowerCase();
                 descripcion = descripcion.substring(0, 1).toUpperCase() + descripcion.substring(1).toLowerCase();
                 double precio = Double.parseDouble(precioStr);
@@ -862,7 +895,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para que cuando se apriete el enter en los formularios pase automáticamente al siguiente
-    private void apretarEnterPasarFormulario() {
+    private void apretarEnterPasarFormularioProducto() {
         codigoProductoTxt.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 nombreProductoTxt.requestFocus();
@@ -930,6 +963,7 @@ public class SistemaControlador implements Initializable {
         }
     }
 
+    //metodo para eliminar un producto de la base de datos
     public void eliminarProducto(){
         var producto = tablaProductos.getSelectionModel().getSelectedItem();
         if (producto != null) {
@@ -953,6 +987,7 @@ public class SistemaControlador implements Initializable {
         }
     }
 
+    //metodo para limpiar todos los formularios del tab
     public void limpiarFormularioTabProducto(){
         codigoProductoTxt.clear();
         nombreProductoTxt.clear();
@@ -962,9 +997,13 @@ public class SistemaControlador implements Initializable {
         comboBoxProveedor.setValue(null);
         codigoProductoBuscarTxt.clear();
     }
+
     //-------------------------------- FIN DEL APARTADO PRODUCTOS --------------------------------//
 
+
+
     //-------------------------------- MÉTODOS DEL APARTADO CLIENTES --------------------------------//
+
     //metodo para abrir la ventana de clientes
     public void verTabClientes(){
         tabPanePrincipal.getSelectionModel().select(tabClientes);
@@ -972,16 +1011,18 @@ public class SistemaControlador implements Initializable {
         listarClientes();
     }
 
+    //metodo configurar columnas de la tabla de clientes
     private void configurarColumnasClientes() {
         idClienteColumna.setCellValueFactory(new PropertyValueFactory<>("cliente_id"));
         nombreClienteColumna.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         apellidoClienteColumna.setCellValueFactory(new PropertyValueFactory<>("apellido"));
         dniClienteColumna.setCellValueFactory(new PropertyValueFactory<>("dni"));
         telefonoClienteColumna.setCellValueFactory(new PropertyValueFactory<>("telefono"));
-        direccionClienteColumna.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        direccionClienteColumna.setCellValueFactory(new PropertyValueFactory<>("direccion"));
         razonSocialClienteColumna.setCellValueFactory(new PropertyValueFactory<>("razon_social"));
     }
 
+    //metodo para listar los clientes
     private void listarClientes() {
         clienteList.clear();
         tablaClientes.refresh();
@@ -990,9 +1031,139 @@ public class SistemaControlador implements Initializable {
         tablaClientes.refresh();
     }
 
+    // metodo para agregar un cliente a la base de datos o modificar uno existente
+    public void agregarCliente(){
 
+        //valido que estén todos los campos llenos
+        if (nombreTabClienteTxt.getText().isEmpty()){
+            mostrarMensaje("Error", "Ingrese el nombre del cliente.");
+            nombreTabClienteTxt.requestFocus();
+        } else if (apellidoClienteTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese el apellido del cliente.");
+            apellidoClienteTxt.requestFocus();
+        } else if (dniTabClienteTxt.getText().isEmpty()) {
+        mostrarMensaje("Error", "Ingrese el DNI del cliente.");
+        dniTabClienteTxt.requestFocus();
+        }else if (telefonoClienteTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese el teléfono del cliente.");
+            telefonoClienteTxt.requestFocus();
+        }else if (direccionClienteTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese la dirección del cliente.");
+            direccionClienteTxt.requestFocus();
+        }else if (razonSocialClienteTxt.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese la razón social del cliente.");
+            razonSocialClienteTxt.requestFocus();
+        }else {
 
+            var cliente = new Cliente();
 
+            try{
+                String nombre = nombreTabClienteTxt.getText();
+                String apellido = apellidoClienteTxt.getText();
+                String direccion = direccionClienteTxt.getText();
+                String razonSocial = razonSocialClienteTxt.getText();
+
+                //pone la primera letra del nombre y apellido en mayúscula y las demás en minúscula
+                nombre = nombre.substring(0, 1).toUpperCase() + nombre.substring(1).toLowerCase();
+                apellido = apellido.substring(0, 1).toUpperCase() + apellido.substring(1).toLowerCase();
+                direccion = direccion.substring(0, 1).toUpperCase() + direccion.substring(1).toLowerCase();
+                razonSocial = razonSocial.substring(0, 1).toUpperCase() + razonSocial.substring(1).toLowerCase();
+
+                int dni = Integer.parseInt(dniTabClienteTxt.getText());
+                int telefono = Integer.parseInt(telefonoClienteTxt.getText());
+
+                cliente.setNombre(nombre);
+                cliente.setApellido(apellido);
+                cliente.setDni(dni);
+                cliente.setTelefono(telefono);
+                cliente.setDireccion(direccion);
+                cliente.setRazon_social(razonSocial);
+
+                //veo si se repite o no
+                Cliente clienteExistente = null;
+                var repetido = false;
+                for (Cliente clienteLista: clienteList){
+                    if (dni == clienteLista.getDni()){
+                        repetido = true;
+                        clienteExistente = clienteLista;
+                        break;
+                    }
+                }
+
+                if (!repetido){
+                    //si no se repite se guarda
+                    clienteServicio.guardarCliente(cliente);
+                    mostrarMensaje("Información", "Se ha guardado un nuevo cliente en la base de datos");
+                }else {
+                    //si se repite se actualiza exceptuando el dni
+                    clienteExistente.setNombre(cliente.getNombre());
+                    clienteExistente.setApellido(cliente.getApellido());
+                    clienteExistente.setTelefono(cliente.getTelefono());
+                    clienteExistente.setDireccion(cliente.getDireccion());
+                    clienteExistente.setRazon_social(cliente.getRazon_social());
+                    clienteServicio.guardarCliente(clienteExistente);
+                    listarClientes();
+                    mostrarMensaje("Información", "Se ha actualizado el cliente con DNI: " + dni);
+                }
+                limpiarFormularioCliente();
+            }catch (Exception e){
+                mostrarMensaje("Error", e.getMessage());
+            }
+        }
+    }
+
+    private void apretarEnterPasarFormularioCliente() {
+        nombreTabClienteTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                apellidoClienteTxt.requestFocus();
+            }
+        });
+        apellidoClienteTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                dniTabClienteTxt.requestFocus();
+            }
+        });
+        dniTabClienteTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                telefonoClienteTxt.requestFocus();
+            }
+        });
+        direccionClienteTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                razonSocialClienteTxt.requestFocus();
+            }
+        });
+        //si se aprieta enter en el textfield razon social se agrega el producto
+        razonSocialClienteTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                agregarCliente();
+            }
+        });
+    }
+
+    public void cargarClienteFormulario(){
+        var cliente = tablaClientes.getSelectionModel().getSelectedItem();
+        if (producto != null) {
+            nombreTabClienteTxt.setText(cliente.getNombre());
+            apellidoClienteTxt.setText(cliente.getApellido());
+            dniTabClienteTxt.setText(String.valueOf(cliente.getDni()));
+            telefonoClienteTxt.setText(String.valueOf(cliente.getTelefono()));
+            direccionClienteTxt.setText(cliente.getDireccion());
+            razonSocialClienteTxt.setText(cliente.getRazon_social());
+            dniTabClienteTxt.setEditable(false);
+        }
+    }
+
+    public void limpiarFormularioCliente(){
+        nombreTabClienteTxt.clear();
+        apellidoClienteTxt.clear();
+        dniTabClienteTxt.clear();
+        telefonoClienteTxt.clear();
+        direccionClienteTxt.clear();
+        razonSocialClienteTxt.clear();
+        dniClienteBuscarTxt.clear();
+        dniTabClienteTxt.setEditable(true);
+    }
 
 
 

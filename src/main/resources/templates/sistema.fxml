@@ -231,16 +231,15 @@
             <content>
                <AnchorPane minHeight="0.0" minWidth="0.0" onMouseClicked="#limpiarFormulariosTabVentas" prefHeight="573.0" prefWidth="1011.0" style="-fx-background-color: #d9d9d9;">
                   <children>
-                     <TableView fx:id="tablaClientes" editable="true" layoutX="40.0" layoutY="155.0" onMouseClicked="#cargarProductoCarritoAFormulario" prefHeight="282.0" prefWidth="778.0">
+                     <TableView fx:id="tablaClientes" editable="true" layoutX="40.0" layoutY="155.0" onMouseClicked="#cargarClienteFormulario" prefHeight="282.0" prefWidth="778.0">
                         <columns>
                            <TableColumn fx:id="idClienteColumna" editable="false" prefWidth="50.0" text="Id" />
                            <TableColumn fx:id="nombreClienteColumna" editable="false" prefWidth="123.0" text="Nombre" />
                            <TableColumn fx:id="apellidoClienteColumna" editable="false" prefWidth="114.0" text="Apellido" />
                            <TableColumn fx:id="dniClienteColumna" editable="false" prefWidth="92.0" text="DNI" />
                            <TableColumn fx:id="telefonoClienteColumna" editable="false" prefWidth="121.0" text="Teléfono" />
-                           <TableColumn fx:id="direccionClienteColumna" editable="false" prefWidth="102.0" text="Dirección" />
-                           <TableColumn fx:id="razonSocialClienteColumna" editable="false" prefWidth="267.0" text="Razón Social" />
-                           <TableColumn fx:id="direccionClienteColumna1" editable="false" prefWidth="109.0" text="Dirección" />
+                           <TableColumn fx:id="direccionClienteColumna" editable="false" prefWidth="134.0" text="Dirección" />
+                           <TableColumn fx:id="razonSocialClienteColumna" editable="false" prefWidth="143.0" text="Razón Social" />
                         </columns>
                      </TableView>
                      <AnchorPane layoutX="19.0" layoutY="7.0" prefHeight="104.0" prefWidth="793.0">
@@ -255,7 +254,7 @@
                                  <Font name="System Bold" size="19.0" />
                               </font>
                            </Label>
-                           <Label layoutX="544.0" layoutY="24.0" text="Dirección">
+                           <Label layoutX="540.0" layoutY="25.0" text="Dirección">
                               <font>
                                  <Font name="System Bold" size="19.0" />
                               </font>
@@ -270,27 +269,27 @@
                                  <Font name="System Bold" size="19.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="codigoTxt1" layoutX="23.0" layoutY="50.0" prefHeight="29.0" prefWidth="134.0" style="-fx-background-color: #d9d9d9;">
+                           <TextField fx:id="nombreTabClienteTxt" layoutX="23.0" layoutY="50.0" prefHeight="29.0" prefWidth="134.0" style="-fx-background-color: #d9d9d9;">
                               <font>
                                  <Font name="Segoe UI" size="16.0" />
                               </font>
                            </TextField>
-                           <TextField fx:id="productoTxt1" editable="false" layoutX="169.0" layoutY="50.0" prefHeight="29.0" prefWidth="109.0" style="-fx-background-color: #d9d9d9;">
+                           <TextField fx:id="apellidoClienteTxt" layoutX="169.0" layoutY="50.0" prefHeight="29.0" prefWidth="109.0" style="-fx-background-color: #d9d9d9;">
                               <font>
                                  <Font name="Segoe UI" size="16.0" />
                               </font>
                            </TextField>
-                           <TextField fx:id="precioTxt1" editable="false" layoutX="313.0" layoutY="50.0" prefHeight="29.0" prefWidth="96.0" style="-fx-background-color: #d9d9d9;">
+                           <TextField fx:id="dniTabClienteTxt" layoutX="313.0" layoutY="50.0" prefHeight="29.0" prefWidth="96.0" style="-fx-background-color: #d9d9d9;">
                               <font>
                                  <Font name="Segoe UI" size="16.0" />
                               </font>
                            </TextField>
-                           <TextField fx:id="stockTxt1" editable="false" layoutX="431.0" layoutY="51.0" prefHeight="25.0" prefWidth="78.0" style="-fx-background-color: #d9d9d9;">
+                           <TextField fx:id="telefonoClienteTxt" layoutX="431.0" layoutY="51.0" prefHeight="25.0" prefWidth="78.0" style="-fx-background-color: #d9d9d9;">
                               <font>
                                  <Font name="Segoe UI" size="16.0" />
                               </font>
                            </TextField>
-                           <TextField fx:id="cantidadTxt1" layoutX="544.0" layoutY="51.0" prefHeight="29.0" prefWidth="77.0" style="-fx-background-color: #d9d9d9;">
+                           <TextField fx:id="direccionClienteTxt" layoutX="537.0" layoutY="51.0" prefHeight="29.0" prefWidth="112.0" style="-fx-background-color: #d9d9d9;">
                               <font>
                                  <Font name="Segoe UI" size="16.0" />
                               </font>
@@ -299,18 +298,18 @@
                            <Separator layoutX="171.0" layoutY="77.0" prefHeight="3.0" prefWidth="113.0" style="-fx-background-color: black;" />
                            <Separator layoutX="316.0" layoutY="78.0" prefHeight="0.0" prefWidth="90.0" style="-fx-background-color: black;" />
                            <Separator layoutX="435.0" layoutY="78.0" prefHeight="0.0" prefWidth="74.0" style="-fx-background-color: black;" />
-                           <Separator layoutX="547.0" layoutY="78.0" prefHeight="0.0" prefWidth="74.0" style="-fx-background-color: black;" />
+                           <Separator layoutX="542.0" layoutY="78.0" prefHeight="3.0" prefWidth="107.0" style="-fx-background-color: black;" />
                            <Label layoutX="670.0" layoutY="24.0" text="Razón social">
                               <font>
                                  <Font name="System Bold" size="19.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="codigoTxt11" layoutX="667.0" layoutY="49.0" prefHeight="29.0" prefWidth="126.0" style="-fx-background-color: #d9d9d9;">
+                           <TextField fx:id="razonSocialClienteTxt" layoutX="667.0" layoutY="50.0" prefHeight="29.0" prefWidth="126.0" style="-fx-background-color: #d9d9d9;">
                               <font>
                                  <Font name="Segoe UI" size="16.0" />
                               </font>
                            </TextField>
-                           <Separator layoutX="670.0" layoutY="77.0" prefHeight="3.0" prefWidth="123.0" style="-fx-background-color: black;" />
+                           <Separator layoutX="671.0" layoutY="78.0" prefHeight="3.0" prefWidth="123.0" style="-fx-background-color: black;" />
                         </children>
                      </AnchorPane>
                      <AnchorPane layoutX="492.0" layoutY="448.0" prefHeight="39.0" prefWidth="186.0">
@@ -320,7 +319,7 @@
                                  <Font name="System Bold" size="19.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="dniClienteTxt1" layoutX="71.0" prefHeight="25.0" prefWidth="124.0" style="-fx-background-color: #d9d9d9;">
+                           <TextField fx:id="dniClienteBuscarTxt" layoutX="71.0" prefHeight="25.0" prefWidth="124.0" style="-fx-background-color: #d9d9d9;">
                               <font>
                                  <Font name="Segoe UI" size="16.0" />
                               </font>
@@ -328,9 +327,9 @@
                            <Separator layoutX="77.0" layoutY="27.0" prefHeight="2.0" prefWidth="118.0" style="-fx-background-color: black;" />
                         </children>
                      </AnchorPane>
-                     <Button layoutX="40.0" layoutY="448.0" mnemonicParsing="false" onAction="#eliminarProductoCarrito" prefHeight="29.0" prefWidth="107.0" style="-fx-background-color: red;" text="Eliminar cliente" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP" wrapText="true" />
-                     <Button layoutX="681.0" layoutY="104.0" mnemonicParsing="false" onAction="#agregarProductoCarrito" prefHeight="36.0" prefWidth="135.0" text="Agregar Cliente" />
-                     <Button layoutX="40.0" layoutY="104.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="135.0" text="Limpiar formulario" />
+                     <Button layoutX="40.0" layoutY="448.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="107.0" style="-fx-background-color: red;" text="Eliminar cliente" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP" wrapText="true" />
+                     <Button layoutX="681.0" layoutY="104.0" mnemonicParsing="false" onAction="#agregarCliente" prefHeight="36.0" prefWidth="135.0" text="Agregar Cliente" />
+                     <Button layoutX="40.0" layoutY="104.0" mnemonicParsing="false" onAction="#limpiarFormularioCliente" prefHeight="36.0" prefWidth="135.0" text="Limpiar formulario" />
                      <Button layoutX="700.0" layoutY="448.0" minHeight="21.0" mnemonicParsing="false" onAction="#agregarProductoCarrito" prefHeight="29.0" prefWidth="116.0" text="Buscar cliente" />
                   </children>
                </AnchorPane>
