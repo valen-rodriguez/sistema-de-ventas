@@ -110,6 +110,10 @@ public class SistemaControlador implements Initializable {
 
     private double totalPagar;
 
+    private double montoAbonado;
+
+    private double vuelto;
+
     //-------- CAMPOS DE TEXTO --------//
 
     @FXML
@@ -135,6 +139,12 @@ public class SistemaControlador implements Initializable {
 
     @FXML
     private TextField totalTxt;
+
+    @FXML
+    private TextField montoAbonadoTxt;
+
+    @FXML
+    private TextField vueltoTxt;
 
     //-------- TABLA CARRITO --------//
 
@@ -275,6 +285,7 @@ public class SistemaControlador implements Initializable {
         cargarTextoProducto();
         configurarColumnasCarrito();
         cargarProductoTabla();
+        calcularVuelto();
 
         buscarCliente();
 
@@ -549,6 +560,38 @@ public class SistemaControlador implements Initializable {
         }
     }
 
+    //metodo para calcular el vuelto en efectivo de una venta
+    private void calcularVuelto(){
+        montoAbonadoTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                if (montoAbonadoTxt.getText().isEmpty()){
+                    mostrarMensaje("Error", "Ingrese el monto abonado.");
+                }else{
+                    try {
+                        //veo si puso , en vez de . para los decimales y lo cambio en caso de ser necesario
+                        String montoAbonadoStr = montoAbonadoTxt.getText();
+                        if (montoAbonadoStr.contains(",")){
+                            montoAbonadoStr = montoAbonadoStr.replace(",", ".");
+                        }
+                        this.montoAbonado = Double.parseDouble(montoAbonadoStr);
+                        montoAbonadoTxt.setText("$" + montoAbonadoStr);
+
+                        if (this.montoAbonado < this.totalPagar){
+                            mostrarMensaje("Error", "El monto abonado es menor al total del pedido.");
+                        }else{
+                            this.vuelto = this.montoAbonado - this.totalPagar;
+                            //formateo el vuelto a solo 2 decimales
+                            String vueltoFormateado = String.format("%.2f", this.vuelto);
+                            vueltoTxt.setText("$" + vueltoFormateado);
+                        }
+                    }catch (Exception e){
+                        mostrarMensaje("Error", "Ingrese un monto válido.");
+                    }
+                }
+            }
+        });
+    }
+
     //metodo para limpiar el formulario del producto
     public void limpiarFormularioProducto() {
         codigoTxt.clear();
@@ -565,6 +608,10 @@ public class SistemaControlador implements Initializable {
         //limpiar formulario del cliente
         dniClienteTxt.clear();
         nombreClienteTxt.clear();
+        //limpiar formulario del total
+        totalTxt.clear();
+        montoAbonadoTxt.clear();
+        vueltoTxt.clear();
     }
 
     //metodo eliminar producto carrito
@@ -1133,7 +1180,7 @@ public class SistemaControlador implements Initializable {
                 razonSocialClienteTxt.requestFocus();
             }
         });
-        //si se aprieta enter en el textfield razon social se agrega el producto
+        //si se aprieta enter en el text field razon social se agrega el producto
         razonSocialClienteTxt.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 agregarCliente();
