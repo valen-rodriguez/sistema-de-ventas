@@ -114,7 +114,7 @@
                         </TextField>
                         <Separator layoutX="61.0" layoutY="27.0" prefHeight="3.0" prefWidth="86.0" style="-fx-background-color: black;" />
                   <Separator layoutX="229.0" layoutY="29.0" prefHeight="2.0" prefWidth="118.0" style="-fx-background-color: black;" />
-                  <Button layoutX="240.0" layoutY="45.0" minHeight="21.0" mnemonicParsing="false" onAction="#btnBuscarCliente" prefHeight="29.0" prefWidth="107.0" text="Buscar cliente" />
+                  <Button layoutX="240.0" layoutY="45.0" minHeight="21.0" mnemonicParsing="false" onAction="#btnBuscarClienteVenta" prefHeight="29.0" prefWidth="107.0" text="Buscar cliente" />
                   <Label layoutX="370.0" layoutY="44.0" text="Monto abonado:">
                      <font>
                         <Font name="System Bold" size="19.0" />
@@ -334,7 +334,7 @@
                            <Separator layoutX="671.0" layoutY="78.0" prefHeight="3.0" prefWidth="123.0" style="-fx-background-color: black;" />
                         </children>
                      </AnchorPane>
-                     <AnchorPane layoutX="492.0" layoutY="448.0" prefHeight="39.0" prefWidth="186.0">
+                     <AnchorPane layoutX="255.0" layoutY="448.0" prefHeight="39.0" prefWidth="186.0">
                         <children>
                            <Label layoutX="30.0" text="DNI:">
                               <font>
@@ -352,7 +352,8 @@
                      <Button layoutX="40.0" layoutY="448.0" mnemonicParsing="false" onAction="#eliminarCliente" prefHeight="29.0" prefWidth="107.0" style="-fx-background-color: red;" text="Eliminar cliente" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP" wrapText="true" />
                      <Button layoutX="681.0" layoutY="104.0" mnemonicParsing="false" onAction="#agregarCliente" prefHeight="36.0" prefWidth="135.0" text="Agregar Cliente" />
                      <Button layoutX="40.0" layoutY="104.0" mnemonicParsing="false" onAction="#limpiarFormularioCliente" prefHeight="36.0" prefWidth="135.0" text="Limpiar formulario" />
-                     <Button layoutX="700.0" layoutY="448.0" minHeight="21.0" mnemonicParsing="false" onAction="#agregarProductoCarrito" prefHeight="29.0" prefWidth="116.0" text="Buscar cliente" />
+                     <Button layoutX="460.0" layoutY="448.0" minHeight="21.0" mnemonicParsing="false" onAction="#btnBuscarCliente" prefHeight="29.0" prefWidth="116.0" text="Buscar cliente" />
+                     <Button layoutX="702.0" layoutY="448.0" minHeight="21.0" mnemonicParsing="false" onAction="#listarClientes" prefHeight="29.0" prefWidth="116.0" text="Listar clientes" />
                   </children>
                </AnchorPane>
             </content>

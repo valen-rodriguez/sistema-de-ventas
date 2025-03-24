@@ -286,8 +286,7 @@ public class SistemaControlador implements Initializable {
         configurarColumnasCarrito();
         cargarProductoTabla();
         calcularVuelto();
-
-        buscarCliente();
+        buscarClienteVenta();
 
         //inicialización de la tabla productos en el apartado de productos
         tablaProductos.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -298,6 +297,7 @@ public class SistemaControlador implements Initializable {
         tablaClientes.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         configurarColumnasClientes();
         apretarEnterPasarFormularioCliente();
+        buscarCliente();
     }
 
     //-------------------------------- MÉTODOS DEL APARTADO NUEVA VENTA --------------------------------//
@@ -460,7 +460,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo buscar cliente por dni (botón)
-    public void btnBuscarCliente(){
+    public void btnBuscarClienteVenta(){
         try {
             Integer dni = Integer.parseInt(dniClienteTxt.getText());
             Cliente clienteDni = clienteServicio.buscarClientePorDni(dni);
@@ -486,10 +486,10 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo buscar cliente por dni (ENTER)
-    private void buscarCliente() {
+    private void buscarClienteVenta() {
         dniClienteTxt.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                btnBuscarCliente();
+                btnBuscarClienteVenta();
             }
         });
     }
@@ -995,15 +995,19 @@ public class SistemaControlador implements Initializable {
     //metodo para buscar un producto por codigo
     public void buscarProducto(){
         if (!codigoProductoBuscarTxt.getText().isEmpty()){
-            Integer codigo = Integer.parseInt(codigoProductoBuscarTxt.getText());
-            var producto = productoServicio.buscarProductoPorCodigo(codigo);
-            if (producto != null){
-                productoList.clear();
-                productoList.add(producto);
-                tablaProductos.setItems(productoList);
-                tablaProductos.refresh();
-            }else{
-                mostrarMensaje("Error", "No se encontró ningún producto con el código: " + codigo + ".");
+            try{
+                Integer codigo = Integer.parseInt(codigoProductoBuscarTxt.getText());
+                var producto = productoServicio.buscarProductoPorCodigo(codigo);
+                if (producto != null){
+                    productoList.clear();
+                    productoList.add(producto);
+                    tablaProductos.setItems(productoList);
+                    tablaProductos.refresh();
+                }else{
+                    mostrarMensaje("Error", "No se encontró ningún producto con el código: " + codigo + ".");
+                }
+            }catch (Exception e){
+                mostrarMensaje("Error", "Ingrese un código válido.");
             }
         }else {
             mostrarMensaje("Error", "Debe ingresar un código.");
@@ -1070,7 +1074,7 @@ public class SistemaControlador implements Initializable {
     }
 
     //metodo para listar los clientes
-    private void listarClientes() {
+    public void listarClientes() {
         clienteList.clear();
         tablaClientes.refresh();
         clienteList.addAll(clienteServicio.listarClientes());
@@ -1113,7 +1117,6 @@ public class SistemaControlador implements Initializable {
                 //pone la primera letra del nombre y apellido en mayúscula y las demás en minúscula
                 nombre = nombre.substring(0, 1).toUpperCase() + nombre.substring(1).toLowerCase();
                 apellido = apellido.substring(0, 1).toUpperCase() + apellido.substring(1).toLowerCase();
-                direccion = direccion.substring(0, 1).toUpperCase() + direccion.substring(1).toLowerCase();
                 razonSocial = razonSocial.substring(0, 1).toUpperCase() + razonSocial.substring(1).toLowerCase();
 
                 int dni = Integer.parseInt(dniTabClienteTxt.getText());
@@ -1245,6 +1248,35 @@ public class SistemaControlador implements Initializable {
         }
     }
 
+    public void btnBuscarCliente(){
+        if (dniClienteBuscarTxt.getText().isEmpty()){
+            mostrarMensaje("Error", "Ingrese un DNI para buscar al cliente.");
+            dniClienteBuscarTxt.requestFocus();
+        }else{
+            try {
+                int dni = Integer.parseInt(dniClienteBuscarTxt.getText());
+                var cliente = clienteServicio.buscarClientePorDni(dni);
+                if (cliente != null){
+                    clienteList.clear();
+                    clienteList.add(cliente);
+                    tablaClientes.setItems(clienteList);
+                    tablaClientes.refresh();
+                }else{
+                    mostrarMensaje("Error", "No se encontró ningún cliente con el DNI: " + dni + ".");
+                }
+            }catch (Exception e){
+                mostrarMensaje("Error", "Ingrese un dni valido");
+            }
+        }
+    }
+
+    private void buscarCliente(){
+        dniClienteBuscarTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                btnBuscarCliente();
+            }
+        });
+    }
 
 
     //-------------------------------- FIN DEL APARTADO CLIENTES --------------------------------//
