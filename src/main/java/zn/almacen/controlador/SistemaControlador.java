@@ -64,6 +64,9 @@ public class SistemaControlador implements Initializable {
     private final ObservableList<Pedido> pedidoList =
             FXCollections.observableArrayList();
 
+    private final ObservableList<Pedido> pedidoFechaList =
+            FXCollections.observableArrayList();
+
     //-------------------------------- SERVICIOS --------------------------------//
 
     @Autowired
@@ -348,6 +351,26 @@ public class SistemaControlador implements Initializable {
     @FXML
     private TableColumn<Pedido, String> precioPedidoColumna;
 
+    //-------- CAMPOS DE TEXTO --------//
+
+    @FXML
+    private TextField fechaBuscarTxt;
+
+    @FXML
+    private TextField mercadoPagoTxt;
+
+    @FXML
+    private TextField tarjetaTxt;
+
+    @FXML
+    private TextField efectivoTxt;
+
+    @FXML
+    private TextField totalDiaTxt;
+
+    @FXML
+    private TextField idPedidoBuscar;
+
 
 
     @Override
@@ -385,6 +408,8 @@ public class SistemaControlador implements Initializable {
         //inicialización de la tabla pedidos en el apartado de pedidos
         tablaPedidos.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         configurarColumnasPedidos();
+        buscarPedidoFecha();
+        buscarPedidoId();
     }
 
     //-------------------------------- MÉTODOS DEL APARTADO NUEVA VENTA --------------------------------//
@@ -1662,6 +1687,98 @@ public class SistemaControlador implements Initializable {
         pedidoList.addAll(pedidoServicio.listarPedidos());
         tablaPedidos.setItems(pedidoList);
         tablaPedidos.refresh();
+    }
+
+    //metodo para buscar los pedidos de una fecha (botón)
+    public void btnBuscarPedidoPorFecha(){
+        if (fechaBuscarTxt.getText().isEmpty()){
+            mostrarMensaje("Error", "Ingrese una fecha");
+        }else {
+            listarPedidos();
+            pedidoFechaList.clear();
+            double totalEfectivo = 0;
+            double totalMercadoPago = 0;
+            double totalTarjeta = 0;
+            double totalDia;
+            try{
+                for (Pedido pedido: pedidoList){
+                    var fecha = pedido.getFecha();
+                    String fechaStr = String.valueOf(fecha);
+                    fechaStr = fechaStr.substring(0, 10);
+                    if (fechaStr.equals(fechaBuscarTxt.getText())){
+                        pedidoFechaList.add(pedido);
+                        switch (pedido.getForma_de_pago()) {
+                            case "Efectivo" -> totalEfectivo += pedido.getPrecio_total();
+                            case "Mercado Pago" -> totalMercadoPago += pedido.getPrecio_total();
+                            case "Tarjeta" -> totalTarjeta += pedido.getPrecio_total();
+                        }
+                    }
+                }
+
+                totalDia = totalTarjeta + totalEfectivo + totalMercadoPago;
+
+                String totalEfectivoFormateado = String.format("%.2f", totalEfectivo);
+                String totalMercadoPagoFormateado = String.format("%.2f", totalMercadoPago);
+                String totalTarjetaFormateado = String.format("%.2f", totalTarjeta);
+                String totalDiaFormateado = String.format("%.2f", totalDia);
+
+
+                mercadoPagoTxt.setText("$" + totalMercadoPagoFormateado);
+                tarjetaTxt.setText("$" + totalTarjetaFormateado);
+                efectivoTxt.setText("$" + totalEfectivoFormateado);
+                totalDiaTxt.setText("$" + totalDiaFormateado);
+
+
+                tablaPedidos.refresh();
+                tablaPedidos.setItems(pedidoFechaList);
+                tablaPedidos.refresh();
+
+
+            }catch (Exception e){
+                mostrarMensaje("Error", e.getMessage());
+            }
+        }
+    }
+
+    //metodo para buscar los pedidos de una fecha (enter)
+    private void buscarPedidoFecha(){
+        fechaBuscarTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                btnBuscarPedidoPorFecha();
+            }
+        });
+    }
+
+    //metodo para buscar un pedido por id (boton)
+    public void btnBuscarPedidoId(){
+        if (idPedidoBuscar.getText().isEmpty()) {
+            mostrarMensaje("Error", "Ingrese un ID para buscar el pedido.");
+            rucBuscarTxt.requestFocus();
+        } else {
+            try {
+                int id = Integer.parseInt(idPedidoBuscar.getText());
+                var pedido = pedidoServicio.buscarPedidoPorId(id);
+                if (pedido != null) {
+                    pedidoList.clear();
+                    pedidoList.add(pedido);
+                    tablaPedidos.setItems(pedidoList);
+                    tablaPedidos.refresh();
+                } else {
+                    mostrarMensaje("Error", "No se encontró ningún pedido con el ID: " + id + ".");
+                }
+            } catch (Exception e) {
+                mostrarMensaje("Error", "Ingrese un ID valido");
+            }
+        }
+    }
+
+    //metodo para buscar un pedido por id (enter)
+    public void buscarPedidoId(){
+        idPedidoBuscar.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                btnBuscarPedidoId();
+            }
+        });
     }
 
     //-------------------------------- FIN DEL APARTADO PEDIDOS --------------------------------//

@@ -352,7 +352,7 @@
             </Tab>
             <Tab fx:id="tabProveedores" text="Proveedores">
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="573.0" prefWidth="862.0" style="-fx-background-color: #d9d9d9;">
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="593.0" prefWidth="862.0" style="-fx-background-color: #d9d9d9;">
                         <TableView fx:id="tablaProveedores" editable="true" layoutX="40.0" layoutY="155.0" onMouseClicked="#cargarProveedorFormulario" prefHeight="282.0" prefWidth="778.0">
                             <columns>
                                 <TableColumn fx:id="idProveedorColumna" editable="false" prefWidth="50.0" text="Id" />
@@ -421,7 +421,7 @@
                             <Separator layoutX="671.0" layoutY="78.0" prefHeight="3.0" prefWidth="123.0" style="-fx-background-color: black;" />
                         </AnchorPane>
                         <AnchorPane layoutX="255.0" layoutY="448.0" prefHeight="39.0" prefWidth="186.0">
-                            <Label layoutX="37.0" text="ID:">
+                            <Label layoutX="27.0" text="RUC:">
                                 <font>
                                     <Font name="System Bold" size="19.0" />
                                 </font>
@@ -458,21 +458,21 @@
                         </TableView>
                         <AnchorPane layoutX="24.0" layoutY="36.0" prefHeight="104.0" prefWidth="285.0">
                            <children>
-                              <Label layoutX="25.0" layoutY="24.0" text="Fecha:">
+                              <Label layoutX="21.0" layoutY="22.0" text="Fecha:">
                                  <font>
                                     <Font name="System Bold" size="19.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="fechaBuscarTxt" layoutX="21.0" layoutY="50.0" prefHeight="29.0" prefWidth="123.0" promptText="YYYY-MM-DD" style="-fx-background-color: #d9d9d9;">
+                              <TextField fx:id="fechaBuscarTxt" layoutX="18.0" layoutY="50.0" prefHeight="29.0" prefWidth="126.0" promptText="YYYY-MM-DD" style="-fx-background-color: #d9d9d9;">
                                  <font>
                                     <Font name="Segoe UI" size="16.0" />
                                  </font>
                               </TextField>
                               <Separator layoutX="22.0" layoutY="78.0" prefHeight="3.0" prefWidth="123.0" style="-fx-background-color: black;" />
-                              <Button layoutX="157.0" layoutY="45.0" minHeight="21.0" mnemonicParsing="false" onAction="#buscarPedidoPorFecha" prefHeight="39.0" prefWidth="118.0" text="Buscar pedidos" />
+                              <Button layoutX="157.0" layoutY="45.0" minHeight="21.0" mnemonicParsing="false" onAction="#btnBuscarPedidoPorFecha" prefHeight="39.0" prefWidth="118.0" text="Buscar pedidos" />
                            </children>
                         </AnchorPane>
-                        <TextField fx:id="totalDiaTxt" layoutX="730.0" layoutY="316.0" prefHeight="29.0" prefWidth="123.0" style="-fx-background-color: #d9d9d9;">
+                        <TextField fx:id="totalDiaTxt" layoutX="725.0" layoutY="317.0" prefHeight="29.0" prefWidth="123.0" style="-fx-background-color: #d9d9d9;">
                            <font>
                               <Font name="Segoe UI" size="16.0" />
                            </font>
@@ -516,6 +516,19 @@
                            </font>
                         </TextField>
                         <Separator layoutX="761.0" layoutY="305.0" prefHeight="3.0" prefWidth="94.0" style="-fx-background-color: black;" />
+                        <Button layoutX="480.0" layoutY="443.0" minHeight="21.0" mnemonicParsing="false" onAction="#listarPedidos" prefHeight="39.0" prefWidth="118.0" text="Listar pedidos" />
+                        <Label layoutX="40.0" layoutY="448.0" text="ID:">
+                           <font>
+                              <Font name="System Bold" size="19.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="idPedidoBuscar" layoutX="73.0" layoutY="448.0" prefHeight="29.0" prefWidth="123.0" style="-fx-background-color: #d9d9d9;">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                        </TextField>
+                        <Separator layoutX="74.0" layoutY="476.0" prefHeight="3.0" prefWidth="123.0" style="-fx-background-color: black;" />
+                        <Button layoutX="209.0" layoutY="443.0" minHeight="21.0" mnemonicParsing="false" onAction="#btnBuscarPedidoId" prefHeight="39.0" prefWidth="118.0" text="Buscar pedido" />
                      </children>
                   </AnchorPane>
                </children></AnchorPane>
