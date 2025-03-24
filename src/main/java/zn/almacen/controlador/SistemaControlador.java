@@ -1153,12 +1153,14 @@ public class SistemaControlador implements Initializable {
                     mostrarMensaje("Información", "Se ha actualizado el cliente con DNI: " + dni);
                 }
                 limpiarFormularioCliente();
+                listarClientes();
             }catch (Exception e){
                 mostrarMensaje("Error", e.getMessage());
             }
         }
     }
 
+    //metodo para avanzar en el formulario al apretar enter
     private void apretarEnterPasarFormularioCliente() {
         nombreTabClienteTxt.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -1175,6 +1177,11 @@ public class SistemaControlador implements Initializable {
                 telefonoClienteTxt.requestFocus();
             }
         });
+        telefonoClienteTxt.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                direccionClienteTxt.requestFocus();
+            }
+        });
         direccionClienteTxt.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 razonSocialClienteTxt.requestFocus();
@@ -1188,6 +1195,7 @@ public class SistemaControlador implements Initializable {
         });
     }
 
+    //metodo para cargar un cliente de la tabla en el formulario
     public void cargarClienteFormulario(){
         var cliente = tablaClientes.getSelectionModel().getSelectedItem();
         if (producto != null) {
@@ -1201,6 +1209,7 @@ public class SistemaControlador implements Initializable {
         }
     }
 
+    //metodo para limpiar el formulario de cliente
     public void limpiarFormularioCliente(){
         nombreTabClienteTxt.clear();
         apellidoClienteTxt.clear();
@@ -1210,6 +1219,30 @@ public class SistemaControlador implements Initializable {
         razonSocialClienteTxt.clear();
         dniClienteBuscarTxt.clear();
         dniTabClienteTxt.setEditable(true);
+    }
+
+    //metodo para eliminar un cliente de la base de datos
+    public void eliminarCliente(){
+        var cliente = tablaClientes.getSelectionModel().getSelectedItem();
+        if (cliente != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmación");
+            alert.setHeaderText("Eliminar Cliente");
+            alert.setContentText("¿Querés confirmar la eliminación del cliente con DNI: " + cliente.getDni() + "?");
+
+            ButtonType botonSi = new ButtonType("Sí");
+            ButtonType botonNo = new ButtonType("No");
+            alert.getButtonTypes().setAll(botonSi, botonNo);
+
+            Optional<ButtonType> resultado = alert.showAndWait();
+
+            if (resultado.isPresent() && resultado.get() == botonSi) {
+                clienteServicio.eliminarCliente(cliente);
+                listarProductos();
+                mostrarMensaje("Información", "Cliente eliminado correctamente.");
+                listarClientes();
+            }
+        }
     }
 
 

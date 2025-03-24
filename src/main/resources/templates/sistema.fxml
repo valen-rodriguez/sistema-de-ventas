@@ -349,7 +349,7 @@
                            <Separator layoutX="77.0" layoutY="27.0" prefHeight="2.0" prefWidth="118.0" style="-fx-background-color: black;" />
                         </children>
                      </AnchorPane>
-                     <Button layoutX="40.0" layoutY="448.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="107.0" style="-fx-background-color: red;" text="Eliminar cliente" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP" wrapText="true" />
+                     <Button layoutX="40.0" layoutY="448.0" mnemonicParsing="false" onAction="#eliminarCliente" prefHeight="29.0" prefWidth="107.0" style="-fx-background-color: red;" text="Eliminar cliente" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP" wrapText="true" />
                      <Button layoutX="681.0" layoutY="104.0" mnemonicParsing="false" onAction="#agregarCliente" prefHeight="36.0" prefWidth="135.0" text="Agregar Cliente" />
                      <Button layoutX="40.0" layoutY="104.0" mnemonicParsing="false" onAction="#limpiarFormularioCliente" prefHeight="36.0" prefWidth="135.0" text="Limpiar formulario" />
                      <Button layoutX="700.0" layoutY="448.0" minHeight="21.0" mnemonicParsing="false" onAction="#agregarProductoCarrito" prefHeight="29.0" prefWidth="116.0" text="Buscar cliente" />
