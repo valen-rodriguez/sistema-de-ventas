@@ -991,7 +991,6 @@ public class SistemaControlador implements Initializable {
 
         //valido que todos los campos estén llenos
         String nombreProveedor = String.valueOf(comboBoxProveedor.getValue());
-        mostrarMensaje("info", nombreProveedor);
 
         if (codigoProductoTxt.getText().isEmpty()) {
             mostrarMensaje("Error", "Ingrese el código.");

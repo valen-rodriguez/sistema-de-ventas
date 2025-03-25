@@ -244,7 +244,6 @@
                   </font>
                </TextField>
                <Separator layoutX="455.0" layoutY="463.0" prefHeight="2.0" prefWidth="174.0" style="-fx-background-color: black;" />
-               <Button layoutX="530.0" layoutY="104.0" mnemonicParsing="false" onAction="#agregarProducto" prefHeight="36.0" prefWidth="135.0" text="Agregar Producto" />
                <Button layoutX="40.0" layoutY="441.0" mnemonicParsing="false" onAction="#eliminarProducto" prefHeight="22.0" prefWidth="122.0" style="-fx-background-color: red;" text="Eliminar producto" textFill="WHITE" />
                <Button layoutX="40.0" layoutY="104.0" mnemonicParsing="false" onAction="#limpiarFormularioTabProducto" prefHeight="36.0" prefWidth="135.0" text="Limpiar Formulario" />
                 </AnchorPane>
@@ -443,192 +442,157 @@
             </Tab>
             <Tab fx:id="tabPedidos" text="Pedidos">
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="593.0" prefWidth="862.0"
-                                style="-fx-background-color: #d9d9d9;">
-                        <TableView fx:id="tablaPedidos" editable="true" layoutX="40.0" layoutY="155.0"
-                                   prefHeight="282.0" prefWidth="540.0">
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="593.0" prefWidth="862.0" style="-fx-background-color: #d9d9d9;">
+                        <TableView fx:id="tablaPedidos" editable="true" layoutX="40.0" layoutY="155.0" prefHeight="282.0" prefWidth="540.0">
                             <columns>
-                                <TableColumn fx:id="idPedidoColumna" editable="false" prefWidth="74.0" text="Id"/>
-                                <TableColumn fx:id="clientePedidoColumna" editable="false" prefWidth="117.0"
-                                             text="Cliente"/>
-                                <TableColumn fx:id="vendedorPedidoColumna" editable="false" prefWidth="86.0"
-                                             text="Vendedor"/>
-                                <TableColumn fx:id="fechaPedidoColumna" editable="false" prefWidth="76.0"
-                                             text="Fecha"/>
-                                <TableColumn fx:id="formaDePagoPedidoColumna" editable="false" minWidth="0.0"
-                                             prefWidth="104.0" text="Forma de pago"/>
-                                <TableColumn fx:id="precioPedidoColumna" editable="false" minWidth="0.0"
-                                             prefWidth="82.0" text="Precio total"/>
+                                <TableColumn fx:id="idPedidoColumna" editable="false" prefWidth="74.0" text="Id" />
+                                <TableColumn fx:id="clientePedidoColumna" editable="false" prefWidth="117.0" text="Cliente" />
+                                <TableColumn fx:id="vendedorPedidoColumna" editable="false" prefWidth="86.0" text="Vendedor" />
+                                <TableColumn fx:id="fechaPedidoColumna" editable="false" prefWidth="76.0" text="Fecha" />
+                                <TableColumn fx:id="formaDePagoPedidoColumna" editable="false" minWidth="0.0" prefWidth="104.0" text="Forma de pago" />
+                                <TableColumn fx:id="precioPedidoColumna" editable="false" minWidth="0.0" prefWidth="82.0" text="Precio total" />
                             </columns>
                         </TableView>
                         <AnchorPane layoutX="25.0" layoutY="51.0" prefHeight="104.0" prefWidth="560.0">
                             <Label layoutX="21.0" layoutY="22.0" text="Fecha:">
                                 <font>
-                                    <Font name="System Bold" size="19.0"/>
+                                    <Font name="System Bold" size="19.0" />
                                 </font>
                             </Label>
-                            <TextField fx:id="fechaBuscarTxt" layoutX="18.0" layoutY="50.0" prefHeight="29.0"
-                                       prefWidth="126.0" promptText="YYYY-MM-DD"
-                                       style="-fx-background-color: #d9d9d9;">
+                            <TextField fx:id="fechaBuscarTxt" layoutX="18.0" layoutY="50.0" prefHeight="29.0" prefWidth="126.0" promptText="YYYY-MM-DD" style="-fx-background-color: #d9d9d9;">
                                 <font>
-                                    <Font name="Segoe UI" size="16.0"/>
+                                    <Font name="Segoe UI" size="16.0" />
                                 </font>
                             </TextField>
-                            <Separator layoutX="22.0" layoutY="78.0" prefHeight="3.0" prefWidth="123.0"
-                                       style="-fx-background-color: black;"/>
-                            <Button layoutX="157.0" layoutY="45.0" minHeight="21.0" mnemonicParsing="false"
-                                    onAction="#btnBuscarPedidoPorFecha" prefHeight="39.0" prefWidth="118.0"
-                                    text="Buscar pedidos"/>
-                            <Button layoutX="428.0" layoutY="45.0" minHeight="21.0" mnemonicParsing="false"
-                                    onAction="#verRecibo" prefHeight="39.0" prefWidth="118.0"
-                                    text="Ver recibo"/>
+                            <Separator layoutX="22.0" layoutY="78.0" prefHeight="3.0" prefWidth="123.0" style="-fx-background-color: black;" />
+                            <Button layoutX="157.0" layoutY="45.0" minHeight="21.0" mnemonicParsing="false" onAction="#btnBuscarPedidoPorFecha" prefHeight="39.0" prefWidth="118.0" text="Buscar pedidos" />
+                            <Button layoutX="428.0" layoutY="45.0" minHeight="21.0" mnemonicParsing="false" onAction="#verRecibo" prefHeight="39.0" prefWidth="118.0" text="Ver recibo" />
                         </AnchorPane>
-                        <TextField fx:id="totalDiaTxt" layoutX="717.0" layoutY="317.0" prefHeight="29.0"
-                                   prefWidth="123.0" style="-fx-background-color: #d9d9d9;">
+                        <TextField fx:id="totalDiaTxt" layoutX="717.0" layoutY="317.0" prefHeight="29.0" prefWidth="123.0" style="-fx-background-color: #d9d9d9;">
                             <font>
-                                <Font name="Segoe UI" size="16.0"/>
+                                <Font name="Segoe UI" size="16.0" />
                             </font>
                         </TextField>
-                        <Separator layoutX="722.0" layoutY="344.0" prefHeight="3.0" prefWidth="123.0"
-                                   style="-fx-background-color: black;"/>
+                        <Separator layoutX="722.0" layoutY="344.0" prefHeight="3.0" prefWidth="123.0" style="-fx-background-color: black;" />
                         <Label layoutX="605.0" layoutY="317.0" text="Total del dia:">
                             <font>
-                                <Font name="System Bold" size="19.0"/>
+                                <Font name="System Bold" size="19.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="mercadoPagoTxt" layoutX="749.0" layoutY="187.0" prefHeight="29.0"
-                                   prefWidth="93.0" style="-fx-background-color: #d9d9d9;">
+                        <TextField fx:id="mercadoPagoTxt" layoutX="749.0" layoutY="187.0" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: #d9d9d9;">
                             <font>
-                                <Font name="Segoe UI" size="16.0"/>
+                                <Font name="Segoe UI" size="16.0" />
                             </font>
                         </TextField>
                         <Label layoutX="594.0" layoutY="190.0" text="Total Mercado Pago:">
                             <font>
-                                <Font name="System Bold" size="16.0"/>
+                                <Font name="System Bold" size="16.0" />
                             </font>
                         </Label>
-                        <Separator layoutX="752.0" layoutY="215.0" prefHeight="3.0" prefWidth="94.0"
-                                   style="-fx-background-color: black;"/>
-                        <Label layoutX="651.0" layoutY="233.0" prefHeight="25.0" prefWidth="101.0"
-                               text="Total Tarjeta:">
+                        <Separator layoutX="752.0" layoutY="215.0" prefHeight="3.0" prefWidth="94.0" style="-fx-background-color: black;" />
+                        <Label layoutX="651.0" layoutY="233.0" prefHeight="25.0" prefWidth="101.0" text="Total Tarjeta:">
                             <font>
-                                <Font name="System Bold" size="16.0"/>
+                                <Font name="System Bold" size="16.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="tarjetaTxt" layoutX="751.0" layoutY="232.0" prefHeight="29.0"
-                                   prefWidth="93.0" style="-fx-background-color: #d9d9d9;">
+                        <TextField fx:id="tarjetaTxt" layoutX="751.0" layoutY="232.0" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: #d9d9d9;">
                             <font>
-                                <Font name="Segoe UI" size="16.0"/>
+                                <Font name="Segoe UI" size="16.0" />
                             </font>
                         </TextField>
-                        <Separator layoutX="754.0" layoutY="260.0" prefHeight="3.0" prefWidth="94.0"
-                                   style="-fx-background-color: black;"/>
+                        <Separator layoutX="754.0" layoutY="260.0" prefHeight="3.0" prefWidth="94.0" style="-fx-background-color: black;" />
                         <Label layoutX="643.0" layoutY="281.0" text="Total Efectivo:">
                             <font>
-                                <Font name="System Bold" size="16.0"/>
+                                <Font name="System Bold" size="16.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="efectivoTxt" layoutX="750.0" layoutY="277.0" prefHeight="29.0"
-                                   prefWidth="93.0" style="-fx-background-color: #d9d9d9;">
+                        <TextField fx:id="efectivoTxt" layoutX="750.0" layoutY="277.0" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: #d9d9d9;">
                             <font>
-                                <Font name="Segoe UI" size="16.0"/>
+                                <Font name="Segoe UI" size="16.0" />
                             </font>
                         </TextField>
-                        <Separator layoutX="753.0" layoutY="305.0" prefHeight="3.0" prefWidth="94.0"
-                                   style="-fx-background-color: black;"/>
-                        <Button layoutX="462.0" layoutY="443.0" minHeight="21.0" mnemonicParsing="false"
-                                onAction="#listarPedidos" prefHeight="39.0" prefWidth="118.0"
-                                text="Listar pedidos"/>
+                        <Separator layoutX="753.0" layoutY="305.0" prefHeight="3.0" prefWidth="94.0" style="-fx-background-color: black;" />
+                        <Button layoutX="462.0" layoutY="443.0" minHeight="21.0" mnemonicParsing="false" onAction="#listarPedidos" prefHeight="39.0" prefWidth="118.0" text="Listar pedidos" />
                         <Label layoutX="40.0" layoutY="448.0" text="ID:">
                             <font>
-                                <Font name="System Bold" size="19.0"/>
+                                <Font name="System Bold" size="19.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="idPedidoBuscar" layoutX="73.0" layoutY="448.0" prefHeight="29.0"
-                                   prefWidth="123.0" style="-fx-background-color: #d9d9d9;">
+                        <TextField fx:id="idPedidoBuscar" layoutX="73.0" layoutY="448.0" prefHeight="29.0" prefWidth="123.0" style="-fx-background-color: #d9d9d9;">
                             <font>
-                                <Font name="Segoe UI" size="16.0"/>
+                                <Font name="Segoe UI" size="16.0" />
                             </font>
                         </TextField>
-                        <Separator layoutX="74.0" layoutY="476.0" prefHeight="3.0" prefWidth="123.0"
-                                   style="-fx-background-color: black;"/>
-                        <Button layoutX="209.0" layoutY="443.0" minHeight="21.0" mnemonicParsing="false"
-                                onAction="#btnBuscarPedidoId" prefHeight="39.0" prefWidth="118.0"
-                                text="Buscar pedido"/>
+                        <Separator layoutX="74.0" layoutY="476.0" prefHeight="3.0" prefWidth="123.0" style="-fx-background-color: black;" />
+                        <Button layoutX="209.0" layoutY="443.0" minHeight="21.0" mnemonicParsing="false" onAction="#btnBuscarPedidoId" prefHeight="39.0" prefWidth="118.0" text="Buscar pedido" />
                     </AnchorPane>
                 </AnchorPane>
             </Tab>
             <Tab fx:id="tabDatosEmpresa" text="Datos de la empresa">
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                    <TextField fx:id="rucEmpresaTxt" layoutX="162.0" layoutY="206.0" prefHeight="28.0" prefWidth="210.0"
-                               style="-fx-background-color: #d9d9d9;">
+                    <TextField fx:id="rucEmpresaTxt" layoutX="162.0" layoutY="206.0" prefHeight="28.0" prefWidth="210.0" style="-fx-background-color: #d9d9d9;">
                         <font>
-                            <Font name="Segoe UI" size="20.0"/>
+                            <Font name="Segoe UI" size="20.0" />
                         </font>
                     </TextField>
-                    <TextField fx:id="nombreEmpresaTxt" layoutX="463.0" layoutY="206.0" prefHeight="28.0"
-                               prefWidth="207.0" style="-fx-background-color: #d9d9d9;">
+                    <TextField fx:id="nombreEmpresaTxt" layoutX="463.0" layoutY="206.0" prefHeight="28.0" prefWidth="207.0" style="-fx-background-color: #d9d9d9;">
                         <font>
-                            <Font name="Segoe UI" size="20.0"/>
+                            <Font name="Segoe UI" size="20.0" />
                         </font>
                     </TextField>
-                    <TextField fx:id="telefonoEmpresaTxt" layoutX="161.0" layoutY="286.0" prefHeight="28.0"
-                               prefWidth="210.0" style="-fx-background-color: #d9d9d9;">
+                    <TextField fx:id="telefonoEmpresaTxt" layoutX="161.0" layoutY="286.0" prefHeight="28.0" prefWidth="210.0" style="-fx-background-color: #d9d9d9;">
                         <font>
-                            <Font name="Segoe UI" size="20.0"/>
+                            <Font name="Segoe UI" size="20.0" />
                         </font>
                     </TextField>
-                    <TextField fx:id="direccionEmpresaTxt" layoutX="467.0" layoutY="284.0" prefHeight="28.0"
-                               prefWidth="206.0" style="-fx-background-color: #d9d9d9;">
+                    <TextField fx:id="direccionEmpresaTxt" layoutX="467.0" layoutY="284.0" prefHeight="28.0" prefWidth="206.0" style="-fx-background-color: #d9d9d9;">
                         <font>
-                            <Font name="Segoe UI" size="20.0"/>
+                            <Font name="Segoe UI" size="20.0" />
                         </font>
                     </TextField>
-                    <TextField fx:id="razonSocialEmpresaTxt" layoutX="161.0" layoutY="374.0" prefHeight="28.0"
-                               prefWidth="210.0" style="-fx-background-color: #d9d9d9;">
+                    <TextField fx:id="razonSocialEmpresaTxt" layoutX="161.0" layoutY="374.0" prefHeight="28.0" prefWidth="210.0" style="-fx-background-color: #d9d9d9;">
                         <font>
-                            <Font name="Segoe UI" size="20.0"/>
+                            <Font name="Segoe UI" size="20.0" />
                         </font>
                     </TextField>
                     <Label layoutX="171.0" layoutY="181.0" text="RUC:">
                         <font>
-                            <Font name="Segoe UI Bold" size="20.0"/>
+                            <Font name="Segoe UI Bold" size="20.0" />
                         </font>
                     </Label>
-                    <Separator layoutX="171.0" layoutY="234.0" prefWidth="200.0" style="-fx-background-color: black;"/>
+                    <Separator layoutX="171.0" layoutY="234.0" prefWidth="200.0" style="-fx-background-color: black;" />
                     <Label layoutX="470.0" layoutY="181.0" text="Nombre:">
                         <font>
-                            <Font name="Segoe UI Bold" size="20.0"/>
+                            <Font name="Segoe UI Bold" size="20.0" />
                         </font>
                     </Label>
-                    <Separator layoutX="470.0" layoutY="233.0" prefWidth="200.0" style="-fx-background-color: black;"/>
+                    <Separator layoutX="470.0" layoutY="233.0" prefWidth="200.0" style="-fx-background-color: black;" />
                     <Label layoutX="170.0" layoutY="262.0" text="Teléfono:">
                         <font>
-                            <Font name="Segoe UI Bold" size="20.0"/>
+                            <Font name="Segoe UI Bold" size="20.0" />
                         </font>
                     </Label>
-                    <Separator layoutX="171.0" layoutY="314.0" prefWidth="200.0" style="-fx-background-color: black;"/>
+                    <Separator layoutX="171.0" layoutY="314.0" prefWidth="200.0" style="-fx-background-color: black;" />
                     <Label layoutX="465.0" layoutY="262.0" text="Dirección:">
                         <font>
-                            <Font name="Segoe UI Bold" size="20.0"/>
+                            <Font name="Segoe UI Bold" size="20.0" />
                         </font>
                     </Label>
-                    <Separator layoutX="470.0" layoutY="315.0" prefWidth="200.0" style="-fx-background-color: black;"/>
+                    <Separator layoutX="470.0" layoutY="315.0" prefWidth="200.0" style="-fx-background-color: black;" />
                     <Label layoutX="171.0" layoutY="350.0" text="Razón social:">
                         <font>
-                            <Font name="Segoe UI Bold" size="20.0"/>
+                            <Font name="Segoe UI Bold" size="20.0" />
                         </font>
                     </Label>
-                    <Separator layoutX="171.0" layoutY="401.0" prefWidth="200.0" style="-fx-background-color: black;"/>
-                    <Button layoutX="470.0" layoutY="374.0" mnemonicParsing="false" onAction="#btnGuardarDatosEmpresa"
-                            prefHeight="36.0" prefWidth="201.0" text="Guardar datos de la empresa">
+                    <Separator layoutX="171.0" layoutY="401.0" prefWidth="200.0" style="-fx-background-color: black;" />
+                    <Button layoutX="470.0" layoutY="374.0" mnemonicParsing="false" onAction="#btnGuardarDatosEmpresa" prefHeight="36.0" prefWidth="201.0" text="Guardar datos de la empresa">
                         <font>
-                            <Font size="15.0"/>
+                            <Font size="15.0" />
                         </font>
                     </Button>
                     <Label layoutX="170.0" layoutY="56.0" text="Datos de la empresa">
                         <font>
-                            <Font name="Segoe UI Bold" size="34.0"/>
+                            <Font name="Segoe UI Bold" size="34.0" />
                         </font>
                     </Label>
                 </AnchorPane>
